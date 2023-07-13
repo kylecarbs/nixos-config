@@ -1,4 +1,4 @@
-{ config, pkgs, lib, fetchurl, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   cfg = config.services.sysbox;
