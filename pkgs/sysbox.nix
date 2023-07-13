@@ -38,6 +38,7 @@ in
     systemd.services.sysbox-mgr = {
       description = "sysbox manager service";
       path = [ pkgs.rsync pkgs.kmod pkgs.iptables ];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${sysboxDeb}/usr/bin/sysbox-mgr";
         Type = "simple";
@@ -52,6 +53,7 @@ in
 
     systemd.services.sysbox-fs = {
       description = "sysbox-fs (part of the Sysbox container runtime)";
+      wantedBy = [ "multi-user.target" ];
       after = [ "sysbox-mgr.service" ];
       path = [ pkgs.fuse ];
       serviceConfig = {
