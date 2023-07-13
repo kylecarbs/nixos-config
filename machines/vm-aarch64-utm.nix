@@ -18,7 +18,7 @@ in
   i18n.defaultLocale = "en_CA.UTF-8";
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" ];
   time.timeZone = "America/Regina";
 
   # Enable sound with pipewire.
