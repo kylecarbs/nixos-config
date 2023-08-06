@@ -1,7 +1,7 @@
 {
   description = "kylecarbs' NixOS configuration";
 
-  outputs = { self, nixpkgs }: {
+  outputs = { self, nixpkgs, home-manager }: {
     nixosConfigurations.vm-aarch64-utm = nixpkgs.lib.nixosSystem rec {
       system = "aarch64-linux";
       modules = [

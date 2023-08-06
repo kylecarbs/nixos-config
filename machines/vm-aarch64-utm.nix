@@ -6,6 +6,7 @@
 
 let
   apple-emoji = pkgs.callPackage ../pkgs/apple-emoji.nix { };
+  apple-fonts = pkgs.callPackage ../pkgs/apple-fonts.nix { };
 in
 {
   imports =
@@ -18,7 +19,7 @@ in
   i18n.defaultLocale = "en_CA.UTF-8";
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" "ca-derivations" ];
   time.timeZone = "America/Regina";
 
   # Enable sound with pipewire.
@@ -54,21 +55,24 @@ in
   environment.systemPackages = with pkgs; [
     alacritty
     chromium
+    betterbird-unwrapped
     go_1_20
     fish
     flameshot
     yarn
     htop
     nixpkgs-fmt
-    tor
     bintools
     google-cloud-sdk
+    graphviz
     nodejs-18_x
     tailscale
     vscode
     bat
     unzip
     git
+    whois
+    deno
     gnumake
     jq
     gh
@@ -143,7 +147,7 @@ in
     '';
   };
 
-  fonts.fonts = with pkgs; [ apple-emoji fira-code ];
+  fonts.packages = with pkgs; [ apple-emoji apple-fonts fira-code ];
   fonts.fontconfig.defaultFonts.emoji = [ "Apple Color Emoji" ];
 
   # This value determines the NixOS release from which the default
