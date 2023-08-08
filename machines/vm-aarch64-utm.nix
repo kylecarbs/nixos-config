@@ -7,6 +7,8 @@
 let
   apple-emoji = pkgs.callPackage ../pkgs/apple-emoji.nix { };
   apple-fonts = pkgs.callPackage ../pkgs/apple-fonts.nix { };
+  coder = pkgs.callPackage ../pkgs/coder.nix { };
+  jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
 in
 {
   imports =
@@ -63,12 +65,14 @@ in
     htop
     nixpkgs-fmt
     bintools
+    coder
     google-cloud-sdk
     graphviz
     nodejs-18_x
     tailscale
     vscode
     bat
+    jetbrains-gateway
     unzip
     git
     whois
@@ -136,7 +140,7 @@ in
 
   # Adjusts the scaling of the display.
   environment.variables = {
-    GDK_SCALE = "2";
+    GDK_SCALE = "1";
     GDK_DPI_SCALE = "0.5";
   };
   # Makes Chrome use dark mode by default!
