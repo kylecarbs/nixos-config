@@ -5,7 +5,9 @@
 
 {
   imports =
-    [ (modulesPath + "/profiles/qemu-guest.nix")
+    [
+      (modulesPath + "/profiles/qemu-guest.nix")
+      ../hosts/configuration.nix
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "virtio_pci" "usbhid" ];
@@ -17,12 +19,14 @@
 
   # This won't work on other systems... it's hardcoded to my current M2's UUIDs.
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/fd23d902-9741-4bfb-a1e6-1c5685a2e261";
+    {
+      device = "/dev/disk/by-uuid/fd23d902-9741-4bfb-a1e6-1c5685a2e261";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/3F78-3D08";
+    {
+      device = "/dev/disk/by-uuid/3F78-3D08";
       fsType = "vfat";
     };
 
@@ -38,4 +42,14 @@
   # networking.interfaces.tailscale0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+
+  # Required for automating resizing with UTM.
+  services.spice-vdagentd.enable = true;
+  # The DPI has to be bigger for the smaller screen!
+  services.xserver.dpi = 180;
+
+  environment.systemPackages = with pkgs; [
+    # Google Chrome isn't available on arm64
+    chromium
+  ];
 }

@@ -40,13 +40,7 @@ in
     xorg.libxcvt
   ];
 
-  programs.alacritty = {
-    enable = true;
-
-    settings = {
-      env.LIBGL_ALWAYS_SOFTWARE = "1";
-    };
-  };
+  programs.alacritty.enable = true;
 
   programs.vscode = {
     enable = true;
@@ -81,7 +75,7 @@ in
   programs.fish = {
     enable = true;
 
-    interactiveShellInit = builtins.readFile ./config.fish;
+    interactiveShellInit = builtins.readFile ./config/config.fish;
   };
 
   programs.git = {
@@ -106,8 +100,8 @@ in
   };
 
   xdg.enable = true;
-  xdg.configFile."i3/config".text = builtins.readFile ./i3;
-  xdg.configFile."i3status/config".text = builtins.readFile ./i3status;
+  xdg.configFile."i3/config".text = builtins.readFile ./config/i3;
+  xdg.configFile."i3status/config".text = builtins.readFile ./config/i3status;
 
   # Add all of our binaries!
   home.file.".local/bin/dmenu_emoji".source = ../bin/dmenu_emoji;
