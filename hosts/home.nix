@@ -44,6 +44,7 @@ in
 
   programs.vscode = {
     enable = true;
+    mutableExtensionsDir = false;
     extensions = with pkgs.vscode-extensions; [
       dbaeumer.vscode-eslint
       eamodio.gitlens
