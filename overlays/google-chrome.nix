@@ -1,3 +1,4 @@
+# Wraps Chrome to force dark mode and changes the name to `google-chrome` instead of `google-chrome-stable`.
 self: super: {
   google-chrome = super.stdenv.mkDerivation {
     name = "google-chrome";

@@ -15,7 +15,7 @@
   '';
 
   nixpkgs.overlays = [
-    (import ../pkgs/google-chrome.nix)
+    (import ../overlays/google-chrome.nix)
   ];
 
   hardware.nvidia = {
