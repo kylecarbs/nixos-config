@@ -31,16 +31,8 @@
   ];
 
   hardware.nvidia = {
-    modesetting.enable = true;
     open = false;
     nvidiaSettings = true;
-  };
-  hardware.opengl.driSupport = true;
-
-  environment.variables = {
-    CLUTTER_DEFAULT_FPS = "144";
-    __GL_SYNC_DISPLAY_DEVICE = "DP-0";
-    __GL_SYNC_TO_VBLANK = "0";
   };
 
   environment.systemPackages = with pkgs; [
