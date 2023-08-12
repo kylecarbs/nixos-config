@@ -96,9 +96,6 @@ in
   programs.rofi = {
     enable = true;
     theme = "Arc-Dark";
-    extraConfig = {
-      width = "20%";
-    };
   };
 
   xdg.enable = true;
