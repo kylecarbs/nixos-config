@@ -7,11 +7,16 @@
     ./shared.nix
   ];
 
-  services.xserver.dpi = 130;
+  services.xserver.dpi = 125;
+
+  nixpkgs.overlays = [
+    (import ../pkgs/google-chrome.nix)
+  ];
 
   environment.systemPackages = with pkgs; [
     zoom-us
     spotify
     slack
+    google-chrome
   ];
 }

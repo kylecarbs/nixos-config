@@ -12,8 +12,7 @@ in
     ];
 
   nixpkgs.config.allowUnfree = true;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
   i18n.defaultLocale = "en_CA.UTF-8";
   networking.hostName = "nixos";
   networking.networkmanager.enable = true;
@@ -106,9 +105,10 @@ in
   environment.etc = {
     "xdg/gtk-3.0/settings.ini".text = ''
       [Settings]
-      gtk-application-prefer-dark-theme = true
+      gtk-application-prefer-dark-theme=1
     '';
   };
+  environment.localBinInPath = true;
 
   fonts.packages = with pkgs; [ apple-emoji apple-fonts fira-code ];
   fonts.fontconfig.defaultFonts.emoji = [ "Apple Color Emoji" ];

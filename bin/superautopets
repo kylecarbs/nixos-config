@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 url=$(curl -s https://teamwood.itch.io/super-auto-pets | htmlq 'div[data-iframe]' -a 'data-iframe' | htmlq 'iframe' -a 'src')
-chrome --app="$url"
+google-chrome --app="$url"

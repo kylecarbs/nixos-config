@@ -10,6 +10,7 @@ in
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
+    dconf
     alacritty
     betterbird-unwrapped
     go_1_20
@@ -90,11 +91,8 @@ in
   xdg.configFile."i3status/config".text = builtins.readFile ./i3status;
 
   # Add all of our binaries!
-  home.file."bin" = {
-    source = ../bin;
-    target = ".bin";
-  };
-  home.sessionVariables = {
-    PATH = "$HOME/.bin:$PATH";
-  };
+  home.file.".local/bin/dmenu_emoji".source = ../bin/dmenu_emoji;
+  home.file.".local/bin/mypulls".source = ../bin/mypulls;
+  home.file.".local/bin/notion".source = ../bin/notion;
+  home.file.".local/bin/superautopets".source = ../bin/superautopets;
 }

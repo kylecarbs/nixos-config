@@ -1,9 +1,5 @@
 general {
-        colors = true
-        color_good = "#242424"
-        separator = true
-        interval = 5
-        markup = "pango"
+
 }
 
 py3status {
@@ -13,7 +9,6 @@ py3status {
 
 order += "google_calendar"
 order += "external_script prs"
-order += "external_script meat"
 order += "disk /"
 order += "cpu_usage"
 order += "memory"
@@ -56,14 +51,7 @@ memory {
 
 external_script "prs" {
         format = "pr reviews: {output}"
-        script_path = "/home/kyle/bin/mypulls"
+        script_path = "/home/kyle/.bin/mypulls"
         cache_timeout = 150
         on_click 3 = "exec xdg-open https://github.com/pulls/review-requested"
-}
-
-external_script "meat" {
-        format = "meatheat: {output}"
-        script_path = "/home/kyle/bin/meatheat"
-        cache_timeout = 150
-	on_click 3 = "exec xdg-open https://cloud.thermoworks.com/devices/24:0a:c4:f1:e8:32"
 }
