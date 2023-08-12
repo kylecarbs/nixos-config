@@ -50,7 +50,7 @@ in
   programs.fish.enable = true;
   # Docker
   virtualisation.docker.enable = true;
-  # services.sysbox.enable = true;
+  services.sysbox.enable = true;
   services.tailscale.enable = true;
   # Useful for VS Code storing credentials.
   services.gnome.gnome-keyring.enable = true;

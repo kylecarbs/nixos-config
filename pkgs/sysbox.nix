@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ stdenv, config, pkgs, lib, ... }:
 
 let
   cfg = config.services.sysbox;
@@ -7,8 +7,14 @@ let
     version = "0.6.2";
 
     src = pkgs.fetchurl {
-      url = "https://downloads.nestybox.com/sysbox/releases/v${version}/${pname}_${version}-0.linux_arm64.deb";
-      sha256 = "sha256-ZENsEgJAmKLjsM0WR3Mss6GxQVkXRY9vPgpW27TC5zc=";
+      url = "https://downloads.nestybox.com/sysbox/releases/v${version}/${pname}_${version}-0.linux_${{
+      "x86_64-linux"  = "amd64";
+      "aarch64-linux" = "arm64";
+    }.${pkgs.stdenv.system}}.deb";
+      sha256 = {
+        "x86_64-linux" = "sha256-/Sh/LztaBytiw3j54e7uqizK0iu0jLOB0w2MhVxRtAE=";
+        "aarch64-linux" = "sha256-ZENsEgJAmKLjsM0WR3Mss6GxQVkXRY9vPgpW27TC5zc=";
+      }.${pkgs.stdenv.system};
     };
 
     buildInputs = [ pkgs.dpkg pkgs.xz pkgs.lsb-release ];
