@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+target_branch="main"
+# Check if there are any commits between the branches
+commits=$(git rev-list --count ${current_branch} ^${target_branch})
+
+if [[ ${commits} -eq 0 ]]; then
+    echo "There are no commits between ${current_branch} and ${target_branch}."
+    exit 1
+fi
+
+git push -u origin HEAD
+gh pr create --label hotfix --assignee @me -f
+gh pr merge --auto -s

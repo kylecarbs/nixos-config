@@ -10,7 +10,6 @@ in
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
-    dconf
     alacritty
     betterbird-unwrapped
     go_1_20
@@ -78,6 +77,22 @@ in
     interactiveShellInit = builtins.readFile ./config.fish;
   };
 
+  programs.git = {
+    enable = true;
+
+    userName = "Kyle Carberry";
+    userEmail = "kyle@carberry.com";
+
+    aliases = {
+      p = "push -u origin HEAD";
+      c = "checkout";
+    };
+
+    extraConfig = {
+      core.editor = "code --wait";
+    };
+  };
+
   programs.rofi = {
     enable = true;
     theme = "Arc-Dark";
@@ -95,4 +110,5 @@ in
   home.file.".local/bin/mypulls".source = ../bin/mypulls;
   home.file.".local/bin/notion".source = ../bin/notion;
   home.file.".local/bin/superautopets".source = ../bin/superautopets;
+  home.file.".local/bin/git-hf".source = ../bin/git-hf;
 }
