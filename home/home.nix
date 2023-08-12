@@ -10,7 +10,6 @@ in
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
-    alacritty
     betterbird-unwrapped
     go_1_20
     fish
@@ -40,6 +39,14 @@ in
     libnotify
     xorg.libxcvt
   ];
+
+  programs.alacritty = {
+    enable = true;
+
+    settings = {
+      env.LIBGL_ALWAYS_SOFTWARE = "1";
+    };
+  };
 
   programs.vscode = {
     enable = true;
