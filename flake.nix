@@ -9,5 +9,12 @@
         ./hardware/vm-aarch64-utm.nix
       ];
     };
+    nixosConfigurations.dev-amd64 = nixpkgs.lib.nixosSystem rec {
+      system = "amd64-linux";
+      modules = [
+        ./machines/dev-amd64.nix
+        ./hardware/dev-amd64.nix
+      ];
+    };
   };
 }

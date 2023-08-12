@@ -1,5 +1,5 @@
 switch:
-	sudo nixos-rebuild switch --flake .#vm-aarch64-utm
+	sudo nixos-rebuild switch --flake .#dev-amd64
 
 update:
 	nix flake update

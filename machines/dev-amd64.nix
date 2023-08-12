@@ -7,13 +7,11 @@
     ./shared.nix
   ];
 
-  # Required for automating resizing with UTM.
-  services.spice-vdagentd.enable = true;
-  # The DPI has to be bigger for the smaller screen!
-  services.xserver.dpi = 180;
+  services.xserver.dpi = 130;
 
   environment.systemPackages = with pkgs; [
-    # Google Chrome isn't available on arm64
-    chromium
+    zoom-us
+    spotify
+    slack
   ];
 }
