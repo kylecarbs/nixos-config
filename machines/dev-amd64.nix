@@ -9,9 +9,6 @@
 
   services.xserver.dpi = 125;
   services.xserver.videoDrivers = [ "nvidia" ];
-  services.xserver.monitorSection = ''
-  VertRefresh     48.0 - 144.0
-  '';
   services.xserver.screenSection = ''
   Option         "nvidiaXineramaInfoOrder" "DFP-1"
   Option         "metamodes" "3840x1600_144 +0+0"
@@ -24,6 +21,8 @@
   ];
 
   hardware.nvidia = {
+    # helps with screen tearing
+    modesetting.enable = true;
     open = false;
     nvidiaSettings = true;
   };
