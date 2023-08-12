@@ -9,11 +9,9 @@
 
   services.xserver.dpi = 125;
   services.xserver.videoDrivers = [ "nvidia" ];
-  # nvidiaXineramaInfoOrder is necessary for 144fps in Chrome.
+  # This is necessary for 144fps in Chrome!
   services.xserver.screenSection = ''
   Option         "nvidiaXineramaInfoOrder" "DFP-1"
-  Option         "metamodes" "3840x1600_144 +0+0"
-  Option         "BaseMosaic" "off"
   '';
 
   nixpkgs.overlays = [
