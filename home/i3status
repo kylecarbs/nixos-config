@@ -51,7 +51,7 @@ memory {
 
 external_script "prs" {
         format = "pr reviews: {output}"
-        script_path = "/home/kyle/.bin/mypulls"
+        script_path = "mypulls"
         cache_timeout = 150
         on_click 3 = "exec xdg-open https://github.com/pulls/review-requested"
 }

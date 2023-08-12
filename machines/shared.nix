@@ -60,7 +60,6 @@ in
     enable = true;
     layout = "us";
     xkbVariant = "";
-    videoDrivers = [ "nvidia" ];
 
     desktopManager = {
       xterm.enable = false;
@@ -109,6 +108,10 @@ in
     '';
   };
   environment.localBinInPath = true;
+  environment.systemPackages = with pkgs; [
+    pkg-config
+    xorg.xorgserver
+  ];
 
   fonts.packages = with pkgs; [ apple-emoji apple-fonts fira-code ];
   fonts.fontconfig.defaultFonts.emoji = [ "Apple Color Emoji" ];

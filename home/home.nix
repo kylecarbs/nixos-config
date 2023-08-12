@@ -111,4 +111,9 @@ in
   home.file.".local/bin/notion".source = ../bin/notion;
   home.file.".local/bin/superautopets".source = ../bin/superautopets;
   home.file.".local/bin/git-hf".source = ../bin/git-hf;
+
+  services.picom = {
+    enable = true;
+    vSync = true;
+  };
 }
