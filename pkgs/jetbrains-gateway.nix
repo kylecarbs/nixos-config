@@ -1,3 +1,5 @@
+# The nixpkgs derivation builds Gateway which doesn't work on
+# aarch64, and seemed unnecessary when it's so simple.
 { stdenv, lib, fetchurl, makeWrapper, unzip, jdk, ... }:
 
 let

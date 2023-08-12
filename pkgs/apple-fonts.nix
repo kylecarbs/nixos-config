@@ -1,3 +1,4 @@
+# Adds all Apple fonts!
 { lib, stdenv, fetchurl, unzip, p7zip }:
 
 stdenv.mkDerivation rec {

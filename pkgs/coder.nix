@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       "aarch64-linux" = "arm64";
     }.${system}}.tar.gz";
     sha256 = {
-      "x86_64-linux"  = "sha256-EuySOs1Ln6OphX9jVzX3pZvzrboAv8JsZFBUj3XEUHA=";
+      "x86_64-linux" = "sha256-EuySOs1Ln6OphX9jVzX3pZvzrboAv8JsZFBUj3XEUHA=";
       "aarch64-linux" = "sha256-WcNWzBW0ISxWtuQ4ZiITxUAdBWj1DhsUPoSRkYKUODc=";
     }.${system};
   };
@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A CLI interface for Coder";
     homepage = "https://github.com/coder/coder/";
-    platforms = platforms.linux; 
+    platforms = platforms.linux;
   };
 }

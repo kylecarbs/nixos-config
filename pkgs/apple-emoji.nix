@@ -1,3 +1,4 @@
+# Adds the Apple Color Emoji font. The default emojis in Linux are gross.
 { stdenvNoCC, lib, fetchurl }:
 
 stdenvNoCC.mkDerivation rec {
@@ -19,6 +20,6 @@ stdenvNoCC.mkDerivation rec {
     longDescription = "AppleColorEmoji.ttf from Samuel Ng's apple-emoji-linux, release version ${version}, packaged for Nix.";
     homepage = "https://github.com/samuelngs/apple-emoji-linux";
     license = licenses.wtfpl;
-    platforms = platforms.unix; 
+    platforms = platforms.unix;
   };
 }
