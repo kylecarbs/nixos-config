@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+gh api \
+    -H "Accept: application/vnd.github+json" \
+    "/search/issues?q=is%3Aopen%20is%3Apr%20review-requested%3Akylecarbs%20archived%3Afalse%20" | jq -r '.items[].title' | wc -l

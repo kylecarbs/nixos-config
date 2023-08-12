@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+while go test -count=1 -failfast -timeout=2m $@; do :; done

@@ -4,8 +4,6 @@
 let
   apple-emoji = pkgs.callPackage ../pkgs/apple-emoji.nix { };
   apple-fonts = pkgs.callPackage ../pkgs/apple-fonts.nix { };
-  coder = pkgs.callPackage ../pkgs/coder.nix { };
-  jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
 in
 {
   imports =
@@ -13,6 +11,7 @@ in
       ../pkgs/sysbox.nix
     ];
 
+  nixpkgs.config.allowUnfree = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   i18n.defaultLocale = "en_CA.UTF-8";
@@ -48,68 +47,6 @@ in
   # Workaround for GNOME autologin: https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-  environment.systemPackages = with pkgs; [
-    alacritty
-    betterbird-unwrapped
-    go_1_20
-    fish
-    flameshot
-    yarn
-    htop
-    nixpkgs-fmt
-    bintools
-    coder
-    google-cloud-sdk
-    graphviz
-    nodejs-18_x
-    tailscale
-    bat
-    jetbrains-gateway
-    unzip
-    git
-    whois
-    deno
-    gnumake
-    jq
-    gh
-    glxinfo
-    vim
-    gotools
-    libnotify
-    xorg.libxcvt
-
-    (vscode-with-extensions.override {
-      vscodeExtensions = with vscode-extensions; [
-        streetsidesoftware.code-spell-checker
-        golang.go
-        vscode-extensions.zxh404.vscode-proto3
-        vscode-extensions.ms-azuretools.vscode-docker
-        vscode-extensions.usernamehw.errorlens
-        vscode-extensions.eamodio.gitlens
-        vscode-extensions.dbaeumer.vscode-eslint
-        vscode-extensions.github.copilot
-        vscode-extensions.github.vscode-pull-request-github
-        vscode-extensions.hashicorp.terraform
-        vscode-extensions.yzhang.markdown-all-in-one
-        vscode-extensions.github.vscode-pull-request-github
-        vscode-extensions.jnoortheen.nix-ide
-        vscode-extensions.esbenp.prettier-vscode
-        vscode-extensions.ms-vscode-remote.remote-ssh
-        vscode-extensions.coder.coder-remote
-        vscode-extensions.foxundermoon.shell-format
-      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
-          name = "min-theme";
-          publisher = "miguelsolorio";
-          version = "1.5.0";
-          sha256 = "sha256-DF/9OlWmjmnZNRBs2hk0qEWN38RcgacdVl9e75N8ZMY=";
-        }
-      ];
-    })
-  ];
 
   programs.fish.enable = true;
   # Docker

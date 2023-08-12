@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+URLS=(
+  "https://emojipedia.org/people/"
+  "https://emojipedia.org/nature/"
+  "https://emojipedia.org/food-drink/"
+  "https://emojipedia.org/activity/"
+  "https://emojipedia.org/travel-places/"
+  "https://emojipedia.org/objects/"
+  "https://emojipedia.org/symbols/"
+  "https://emojipedia.org/flags/"
+)
+
+for url in "${URLS[@]}"; do
+  curl -s "$url" | pup ".emoji-list a json{}" | jq -r 'map(.children[0].text + " " + .text) | .[]'
+done

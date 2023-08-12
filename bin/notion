@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+chrome --app="https://www.notion.so/coderhq"

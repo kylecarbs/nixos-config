@@ -7,6 +7,10 @@
       modules = [
         ./machines/vm-aarch64-utm.nix
         ./hardware/vm-aarch64-utm.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.users.kyle = import ./home/home.nix;
+        }
       ];
     };
     nixosConfigurations.dev-amd64 = nixpkgs.lib.nixosSystem rec {
@@ -14,6 +18,10 @@
       modules = [
         ./machines/dev-amd64.nix
         ./hardware/dev-amd64.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.users.kyle = import ./home/home.nix;
+        }
       ];
     };
   };
