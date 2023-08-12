@@ -15,13 +15,10 @@
   services.xserver.monitorSection = ''
   HorizSync       250.0 - 250.0
   VertRefresh     48.0 - 144.0
-  Option         "DPMS"
   '';
   services.xserver.screenSection = ''
   Option         "nvidiaXineramaInfoOrder" "DFP-1"
   Option         "metamodes" "3840x1600_144 +0+0"
-  Option         "SLI" "Off"
-  Option         "MultiGPU" "Off"
   Option         "BaseMosaic" "off"
   '';
   environment.etc."X11/xorg.conf".source = ./dev-xorg.conf;
