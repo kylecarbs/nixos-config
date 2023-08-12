@@ -119,5 +119,5 @@ for (const extension of extensions) {
 
 Deno.writeTextFile(
   "./hosts/vscode-extensions.json",
-  JSON.stringify(extensions, undefined, "\t")
+  JSON.stringify(extensions, undefined, "  ")
 );
