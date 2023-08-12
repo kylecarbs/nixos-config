@@ -9,11 +9,7 @@
 
   services.xserver.dpi = 125;
   services.xserver.videoDrivers = [ "nvidia" ];
-  services.xserver.serverLayoutSection = ''
-  Option         "Xinerama" "0"
-  '';
   services.xserver.monitorSection = ''
-  HorizSync       250.0 - 250.0
   VertRefresh     48.0 - 144.0
   '';
   services.xserver.screenSection = ''
