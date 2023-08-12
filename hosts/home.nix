@@ -10,34 +10,34 @@ in
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
+    bat
     betterbird-unwrapped
-    go_1_20
-    fish
-    flameshot
-    yarn
-    htop
-    nixpkgs-fmt
     bintools
     coder
+    deno
+    fish
+    flameshot
+    gh
+    git
+    glxinfo
+    gnumake
+    go_1_20
     google-cloud-sdk
+    gotools
     graphviz
+    htmlq
+    htop
+    jetbrains-gateway
+    jq
+    libnotify
+    nixpkgs-fmt
     nodejs-18_x
     tailscale
-    bat
-    jetbrains-gateway
     unzip
-    git
-    whois
-    deno
-    gnumake
-    jq
-    gh
-    glxinfo
     vim
-    htmlq
-    gotools
-    libnotify
+    whois
     xorg.libxcvt
+    yarn
   ];
 
   programs.alacritty.enable = true;
@@ -45,24 +45,29 @@ in
   programs.vscode = {
     enable = true;
     extensions = with pkgs.vscode-extensions; [
-      streetsidesoftware.code-spell-checker
-      golang.go
-      zxh404.vscode-proto3
-      ms-azuretools.vscode-docker
-      usernamehw.errorlens
-      eamodio.gitlens
       dbaeumer.vscode-eslint
+      eamodio.gitlens
+      esbenp.prettier-vscode
+      foxundermoon.shell-format
       github.copilot
       github.vscode-pull-request-github
-      hashicorp.terraform
-      yzhang.markdown-all-in-one
       github.vscode-pull-request-github
+      golang.go
+      hashicorp.terraform
       jnoortheen.nix-ide
-      esbenp.prettier-vscode
+      ms-azuretools.vscode-docker
       ms-vscode-remote.remote-ssh
-      # coder.coder-remote
-      foxundermoon.shell-format
+      streetsidesoftware.code-spell-checker
+      usernamehw.errorlens
+      yzhang.markdown-all-in-one
+      zxh404.vscode-proto3
     ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+      {
+        name = "coder-remote";
+        publisher = "coder";
+        version = "0.1.19";
+        sha256 = "sha256-Saw+D1haSGAq2bdlYjEjM/GF95eQmJEDXXB8VGQkXiE=";
+      }
       {
         name = "min-theme";
         publisher = "miguelsolorio";
@@ -107,8 +112,8 @@ in
 
   # Add all of our binaries!
   home.file.".local/bin/dmenu_emoji".source = ../bin/dmenu_emoji;
+  home.file.".local/bin/git-hf".source = ../bin/git-hf;
   home.file.".local/bin/mypulls".source = ../bin/mypulls;
   home.file.".local/bin/notion".source = ../bin/notion;
   home.file.".local/bin/superautopets".source = ../bin/superautopets;
-  home.file.".local/bin/git-hf".source = ../bin/git-hf;
 }

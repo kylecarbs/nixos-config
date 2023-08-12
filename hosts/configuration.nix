@@ -75,21 +75,21 @@ in
       enable = true;
       extraPackages = with pkgs; [
         dmenu
-        rofi
-        i3status
-        i3lock
+        dunst
         i3blocks
+        i3lock
+        i3status
+        rofi
         xclip
         xorg.libXcursor
         xorg.libXi
-        dunst
 
         # Required for py3status to work!
         (python3.withPackages (p: with p; [
-          python-dateutil
           google-api-python-client
           httplib2
           py3status
+          python-dateutil
         ]))
       ];
     };
@@ -108,10 +108,6 @@ in
     '';
   };
   environment.localBinInPath = true;
-  environment.systemPackages = with pkgs; [
-    pkg-config
-    xorg.xorgserver
-  ];
 
   fonts.packages = with pkgs; [ apple-emoji apple-fonts fira-code ];
   # Replace the gross Linux emojis with pretty Apple ones!

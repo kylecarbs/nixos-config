@@ -70,9 +70,9 @@
 
   # These packages are only available on amd64.
   environment.systemPackages = with pkgs; [
-    zoom-us
-    spotify
-    slack
     google-chrome
+    slack
+    spotify
+    zoom-us
   ];
 }
