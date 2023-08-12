@@ -3,6 +3,8 @@
 let
   coder = pkgs.callPackage ../pkgs/coder.nix { };
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
+
+  vscodeExtensions = builtins.fromJSON (builtins.readFile ./vscode-extensions.json);
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -45,37 +47,9 @@ in
   programs.vscode = {
     enable = true;
     mutableExtensionsDir = false;
-    extensions = with pkgs.vscode-extensions; [
-      dbaeumer.vscode-eslint
-      eamodio.gitlens
-      esbenp.prettier-vscode
-      foxundermoon.shell-format
-      github.copilot
-      github.vscode-pull-request-github
-      github.vscode-pull-request-github
-      golang.go
-      hashicorp.terraform
-      jnoortheen.nix-ide
-      ms-azuretools.vscode-docker
-      ms-vscode-remote.remote-ssh
-      streetsidesoftware.code-spell-checker
-      usernamehw.errorlens
-      yzhang.markdown-all-in-one
-      zxh404.vscode-proto3
-    ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-      {
-        name = "coder-remote";
-        publisher = "coder";
-        version = "0.1.19";
-        sha256 = "sha256-Saw+D1haSGAq2bdlYjEjM/GF95eQmJEDXXB8VGQkXiE=";
-      }
-      {
-        name = "min-theme";
-        publisher = "miguelsolorio";
-        version = "1.5.0";
-        sha256 = "sha256-DF/9OlWmjmnZNRBs2hk0qEWN38RcgacdVl9e75N8ZMY=";
-      }
-    ];
+    # To add new extensions, add them to the vscode-extensions.json file and
+    # then run `make update-vscode-extensions`.
+    extensions = pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions;
   };
 
   programs.fish = {
