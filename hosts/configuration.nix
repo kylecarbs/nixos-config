@@ -48,7 +48,6 @@ in
   systemd.services."autovt@tty1".enable = false;
 
   programs.fish.enable = true;
-  # Docker
   virtualisation.docker.enable = true;
   services.sysbox.enable = true;
   services.tailscale.enable = true;

@@ -38,13 +38,8 @@
 
   swapDevices = [ ];
 
-  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
-  # (the default) this is the recommended approach. When using systemd-networkd it's
-  # still possible to use this option, but it's recommended to use it in conjunction
-  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  networking.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp39s0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.wlp41s0.useDHCP = lib.mkDefault true;
+  networking.useDHCP = false;
+  networking.interfaces.wlp41s0.useDHCP = true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -66,6 +61,14 @@
     modesetting.enable = true;
     open = false;
     nvidiaSettings = true;
+  };
+
+  # DHCP was adding a local nameserver which was causing DNS issues.
+  environment.etc = {
+    "resolv.conf".text = ''
+    nameserver 8.8.8.8
+    nameserver 1.1.1.1
+    '';
   };
 
   # These packages are only available on amd64.

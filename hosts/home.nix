@@ -17,6 +17,7 @@ in
     bintools
     coder
     deno
+    dig
     fish
     flameshot
     gh
