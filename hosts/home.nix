@@ -91,4 +91,5 @@ in
   home.file.".local/bin/mypulls".source = ../bin/mypulls;
   home.file.".local/bin/notion".source = ../bin/notion;
   home.file.".local/bin/superautopets".source = ../bin/superautopets;
+  home.file.".local/bin/nix-vscode-extensions".source = ../bin/nix-vscode-extensions;
 }

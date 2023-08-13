@@ -1,0 +1,188 @@
+#!/usr/bin/env -S deno run --allow-run --allow-net --allow-read --allow-write --unstable --no-check --ext=ts
+
+// This fetches the latest version of each extension and updates the
+// vscode-extensions.json file with the new version and sha256 hash.
+//
+// This makes it much easier to manage VS Code extensions with Nix.
+
+import { createHash } from "https://deno.land/std@0.108.0/hash/mod.ts";
+import * as semver from "https://deno.land/std@0.198.0/semver/mod.ts";
+import { parse } from "https://deno.land/std@0.194.0/flags/mod.ts";
+
+interface Extension {
+  readonly publisher: string;
+  readonly name: string;
+
+  version?: string;
+  sha256?: string;
+}
+
+interface RemoteExtension {
+  readonly displayName: string;
+  readonly latestVersion: string;
+  readonly vsixDownloadURL: string;
+}
+
+const extensionID = (p: string, n: string) => `${p}.${n}`.toLowerCase();
+
+const fetchExtensions = async (
+  toFetch: ReadonlyArray<Extension>
+): Promise<Record<string, RemoteExtension>> => {
+  const requestUrl = `https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery`;
+  const postData = JSON.stringify({
+    filters: [
+      {
+        criteria: toFetch.map((e) => ({
+          // Filter type 7 is by ID.
+          filterType: 7,
+          value: extensionID(e.publisher, e.name),
+        })),
+      },
+    ],
+    // Hardcoded and discovered from browsing the VS Code marketplace on the web.
+    // This ensures versions are returned!
+    flags: 2151,
+  });
+  const result = await fetch(requestUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept-Encoding": "gzip",
+      Accept: "application/json;api-version=3.0-preview",
+    },
+    body: postData,
+  });
+  const response: {
+    results?: [
+      {
+        extensions: [
+          {
+            displayName: string;
+            extensionName: string;
+            publisher: {
+              publisherName: string;
+            };
+            versions: [
+              {
+                version: string;
+                files: [
+                  {
+                    assetType: string;
+                    source: string;
+                  }
+                ];
+              }
+            ];
+          }
+        ];
+      }
+    ];
+  } = await result.json();
+  if (!response.results || !response.results.length) {
+    throw new Error("no results");
+  }
+  const extensions: Record<string, RemoteExtension> = {};
+
+  response.results[0].extensions.forEach((extension) => {
+    const version = extension.versions[0];
+    const vsix = version.files.filter(
+      (v) => v.assetType === "Microsoft.VisualStudio.Services.VSIXPackage"
+    );
+    if (!vsix.length) {
+      throw new Error("no vsix found for " + extension.extensionName);
+    }
+    extensions[
+      extensionID(extension.publisher.publisherName, extension.extensionName)
+    ] = {
+      displayName: extension.displayName,
+      latestVersion: version.version,
+      vsixDownloadURL: vsix[0].source,
+    };
+  });
+
+  return extensions;
+};
+
+// downloadAndDash
+const downloadAndHash = async (url: string) => {
+  const res = await fetch(url);
+  const hash = createHash("sha256");
+  hash.update(await res.arrayBuffer());
+  const hashInBase64 = btoa(
+    String.fromCharCode.apply(null, Array.from(new Uint8Array(hash.digest())))
+  );
+  return `sha256-${hashInBase64}`;
+};
+
+if (!Deno.args.length) {
+  console.error("Usage: nix-vscode-extensions.ts <path-to-manifest>");
+  Deno.exit(1);
+}
+
+const manifestPath = Deno.args[0];
+
+const flags = parse(Deno.args, {
+  boolean: ["help", "install", "status-bar"],
+});
+if (flags.help) {
+  console.error("Usage: nix-vscode-extensions.ts <path-to-manifest>");
+  Deno.exit(1);
+}
+
+const text = await Deno.readTextFile(manifestPath);
+const extensions: ReadonlyArray<Extension> = JSON.parse(text);
+
+const remoteExtensions = await fetchExtensions(extensions);
+let outdated = 0;
+
+for (const extension of extensions) {
+  const fetched = remoteExtensions[extension.publisher + "." + extension.name];
+  if (!fetched) {
+    console.warn(
+      "No remote extension found for",
+      extension.publisher,
+      extension.name
+    );
+    continue;
+  }
+  const id = extension.publisher + "." + extension.name;
+  if (extension.version) {
+    try {
+      const current = semver.parse(extension.version);
+      const latest = semver.parse(fetched.latestVersion);
+      if (semver.compare(current, latest) >= 0) {
+        continue;
+      }
+    } catch {
+      // Continue...
+    }
+  }
+  if (flags.install) {
+    extension.version = fetched.latestVersion;
+    extension.sha256 = await downloadAndHash(fetched.vsixDownloadURL);
+  }
+  if (flags["status-bar"]) {
+    outdated++;
+    // Continue so we can print the status bar
+    continue;
+  }
+  console.log(
+    `%c${id}:%c ${extension.version || "uninitialized"} => ${
+      fetched.latestVersion
+    }`,
+    "font-weight: bold;",
+    "font-weight: regular;"
+  );
+}
+
+if (flags["status-bar"]) {
+  if (outdated === 0) {
+    console.log("up to date");
+  } else {
+    console.log(`${outdated} outdated`);
+  }
+}
+
+if (flags.install) {
+  Deno.writeTextFile(manifestPath, JSON.stringify(extensions, undefined, "  "));
+}
