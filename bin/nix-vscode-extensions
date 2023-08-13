@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-run --allow-net --allow-read --allow-write --unstable --no-check --ext=ts
+#!/usr/bin/env -S deno run --allow-env --allow-run --allow-net --allow-read --allow-write --unstable --no-check --ext=ts
 
 // This fetches the latest version of each extension and updates the
 // vscode-extensions.json file with the new version and sha256 hash.
@@ -114,23 +114,70 @@ const downloadAndHash = async (url: string) => {
   return `sha256-${hashInBase64}`;
 };
 
-if (!Deno.args.length) {
-  console.error("Usage: nix-vscode-extensions.ts <path-to-manifest>");
-  Deno.exit(1);
-}
-
-const manifestPath = Deno.args[0];
-
 const flags = parse(Deno.args, {
-  boolean: ["help", "install", "status-bar"],
+  boolean: ["help", "update", "status-bar"],
+  string: ["install"],
 });
 if (flags.help) {
   console.error("Usage: nix-vscode-extensions.ts <path-to-manifest>");
   Deno.exit(1);
 }
 
+let manifestPath = flags._[0] as string;
+if (!manifestPath) {
+  manifestPath = `${Deno.env.get(
+    "HOME"
+  )}/projects/kylecarbs/nixos-config/hosts/vscode-extensions.json`;
+}
+
+const writeManifest = async (extensions: ReadonlyArray<Extension>) => {
+  extensions = extensions.toSorted((a, b) =>
+    extensionID(a.publisher, a.name) > extensionID(b.publisher, b.name) ? 1 : -1
+  );
+  await Deno.writeTextFile(
+    manifestPath,
+    JSON.stringify(extensions, undefined, "  ")
+  );
+};
+
 const text = await Deno.readTextFile(manifestPath);
 const extensions: ReadonlyArray<Extension> = JSON.parse(text);
+
+if (flags.install) {
+  const [publisher, name] = flags.install.split(".");
+  if (!publisher || !name) {
+    console.error("invalid extension ID: should be 'publisher.name'");
+    Deno.exit(1);
+  }
+  const id = extensionID(publisher, name);
+  const existing = extensions.find(
+    (e) => extensionID(e.publisher, e.name) === id
+  );
+  if (existing) {
+    console.error("extension already installed:", id);
+    Deno.exit(1);
+  }
+  const fetched = await fetchExtensions([{ publisher, name }]);
+  if (!fetched[id]) {
+    console.error("no extension found for", id);
+    Deno.exit(1);
+  }
+  await writeManifest([
+    ...extensions,
+    {
+      name,
+      publisher,
+      version: fetched[id].latestVersion,
+      sha256: await downloadAndHash(fetched[id].vsixDownloadURL),
+    },
+  ]);
+  console.log(
+    `%c${id} v${fetched[id].latestVersion}:%c added to manifest`,
+    `font-weight: bold`,
+    `font-weight: normal; color: green`
+  );
+  Deno.exit(0);
+}
 
 const remoteExtensions = await fetchExtensions(extensions);
 let outdated = 0;
@@ -151,13 +198,20 @@ for (const extension of extensions) {
       const current = semver.parse(extension.version);
       const latest = semver.parse(fetched.latestVersion);
       if (semver.compare(current, latest) >= 0) {
+        if (!flags["status-bar"]) {
+          console.log(
+            `%c${id}:%c up-to-date`,
+            `font-weight: bold;`,
+            `font-weight: normal;`
+          );
+        }
         continue;
       }
     } catch {
       // Continue...
     }
   }
-  if (flags.install) {
+  if (flags.update) {
     extension.version = fetched.latestVersion;
     extension.sha256 = await downloadAndHash(fetched.vsixDownloadURL);
   }
@@ -181,8 +235,7 @@ if (flags["status-bar"]) {
   } else {
     console.log(`${outdated} outdated`);
   }
+  Deno.exit(0);
 }
 
-if (flags.install) {
-  Deno.writeTextFile(manifestPath, JSON.stringify(extensions, undefined, "  "));
-}
+await writeManifest(extensions);

@@ -52,9 +52,9 @@ memory {
 
 external_script "extensions" {
         format = "extensions: {output}"
-        script_path = "nix-vscode-extensions ~/projects/kylecarbs/nixos-config/hosts/vscode-extensions.json --status-bar"
+        script_path = "nix-vscode-extensions --status-bar"
         cache_timeout = 60
-        on_click 3 = "exec nix-vscode-extensions ~/projects/kylecarbs/nixos-config/hosts/vscode-extensions.json --install"
+        on_click 3 = "exec nix-vscode-extensions --update"
 }
 
 external_script "prs" {
