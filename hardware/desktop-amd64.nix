@@ -73,6 +73,7 @@
 
   # These packages are only available on amd64.
   environment.systemPackages = with pkgs; [
+    figma-linux
     google-chrome
     slack
     spotify
