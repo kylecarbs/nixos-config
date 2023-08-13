@@ -19,7 +19,6 @@ in
     deno
     dig
     fish
-    flameshot
     gh
     git
     glxinfo
@@ -81,6 +80,8 @@ in
     enable = true;
     theme = "Arc-Dark";
   };
+
+  services.flameshot.enable = true;
 
   xdg.enable = true;
   xdg.configFile."i3/config".text = builtins.readFile ./config/i3;
