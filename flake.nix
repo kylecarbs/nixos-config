@@ -13,11 +13,14 @@
         {
           home-manager.users.kyle =
             let
-              homeConfig = import ./hosts/home.nix;
+              pkgs = import nixpkgs {
+                inherit system;
+              };
+              homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in
-            homeConfig // {
+            nixpkgs.lib.recursiveUpdate homeConfig {
               programs.alacritty.settings.env = {
-                # In our VM we don't have LIBGL rendering!
+                # Our VM must use software rendering!
                 LIBGL_ALWAYS_SOFTWARE = "1";
               };
             };

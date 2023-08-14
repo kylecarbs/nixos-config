@@ -38,14 +38,14 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.101.329",
-    "sha256": "sha256-wxU9NMRLLmRUGQrbCWzanRfQxrQrOCJCWY+wenguaPw="
+    "version": "1.102.333",
+    "sha256": "sha256-wCp78IRH1juBF+r6QXVIwhLXlO8W67b6mMNkSTZGHjs="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.71.2023081016",
-    "sha256": "sha256-hFSyi6UHWJtVH16wROoQLxLevPS4d3WFCiMmPFq4JYE="
+    "version": "0.71.2023081409",
+    "sha256": "sha256-s1TdiV0pSQYeb74PEPmqfxLP5jwhOZFoGHuM4ZlEkT0="
   },
   {
     "publisher": "golang",
