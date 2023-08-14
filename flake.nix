@@ -23,6 +23,7 @@
                 # Our VM must use software rendering!
                 LIBGL_ALWAYS_SOFTWARE = "1";
               };
+              programs.rofi.font = "Fira Code 24";
             };
         }
       ];

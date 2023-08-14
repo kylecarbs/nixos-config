@@ -79,6 +79,7 @@ in
   programs.rofi = {
     enable = true;
     theme = "Arc-Dark";
+    font = "Fira Code 14";
   };
 
   services.flameshot.enable = true;

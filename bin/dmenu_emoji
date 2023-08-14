@@ -16,7 +16,7 @@ case "$1" in
     fi
     ;;
   "")
-    bash $0 list | rofi -dmenu -i -theme-str '#window { width: 20%; }' -p "Name" -font "Fira Code 14" | bash $0 copy
+    bash $0 list | rofi -dmenu -i -theme-str '#window { width: 25%; }' -p "Name" | bash $0 copy
     ;;
 esac
 
