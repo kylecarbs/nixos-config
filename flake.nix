@@ -3,6 +3,7 @@
 
   outputs = { self, nixpkgs, home-manager }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+    formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.nixpkgs-fmt;
 
     # A UTM VM on my M2 Macbook used when traveling or at coffee shops.
     nixosConfigurations.vm-aarch64 = nixpkgs.lib.nixosSystem rec {
@@ -25,6 +26,7 @@
               };
               programs.rofi.font = "Fira Code 24";
               services.picom.enable = true;
+              home.file.".local/bin/vmres".source = ./bin/vmres;
             };
         }
       ];

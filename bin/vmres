@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Automatically adjusts the VM resolution to fix the screen.
+# This works with spice-vdagent!
+xrandr --output Virtual-1 --auto

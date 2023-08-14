@@ -66,8 +66,8 @@
   # DHCP was adding a local nameserver which was causing DNS issues.
   environment.etc = {
     "resolv.conf".text = ''
-    nameserver 8.8.8.8
-    nameserver 1.1.1.1
+      nameserver 8.8.8.8
+      nameserver 1.1.1.1
     '';
   };
 
