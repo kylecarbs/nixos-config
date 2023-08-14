@@ -48,8 +48,14 @@
   # The DPI has to be bigger for the smaller screen!
   services.xserver.dpi = 180;
 
+  nixpkgs.overlays = [
+    (import ../overlays/slack.nix)
+  ];
+
   environment.systemPackages = with pkgs; [
     # Google Chrome isn't available on arm64
     chromium
+    slack
   ];
+  environment.variables.BROWSER = "chromium";
 }

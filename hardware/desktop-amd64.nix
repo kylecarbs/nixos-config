@@ -75,8 +75,9 @@
   environment.systemPackages = with pkgs; [
     figma-linux
     google-chrome
-    slack
     spotify
+    slack
     zoom-us
   ];
+  environment.variables.BROWSER = "google-chrome";
 }
