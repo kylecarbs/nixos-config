@@ -1,0 +1,26 @@
+{
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.fontFamily": "'Berkeley Mono', 'Fira Code'",
+  "editor.fontSize": 15,
+  "editor.inlineSuggest.enabled": true,
+  "files.associations": {
+    "*.gotmpl": "go",
+    "*.tf": "terraform"
+  },
+  "git.mergeEditor": false,
+  "go.coverMode": "atomic",
+  "go.coverShowCounts": true,
+  "go.testFlags": ["-v"],
+  "go.useLanguageServer": true,
+  "remote.localPortHost": "allInterfaces",
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "terminal.integrated.fontSize": 15,
+  "window.dialogStyle": "custom",
+  "window.menuBarVisibility": "toggle",
+  "workbench.colorTheme": "Min Dark"
+}

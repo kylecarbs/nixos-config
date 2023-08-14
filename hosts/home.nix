@@ -5,6 +5,7 @@ let
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
 
   vscodeExtensions = builtins.fromJSON (builtins.readFile ./vscode-extensions.json);
+  vscodeSettings = builtins.fromJSON (builtins.readFile ./vscode-settings.json);
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -50,6 +51,7 @@ in
     # To add new extensions, add them to the vscode-extensions.json file and
     # then run `make update-vscode-extensions`.
     extensions = pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions;
+    userSettings = vscodeSettings;
   };
 
   programs.fish = {
