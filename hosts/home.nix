@@ -36,6 +36,7 @@ in
     nixpkgs-fmt
     nix-prefetch-docker
     nodejs-18_x
+    skopeo
     tailscale
     unzip
     vim

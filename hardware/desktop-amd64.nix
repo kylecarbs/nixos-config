@@ -10,6 +10,8 @@
   boot.initrd.availableKernelModules = [ "nvme" "ahci" "xhci_pci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
   boot.extraModulePackages = [ ];
   boot.loader.grub = {
     enable = true;
