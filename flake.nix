@@ -38,7 +38,17 @@
         ./hardware/desktop-amd64.nix
         home-manager.nixosModules.home-manager
         {
-          home-manager.users.kyle = import ./hosts/home.nix;
+          home-manager.users.kyle =
+            let
+              pkgs = import nixpkgs {
+                system = "x86_64-linux";
+              };
+              homeConfig = import ./hosts/home.nix { inherit pkgs; };
+            in
+            nixpkgs.lib.recursiveUpdate homeConfig {
+              programs.vscode.userSettings."editor.fontSize" = 16;
+              programs.vscode.userSettings."terminal.fontSize" = 16;
+            };
         }
       ];
     };

@@ -17,6 +17,9 @@
   "go.coverShowCounts": true,
   "go.testFlags": ["-v"],
   "go.useLanguageServer": true,
+  "gopls": {
+    "ui.semanticTokens": true
+  },
   "remote.localPortHost": "allInterfaces",
   "terminal.integrated.enableMultiLinePasteWarning": false,
   "terminal.integrated.fontSize": 15,
