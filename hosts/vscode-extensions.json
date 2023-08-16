@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.103.338",
-    "sha256": "sha256-d1KVer6z79beJ1SbruoImmrtgwjpvldCjpUHnFUm+lQ="
+    "version": "1.103.339",
+    "sha256": "sha256-U4VWoM2Hl1aOEwIkFjGibDW49kTvxogQVJWG0pwOiXg="
   },
   {
     "publisher": "github",
@@ -86,8 +86,8 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-ssh",
-    "version": "0.105.2023080715",
-    "sha256": "sha256-G0IDyP2kbAbuavlGKbjNYRWKwPAtnrrJM5NgaRVAUhY="
+    "version": "0.106.2023081615",
+    "sha256": "sha256-AScIwyTBDRatoLO6CWoMvC30YbmzESzqMxqzDE3iWU4="
   },
   {
     "publisher": "streetsidesoftware",
