@@ -9,6 +9,10 @@ in
   imports =
     [
       ../pkgs/sysbox.nix
+      (fetchTarball {
+        url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
+        sha256 = "0sz8njfxn5bw89n6xhlzsbxkafb6qmnszj4qxy2w0hw2mgmjp829";
+      })
     ];
 
   nixpkgs.config.allowUnfree = true;
@@ -47,8 +51,11 @@ in
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
+  # The NodeJS in VS Code by default fails to link!
+  services.vscode-server.enable = true;
   programs.fish.enable = true;
   virtualisation.docker.enable = true;
+  services.openssh.enable = true;
   services.sysbox.enable = true;
   services.tailscale.enable = true;
   # Useful for VS Code storing credentials.
