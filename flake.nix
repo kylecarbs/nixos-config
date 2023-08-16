@@ -20,9 +20,9 @@
               homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
-              programs.alacritty.settings.env = {
-                # Our VM must use software rendering!
-                LIBGL_ALWAYS_SOFTWARE = "1";
+              # Needed for the terminal to be hardware accelerated.
+              programs.alacritty.settings.debug = {
+                renderer = "gles2_pure";
               };
               programs.rofi.font = "Fira Code 24";
               services.picom.enable = true;
