@@ -24,6 +24,9 @@
     "ui.semanticTokens": true
   },
   "remote.localPortHost": "allInterfaces",
+  "remote.SSH.remotePlatform": {
+    "coder-vscode--kylecarbs--dev--dev": "linux"
+  },
   "terminal.integrated.enableMultiLinePasteWarning": false,
   "terminal.integrated.fontSize": 15,
   "window.dialogStyle": "custom",

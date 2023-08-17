@@ -15,11 +15,11 @@ in
   home.packages = with pkgs; [
     bat
     betterbird-unwrapped
-    bintools
     coder
     deno
     dig
     fish
+    gcc
     gh
     git
     glxinfo
@@ -54,7 +54,6 @@ in
 
   programs.vscode = {
     enable = true;
-    mutableExtensionsDir = false;
     # To add new extensions, add them to the vscode-extensions.json file and
     # then run `make update-vscode-extensions`.
     extensions = pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions;
