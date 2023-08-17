@@ -8,6 +8,7 @@
 import { createHash } from "https://deno.land/std@0.108.0/hash/mod.ts";
 import * as semver from "https://deno.land/std@0.198.0/semver/mod.ts";
 import { parse } from "https://deno.land/std@0.194.0/flags/mod.ts";
+import { execSync } from "https://deno.land/std@0.173.0/node/child_process.ts";
 
 interface Extension {
   readonly publisher: string;
@@ -22,6 +23,8 @@ interface RemoteExtension {
   readonly latestVersion: string;
   readonly vsixDownloadURL: string;
 }
+
+const vscodeVersion = execSync("code --version", {}).toString().trim().split("\n")[0];
 
 const extensionID = (p: string, n: string) => `${p}.${n}`.toLowerCase();
 
@@ -39,9 +42,8 @@ const fetchExtensions = async (
         })),
       },
     ],
-    // Hardcoded and discovered from browsing the VS Code marketplace on the web.
-    // This ensures versions are returned!
-    flags: 2151,
+    // See: https://github.com/microsoft/vscode/blob/29736e1ff8aa5ac860b539997c386163f8434bb6/src/vs/platform/extensionManagement/common/extensionGalleryService.ts#L102
+    flags: 0x1 | 0x2 | 0x10,
   });
   const result = await fetch(requestUrl, {
     method: "POST",
@@ -65,6 +67,12 @@ const fetchExtensions = async (
             versions: [
               {
                 version: string;
+                properties?: [
+                  {
+                    key: string;
+                    value: string;
+                  }
+                ];
                 files: [
                   {
                     assetType: string;
@@ -84,7 +92,23 @@ const fetchExtensions = async (
   const extensions: Record<string, RemoteExtension> = {};
 
   response.results[0].extensions.forEach((extension) => {
-    const version = extension.versions[0];
+    const version = extension.versions.filter((v) => {
+      if (!v.properties) {
+        return false
+      }
+      const engine = v.properties.find((p) => p.key === "Microsoft.VisualStudio.Code.Engine");
+      if (!engine) {
+        return false;
+      }
+      if (engine.value.startsWith("^")) {
+        engine.value = engine.value.slice(1)
+      }
+      const range = semver.parseRange(`>=`+engine.value)
+      return semver.testRange(vscodeVersion, range)
+    })[0]
+    if (!version) {
+      throw new Error("no valid version found for " + extension.extensionName);
+    }
     const vsix = version.files.filter(
       (v) => v.assetType === "Microsoft.VisualStudio.Services.VSIXPackage"
     );
