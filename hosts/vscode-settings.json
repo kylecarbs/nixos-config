@@ -5,6 +5,9 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "editor.fontFamily": "'Berkeley Mono', 'Fira Code'",
   "editor.fontSize": 15,
   "editor.inlineSuggest.enabled": true,
