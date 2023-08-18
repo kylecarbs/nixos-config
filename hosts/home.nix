@@ -47,9 +47,6 @@ in
 
   programs.alacritty = {
     enable = true;
-    settings.font = {
-      size = 20;
-    };
   };
 
   programs.vscode = {
