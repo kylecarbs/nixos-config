@@ -2,8 +2,8 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.19",
-    "sha256": "sha256-Saw+D1haSGAq2bdlYjEjM/GF95eQmJEDXXB8VGQkXiE="
+    "version": "0.1.20",
+    "sha256": "sha256-ClwsgU+MshpFE6RGxtZmqFx0LP9t+SE24yBzmiQJ5ms="
   },
   {
     "publisher": "dbaeumer",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.104.342",
-    "sha256": "sha256-K2XcnDIFhFO0eBufrer5HMZsC5Mt4eyZGUuBSfJPTso="
+    "version": "1.104.343",
+    "sha256": "sha256-wSWdoxC/hD+wHjHrMPktpsHMsCV88avj3UwPM2DBP8o="
   },
   {
     "publisher": "github",
