@@ -24,7 +24,10 @@ interface RemoteExtension {
   readonly vsixDownloadURL: string;
 }
 
-const vscodeVersion = execSync("code --version", {}).toString().trim().split("\n")[0];
+const vscodeVersion = execSync("code --version", {})
+  .toString()
+  .trim()
+  .split("\n")[0];
 
 const extensionID = (p: string, n: string) => `${p}.${n}`.toLowerCase();
 
@@ -94,18 +97,20 @@ const fetchExtensions = async (
   response.results[0].extensions.forEach((extension) => {
     const version = extension.versions.filter((v) => {
       if (!v.properties) {
-        return false
+        return false;
       }
-      const engine = v.properties.find((p) => p.key === "Microsoft.VisualStudio.Code.Engine");
+      const engine = v.properties.find(
+        (p) => p.key === "Microsoft.VisualStudio.Code.Engine"
+      );
       if (!engine) {
         return false;
       }
       if (engine.value.startsWith("^")) {
-        engine.value = engine.value.slice(1)
+        engine.value = engine.value.slice(1);
       }
-      const range = semver.parseRange(`>=`+engine.value)
-      return semver.testRange(vscodeVersion, range)
-    })[0]
+      const range = semver.parseRange(`>=` + engine.value);
+      return semver.testRange(vscodeVersion, range);
+    })[0];
     if (!version) {
       throw new Error("no valid version found for " + extension.extensionName);
     }
@@ -139,7 +144,7 @@ const downloadAndHash = async (url: string) => {
 };
 
 const flags = parse(Deno.args, {
-  boolean: ["help", "update", "status-bar"],
+  boolean: ["help", "update", "status-bar", "commit"],
   string: ["install"],
 });
 if (flags.help) {
@@ -147,11 +152,11 @@ if (flags.help) {
   Deno.exit(1);
 }
 
+const repoPath = `${Deno.env.get("HOME")}/projects/kylecarbs/nixos-config`;
+
 let manifestPath = flags._[0] as string;
 if (!manifestPath) {
-  manifestPath = `${Deno.env.get(
-    "HOME"
-  )}/projects/kylecarbs/nixos-config/hosts/vscode-extensions.json`;
+  manifestPath = `${repoPath}/hosts/vscode-extensions.json`;
 }
 
 const writeManifest = async (extensions: ReadonlyArray<Extension>) => {
@@ -263,3 +268,30 @@ if (flags["status-bar"]) {
 }
 
 await writeManifest(extensions);
+
+if (flags["commit"]) {
+  const diff = new Deno.Command("git", {
+    args: ["diff", "--exit-code"],
+    cwd: repoPath,
+  });
+  if (diff.outputSync().code === 0) {
+    console.log("no changes to commit");
+    Deno.exit(0);
+  }
+  const commit = new Deno.Command("git", {
+    args: ["commit", "-m", "Update vscode-extensions.json", manifestPath],
+    cwd: repoPath,
+  });
+  if (commit.outputSync().code !== 0) {
+    console.error("failed to commit");
+    Deno.exit(1);
+  }
+  const push = new Deno.Command("git", {
+    args: ["push"],
+    cwd: repoPath,
+  });
+  if (push.outputSync().code !== 0) {
+    console.error("failed to push");
+    Deno.exit(1);
+  }
+}

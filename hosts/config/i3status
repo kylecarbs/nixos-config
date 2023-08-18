@@ -54,7 +54,7 @@ external_script "extensions" {
         format = "extensions: {output}"
         script_path = "nix-vscode-extensions --status-bar"
         cache_timeout = 60
-        on_click 3 = "exec nix-vscode-extensions --update"
+        on_click 3 = "exec nix-vscode-extensions --update --commit"
 }
 
 external_script "prs" {
