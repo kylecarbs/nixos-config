@@ -20,7 +20,6 @@ in
     dig
     fish
     gcc
-    gh
     git
     glxinfo
     gnumake
@@ -66,6 +65,13 @@ in
     enable = true;
 
     interactiveShellInit = builtins.readFile ./config/config.fish;
+  };
+
+  programs.gh = {
+    enable = true;
+    gitCredentialHelper = {
+      enable = true;
+    };
   };
 
   programs.git = {
