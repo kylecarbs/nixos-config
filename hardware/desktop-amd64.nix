@@ -54,6 +54,11 @@
   services.xserver.screenSection = ''
     Option         "nvidiaXineramaInfoOrder" "DFP-1"
   '';
+  # Required for Cuda!
+  systemd.services.nvidia-control-devices = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.ExecStart = "${pkgs.linuxPackages.nvidia_x11.bin}/bin/nvidia-smi";
+  };
 
   nixpkgs.overlays = [
     (import ../overlays/google-chrome.nix)
