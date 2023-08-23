@@ -3,3 +3,5 @@
 # Automatically adjusts the VM resolution to fix the screen.
 # This works with spice-vdagent!
 xrandr --output Virtual-1 --auto
+# I have no idea why, but it thinks my refresh is 75hz by default!
+xrandr --current --rate 60
