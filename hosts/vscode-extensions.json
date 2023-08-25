@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.8.2305",
-    "sha256": "sha256-k5yB+lApU8gZPi52Iwr5MAG/BlSahlYVSIogbbTpVHw="
+    "version": "2023.8.2505",
+    "sha256": "sha256-qLCp6TlX4Y3wK9DLBnZzjhkWCXDuYKZRdPiX/hidHJs="
   },
   {
     "publisher": "esbenp",
@@ -38,14 +38,14 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.105.354",
-    "sha256": "sha256-QuZ2Dhy8K2o/9vH+ejvY6ICG8bpzAIa9uq9xvabav/Q="
+    "version": "1.105.358",
+    "sha256": "sha256-OK+6mLGfq1eM9PA7CWT1LrhcOLyiEQRijqX3u/zlazM="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.71.2023082309",
-    "sha256": "sha256-+NpTSYNnsChBqVVqB9CicT5/DWc61iZ7wtmO26jXY6k="
+    "version": "0.71.2023082409",
+    "sha256": "sha256-rHdJMTxK59upRO87sO4v2ynSKHQ1tKs2OdDmFuLqe9Q="
   },
   {
     "publisher": "golang",
