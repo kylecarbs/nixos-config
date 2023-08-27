@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.8.2505",
-    "sha256": "sha256-qLCp6TlX4Y3wK9DLBnZzjhkWCXDuYKZRdPiX/hidHJs="
+    "version": "2023.8.2605",
+    "sha256": "sha256-OXSdqeDOIT+vGcAxLkypsIqYzQvNGrF5QbiqprRpYs0="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.105.359",
-    "sha256": "sha256-eYEEiYQarKah6AD/uuLcNO7sHstKyQbshPxVxZDAnyA="
+    "version": "1.105.361",
+    "sha256": "sha256-VSsB+DoGOGRftzF3Ghm1pCCpBhwemjxYhRRzBZiFdso="
   },
   {
     "publisher": "github",
