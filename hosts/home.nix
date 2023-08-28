@@ -57,7 +57,10 @@ in
     enable = true;
     # To add new extensions, add them to the vscode-extensions.json file and
     # then run `make update-vscode-extensions`.
-    extensions = pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions;
+    extensions = (pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions) ++ [
+      # Terraform has a custom build script!
+      pkgs.vscode-extensions.hashicorp.terraform
+    ];
     userSettings = vscodeSettings;
   };
 

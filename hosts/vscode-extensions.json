@@ -54,12 +54,6 @@
     "sha256": "sha256-gAaTCmBfyPM5dtQ6HSj1ueW6OIuc7N5ylCtEp8PRSE4="
   },
   {
-    "publisher": "hashicorp",
-    "name": "terraform",
-    "version": "2.27.2023071109",
-    "sha256": "sha256-ir/x+q868xclfr7xER0VY3kDYEix3rkxyMzJXEzdVfo="
-  },
-  {
     "publisher": "jnoortheen",
     "name": "nix-ide",
     "version": "0.2.2",
