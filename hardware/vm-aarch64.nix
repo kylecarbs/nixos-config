@@ -47,7 +47,7 @@
   # Required for automating resizing with UTM.
   services.spice-vdagentd.enable = true;
   # The DPI has to be bigger for the smaller screen!
-  services.xserver.dpi = 180;
+  services.xserver.dpi = 200;
 
   nixpkgs.overlays = [
     (import ../overlays/slack.nix)

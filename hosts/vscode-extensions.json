@@ -38,14 +38,14 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.105.361",
-    "sha256": "sha256-VSsB+DoGOGRftzF3Ghm1pCCpBhwemjxYhRRzBZiFdso="
+    "version": "1.105.364",
+    "sha256": "sha256-DGLX0xxZkUtbPn3tEtsBTeT/cJCkDAslKxsxvXHrc1w="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.71.2023082409",
-    "sha256": "sha256-rHdJMTxK59upRO87sO4v2ynSKHQ1tKs2OdDmFuLqe9Q="
+    "version": "0.71.2023082809",
+    "sha256": "sha256-zgAMJLNW1rjgrD1u+gwY03m/r5GeHdZElog25xuqLyg="
   },
   {
     "publisher": "golang",
@@ -57,7 +57,7 @@
     "publisher": "hashicorp",
     "name": "terraform",
     "version": "2.27.2023071109",
-    "sha256": "sha256-RXQZu0J4UJwFl1e00cWNX5PeorfOXQ1AO+xmtQUmoxg="
+    "sha256": "sha256-ir/x+q868xclfr7xER0VY3kDYEix3rkxyMzJXEzdVfo="
   },
   {
     "publisher": "jnoortheen",

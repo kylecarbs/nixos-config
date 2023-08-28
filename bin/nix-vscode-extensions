@@ -9,6 +9,7 @@ import { createHash } from "https://deno.land/std@0.108.0/hash/mod.ts";
 import * as semver from "https://deno.land/std@0.198.0/semver/mod.ts";
 import { parse } from "https://deno.land/std@0.194.0/flags/mod.ts";
 import { execSync } from "https://deno.land/std@0.173.0/node/child_process.ts";
+import { os } from "https://deno.land/std@0.173.0/node/internal_binding/constants.ts";
 
 interface Extension {
   readonly publisher: string;
@@ -70,6 +71,7 @@ const fetchExtensions = async (
             versions: [
               {
                 version: string;
+                targetPlatform: "linux-arm64" | "linux-x64";
                 properties?: [
                   {
                     key: string;
@@ -97,6 +99,12 @@ const fetchExtensions = async (
   response.results[0].extensions.forEach((extension) => {
     const version = extension.versions.filter((v) => {
       if (!v.properties) {
+        return false;
+      }
+      if (Deno.build.arch === "x86_64" && v.targetPlatform !== "linux-x64") {
+        return false;
+      }
+      if (Deno.build.arch === "aarch64" && v.targetPlatform !== "linux-arm64") {
         return false;
       }
       const engine = v.properties.find(

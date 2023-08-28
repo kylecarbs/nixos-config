@@ -34,7 +34,9 @@ in
   };
 
   # Enable graphics virtualization.
-  hardware.opengl.enable = true;
+  hardware.opengl = {
+    enable = true;
+  };
 
   # Add my user!
   users.users.kyle = {
