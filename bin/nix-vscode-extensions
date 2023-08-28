@@ -71,7 +71,7 @@ const fetchExtensions = async (
             versions: [
               {
                 version: string;
-                targetPlatform: "linux-arm64" | "linux-x64";
+                targetPlatform?: "linux-arm64" | "linux-x64";
                 properties?: [
                   {
                     key: string;
@@ -101,10 +101,10 @@ const fetchExtensions = async (
       if (!v.properties) {
         return false;
       }
-      if (Deno.build.arch === "x86_64" && v.targetPlatform !== "linux-x64") {
+      if (v.targetPlatform && Deno.build.arch === "x86_64" && v.targetPlatform !== "linux-x64") {
         return false;
       }
-      if (Deno.build.arch === "aarch64" && v.targetPlatform !== "linux-arm64") {
+      if (v.targetPlatform && Deno.build.arch === "aarch64" && v.targetPlatform !== "linux-arm64") {
         return false;
       }
       const engine = v.properties.find(
