@@ -49,12 +49,14 @@
 
   nixpkgs.overlays = [
     (import ../overlays/chromium.nix)
+    (import ../overlays/discord.nix)
     (import ../overlays/slack.nix)
   ];
 
   environment.systemPackages = with pkgs; [
     # Google Chrome isn't available on arm64
     chromium
+    discord
     slack
   ];
   environment.variables.BROWSER = "chromium";
