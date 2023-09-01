@@ -19,14 +19,12 @@
 
   # This won't work on other systems... it's hardcoded to my current M2's UUIDs.
   fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/fd23d902-9741-4bfb-a1e6-1c5685a2e261";
+    { device = "/dev/disk/by-uuid/c689a4f6-d0d1-4cad-97dc-c1753c7916bf";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/3F78-3D08";
+    { device = "/dev/disk/by-uuid/01A0-9140";
       fsType = "vfat";
     };
 
@@ -44,8 +42,8 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 
-  # Required for automating resizing with UTM.
-  services.spice-vdagentd.enable = true;
+  # Required for automatic screen resize!
+  hardware.parallels.enable = true;
   # The DPI has to be bigger for the smaller screen!
   services.xserver.dpi = 200;
 

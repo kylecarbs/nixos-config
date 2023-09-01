@@ -20,10 +20,6 @@
               homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
-              # Needed for the terminal to be hardware accelerated.
-              programs.alacritty.settings.debug = {
-                renderer = "gles2_pure";
-              };
               programs.rofi.font = "Fira Code 24";
               services.picom.enable = true;
               home.file.".local/bin/vmres".source = ./bin/vmres;
