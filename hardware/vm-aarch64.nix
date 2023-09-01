@@ -50,6 +50,7 @@
   services.xserver.dpi = 200;
 
   nixpkgs.overlays = [
+    (import ../overlays/chromium.nix)
     (import ../overlays/slack.nix)
   ];
 
