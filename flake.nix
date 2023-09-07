@@ -25,6 +25,7 @@
               home.file.".local/bin/vmres".source = ./bin/vmres;
               # For _whatever_ reason, this doesn't work on my VM.
               programs.vscode.userSettings."remote.SSH.useLocalServer" = false;
+              home.pointerCursor.size = 96;
             };
         }
       ];

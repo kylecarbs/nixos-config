@@ -19,6 +19,7 @@ in
   boot.loader.efi.efiSysMountPoint = "/boot";
   i18n.defaultLocale = "en_CA.UTF-8";
   networking.networkmanager.enable = true;
+  services.chrony.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" "ca-derivations" ];
   time.timeZone = "America/Chicago";
 

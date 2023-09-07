@@ -48,7 +48,7 @@ in
     enable = true;
     settings = {
       font = {
-        size = 20;
+        size = 24;
       };
     };
   };
@@ -106,6 +106,12 @@ in
   xdg.enable = true;
   xdg.configFile."i3/config".text = builtins.readFile ./config/i3;
   xdg.configFile."i3status/config".text = builtins.readFile ./config/i3status;
+
+  home.pointerCursor = {
+    x11.enable = true;
+    package = pkgs.vanilla-dmz;
+    name = "Vanilla-DMZ";
+  };
 
   # Add all of our binaries!
   home.file.".local/bin/dmenu_emoji".source = ../bin/dmenu_emoji;
