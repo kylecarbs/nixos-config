@@ -10,6 +10,7 @@ py3status {
 order += "google_calendar"
 order += "external_script extensions"
 order += "external_script prs"
+order += "battery status"
 order += "disk /"
 order += "cpu_usage"
 order += "memory"
@@ -30,6 +31,11 @@ google_calendar {
             (4, '#ff7f7f'), (5, '#ff5f5f'), (6, '#ff3f3f'), (7, '#ff1f1f')]
     }
     warn_threshold = 10
+}
+
+battery "status" {
+        format = " bat: %percentage "
+        integer_battery_capacity = true
 }
 
 disk "/" {
