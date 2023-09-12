@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.9.805",
-    "sha256": "sha256-fzHQ+aOjrmFecMcN1OLXjNPT1CnuZuxX0jwSLvtZES0="
+    "version": "2023.9.1205",
+    "sha256": "sha256-mjlzS5/uTovN8zQf5inctXWe2sSWCiJOH2ecNtk4NlE="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.110.394",
-    "sha256": "sha256-Odz6eVrWLPr2nwbNuFb5qXBZlmBXHqGXE0kmY4jeZ6E="
+    "version": "1.111.405",
+    "sha256": "sha256-b3zTBxRF4zbhsjPtf222uuq+pxpxB1t59jOdas+a2yY="
   },
   {
     "publisher": "github",
@@ -86,8 +86,8 @@
   {
     "publisher": "streetsidesoftware",
     "name": "code-spell-checker",
-    "version": "3.0.0",
-    "sha256": "sha256-MQ3LpSKwQek/7wVl18VBOtpsekW2QR2UNmPd9MKr0cg="
+    "version": "3.0.1",
+    "sha256": "sha256-KeYE6/yO2n3RHPjnJOnOyHsz4XW81y9AbkSC/I975kQ="
   },
   {
     "publisher": "usernamehw",
