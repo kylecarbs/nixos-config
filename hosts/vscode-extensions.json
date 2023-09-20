@@ -2,8 +2,8 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.21",
-    "sha256": "sha256-CeJy2QrZarnGFLr69MuvMzjhJmaJgcxjuhq+qFIetAs="
+    "version": "0.1.23",
+    "sha256": "sha256-Ww73t+RB60rGzcoWTnj3xSRbwVf7q4QIpnyN4CAQEc8="
   },
   {
     "publisher": "dbaeumer",
@@ -14,14 +14,14 @@
   {
     "publisher": "denoland",
     "name": "vscode-deno",
-    "version": "3.22.0",
-    "sha256": "sha256-oKiAz4ItlJm9TYazL3otoecueHYz4CuwVmWhhBtT0h0="
+    "version": "3.23.1",
+    "sha256": "sha256-vdQdc+5X8X+6cGFR3MP5xG2GbVAz0C/JfMi/euXM/LY="
   },
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.9.1205",
-    "sha256": "sha256-mjlzS5/uTovN8zQf5inctXWe2sSWCiJOH2ecNtk4NlE="
+    "version": "2023.9.2005",
+    "sha256": "sha256-PNvT/rfGTIkmDmmrmUg+nHM+/EcYBCZJXOk1Qs1EJkM="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.111.405",
-    "sha256": "sha256-b3zTBxRF4zbhsjPtf222uuq+pxpxB1t59jOdas+a2yY="
+    "version": "1.114.426",
+    "sha256": "sha256-ENqugIOojZP3qsKrPQfI/K35vS7ETS8q+a/KFwfRnRk="
   },
   {
     "publisher": "github",
@@ -68,8 +68,8 @@
   {
     "publisher": "ms-azuretools",
     "name": "vscode-docker",
-    "version": "1.26.0",
-    "sha256": "sha256-RkHKO97so3N61UXc35IekmLEsdPQIOpSxiDzCGL3VTs="
+    "version": "1.26.1",
+    "sha256": "sha256-+L1Stkhf4e+ZKzwGGaowiw3kaMF89Ym1JxUD1pxW6NE="
   },
   {
     "publisher": "ms-vscode-remote",
