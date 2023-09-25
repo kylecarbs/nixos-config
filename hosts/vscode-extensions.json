@@ -14,14 +14,14 @@
   {
     "publisher": "denoland",
     "name": "vscode-deno",
-    "version": "3.23.1",
-    "sha256": "sha256-vdQdc+5X8X+6cGFR3MP5xG2GbVAz0C/JfMi/euXM/LY="
+    "version": "3.24.0",
+    "sha256": "sha256-utMDD9F6mmhAif+EtH8ZIQVYRtPaHV366NVLLPuK3jY="
   },
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.9.2005",
-    "sha256": "sha256-PNvT/rfGTIkmDmmrmUg+nHM+/EcYBCZJXOk1Qs1EJkM="
+    "version": "2023.9.2512",
+    "sha256": "sha256-eDKiFGt5DhmKINlEvvB5TMMKk3pi5lR1JkLtbJdJYBw="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.114.426",
-    "sha256": "sha256-ENqugIOojZP3qsKrPQfI/K35vS7ETS8q+a/KFwfRnRk="
+    "version": "1.115.438",
+    "sha256": "sha256-3tZXrmjI94AQ4Hm6lk5TlH1njat/W8ikPLdQUEFjD8U="
   },
   {
     "publisher": "github",
@@ -92,8 +92,8 @@
   {
     "publisher": "usernamehw",
     "name": "errorlens",
-    "version": "3.13.0",
-    "sha256": "sha256-HslBfJsKDUGq+xdCBfYlxsWJ4xOB9flfyO2aUCqwmYM="
+    "version": "3.14.0",
+    "sha256": "sha256-SBTpEt722VeocWjVsfjhqFeFaDXjEKAGlWMzSFxx4Ew="
   },
   {
     "publisher": "yzhang",
