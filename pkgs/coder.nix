@@ -5,7 +5,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coder";
-  version = "2.0.1";
+  version = "2.1.5";
 
   src = fetchurl {
     url = "https://github.com/coder/coder/releases/download/v${version}/coder_${version}_linux_${{
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     }.${system}}.tar.gz";
     sha256 = {
       "x86_64-linux" = "sha256-EuySOs1Ln6OphX9jVzX3pZvzrboAv8JsZFBUj3XEUHA=";
-      "aarch64-linux" = "sha256-WcNWzBW0ISxWtuQ4ZiITxUAdBWj1DhsUPoSRkYKUODc=";
+      "aarch64-linux" = "sha256-fIpWNQLAThw2001F2DrYJ/oKuaoGKxwftiMWtKOKpxM=";
     }.${system};
   };
 

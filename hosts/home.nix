@@ -16,10 +16,10 @@ in
     bat
     betterbird-unwrapped
     (bun.overrideAttrs (oldAttrs: {
-      version = "1.0.0";
+      version = "1.0.2";
       src = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v1.0.0/bun-linux-aarch64.zip";
-        hash = "sha256-CHOiQ47wXjkFyJG9ElE9gBpmWpylMEUf6c+Sm+YCpGc=";
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v1.0.2/bun-linux-aarch64.zip";
+        hash = "sha256-izVtW28QE7Tty6DfQDKmw1oqD5GOolTzCeIUmtgI1Uw=";
       };
     }))
     coder
@@ -42,8 +42,10 @@ in
     nixpkgs-fmt
     nix-prefetch-docker
     nodejs-18_x
+    simplescreenrecorder
     skopeo
     tailscale
+    terraform
     unzip
     vim
     whois
