@@ -14,14 +14,14 @@
   {
     "publisher": "denoland",
     "name": "vscode-deno",
-    "version": "3.24.0",
-    "sha256": "sha256-utMDD9F6mmhAif+EtH8ZIQVYRtPaHV366NVLLPuK3jY="
+    "version": "3.25.0",
+    "sha256": "sha256-a8iExpTepv/OzyXLqAvWvCk320jTCKFb+hx7BXKELIQ="
   },
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.9.2710",
-    "sha256": "sha256-24GwVKbj/Hr9XZZbTSfkfQsarErcMdI6L2w266XFZsU="
+    "version": "2023.9.2905",
+    "sha256": "sha256-UTRn+CW+jTBzo/1z+DKd+2b/YmtO1INI884rDyVc5D0="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.117.444",
-    "sha256": "sha256-ls/wFbZHfFFZ/bTgQ6SWyDPC2losX+BFfKJbVDHnueA="
+    "version": "1.121.453",
+    "sha256": "sha256-uhwAwdgHt9jk+Hmm01LTB2vI6HOS7R9E9kair6so4Ao="
   },
   {
     "publisher": "github",
