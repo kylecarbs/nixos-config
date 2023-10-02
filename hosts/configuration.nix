@@ -121,6 +121,18 @@ in
   # Replace the gross Linux emojis with pretty Apple ones!
   fonts.fontconfig.defaultFonts.emoji = [ "Apple Color Emoji" ];
 
+  # Starts PostgreSQL on a UNIX socket at "/var/lib/postgresql"
+  # with a "coder" database.
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "coder" ];
+    authentication = pkgs.lib.mkOverride 10 ''
+      #type database  DBuser  address   auth-method
+      local all       all               trust
+      host  all       all     ::1/128   trust
+    '';
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave

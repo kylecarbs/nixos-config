@@ -13,18 +13,22 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "virtio_pci" "usbhid" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
+  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
+  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
   boot.extraModulePackages = [ ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   # This won't work on other systems... it's hardcoded to my current M2's UUIDs.
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/c689a4f6-d0d1-4cad-97dc-c1753c7916bf";
+    {
+      device = "/dev/disk/by-uuid/c689a4f6-d0d1-4cad-97dc-c1753c7916bf";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/01A0-9140";
+    {
+      device = "/dev/disk/by-uuid/01A0-9140";
       fsType = "vfat";
     };
 
@@ -36,9 +40,6 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
   networking.hostName = "vm";
-  # networking.interfaces.docker0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.enp0s1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.tailscale0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 

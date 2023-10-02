@@ -70,7 +70,6 @@ in
       # Terraform has a custom build script!
       pkgs.vscode-extensions.hashicorp.terraform
     ];
-    userSettings = vscodeSettings;
   };
 
   programs.fish = {
