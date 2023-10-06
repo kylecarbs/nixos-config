@@ -23,8 +23,6 @@
               programs.rofi.font = "Fira Code 24";
               services.picom.enable = true;
               home.file.".local/bin/vmres".source = ./bin/vmres;
-              # For _whatever_ reason, this doesn't work on my VM.
-              programs.vscode.userSettings."remote.SSH.useLocalServer" = false;
               home.pointerCursor.size = 96;
             };
         }
@@ -45,8 +43,7 @@
               homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
-              programs.vscode.userSettings."editor.fontSize" = 16;
-              programs.vscode.userSettings."terminal.fontSize" = 16;
+              programs.alacritty.settings.font.size = 14;
             };
         }
       ];
