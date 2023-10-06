@@ -15,13 +15,7 @@ in
   home.packages = with pkgs; [
     bat
     betterbird-unwrapped
-    (bun.overrideAttrs (oldAttrs: {
-      version = "1.0.2";
-      src = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v1.0.2/bun-linux-aarch64.zip";
-        hash = "sha256-izVtW28QE7Tty6DfQDKmw1oqD5GOolTzCeIUmtgI1Uw=";
-      };
-    }))
+    bun
     coder
     deno
     dig
