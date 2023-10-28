@@ -39,7 +39,7 @@ in
     simplescreenrecorder
     skopeo
     tailscale
-    terraform
+    # terraform
     unzip
     vim
     whois
@@ -51,7 +51,7 @@ in
     enable = true;
     settings = {
       font = {
-        size = 24;
+        size = 16;
       };
     };
   };
@@ -114,6 +114,15 @@ in
     package = pkgs.vanilla-dmz;
     name = "Vanilla-DMZ";
   };
+
+  xresources.extraConfig = ''
+Xft.autohint: true
+Xft.antialias: true
+Xft.hinting: true
+Xft.hintstyle: hintslight
+Xft.rgba: rgb
+Xft.lcdfilter: lcddefault
+  '';
 
   # Add all of our binaries!
   home.file.".local/bin/dmenu_emoji".source = ../bin/dmenu_emoji;

@@ -20,10 +20,8 @@
               homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
-              programs.rofi.font = "Fira Code 24";
               services.picom.enable = true;
-              home.file.".local/bin/vmres".source = ./bin/vmres;
-              home.pointerCursor.size = 96;
+              home.pointerCursor.size = 30;
             };
         }
       ];
