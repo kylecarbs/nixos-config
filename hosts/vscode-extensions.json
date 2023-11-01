@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.10.2805",
-    "sha256": "sha256-KkB5yx44L1vWxx6B8Al8mgEkgD11b8JJMoo3y7VquQU="
+    "version": "2023.11.105",
+    "sha256": "sha256-0ARzEGbhYYE4E+Zd30YbGYFceByOuAfyAa5e4eTrrT8="
   },
   {
     "publisher": "esbenp",
@@ -38,14 +38,14 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.130.518",
-    "sha256": "sha256-kHUk9Ap90MAZVyp+avhrgKE8luE+5NekVGZfSwDyzXU="
+    "version": "1.132.526",
+    "sha256": "sha256-xMN+lCBohcA0VT/WqresSp9nczM7Wro/pcbc+IObzpI="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.75.2023102709",
-    "sha256": "sha256-UsoPznfGXihba3M7xB1oteVjYk1Ppe7NndHfYJNUA7s="
+    "version": "0.77.2023110113",
+    "sha256": "sha256-v3Xdw94NHr8krnjXMAD4gSFkbkGJKnfvMksaiYT5y04="
   },
   {
     "publisher": "golang",
@@ -80,8 +80,8 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-ssh",
-    "version": "0.107.2023102615",
-    "sha256": "sha256-RE6Vqhg85JTISzf0R5hvzUM9ul5AUygwkuIJHFYe2zk="
+    "version": "0.107.2023103115",
+    "sha256": "sha256-1Hwja90dtM6hvFMscM0P0e1PysGSkLL9TXKAYnkI3Fk="
   },
   {
     "publisher": "streetsidesoftware",
