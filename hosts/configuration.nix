@@ -63,6 +63,20 @@ in
   # Useful for VS Code storing credentials.
   services.gnome.gnome-keyring.enable = true;
 
+  location.provider = "geoclue2";
+  services.redshift = {
+    enable = true;
+    brightness = {
+      # Note the string values below.
+      day = "1";
+      night = "1";
+    };
+    temperature = {
+      day = 5500;
+      night = 4000;
+    };
+  };
+
   # Change the display manager to i3.
   services.xserver = {
     enable = true;

@@ -15,7 +15,7 @@
   boot.extraModulePackages = [ ];
   boot.loader.grub = {
     enable = true;
-    device = "nodev";
+    device = "/dev/sda";
     efiSupport = true;
     efiInstallAsRemovable = true;
     # Required for scanning my dual-boot Windows!
