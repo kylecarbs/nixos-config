@@ -5,7 +5,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coder";
-  version = "2.1.5";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://github.com/coder/coder/releases/download/v${version}/coder_${version}_linux_${{
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       "aarch64-linux" = "arm64";
     }.${system}}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "sha256-yIhyVxsYfMfsNvMu6wohs/57FXYCnPSibR8l3eu1p3M=";
+      "x86_64-linux" = "sha256-3gO71Eii3KBjn/oQ1Q3OCJ7S6H12iDYjOfqf43ph1nQ=";
       "aarch64-linux" = "sha256-fIpWNQLAThw2001F2DrYJ/oKuaoGKxwftiMWtKOKpxM=";
     }.${system};
   };

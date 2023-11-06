@@ -7,14 +7,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jetbrains-gateway";
-  version = "2023.2";
+  version = "2023.2.4";
 
   src = fetchurl {
     url = "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-${version}${
       { "x86_64-linux" = ""; "aarch64-linux" = "-aarch64"; }.${system}
     }.tar.gz";
     sha256 = {
-      "x86_64-linux" = "sha256-i0BkZw9C0YEs9EBo3ZidUYtG/QSovUtrXo+E6aRPWLI=";
+      "x86_64-linux" = "sha256-C5zxAunR6su9hGEGFFQE+UTkxtbiVIvDRzSkHEqfIOg=";
       "aarch64-linux" = "sha256-wMQOZYIXZj+1jJGXO7c8//624ycdnQ8pF0m9biCgnMo=";
     }.${system};
   };
