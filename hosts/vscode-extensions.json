@@ -2,8 +2,8 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.25",
-    "sha256": "sha256-Ff2Qjs0xlcjcqkCn1InriPAWbC7I/rq+R8DddITda7s="
+    "version": "0.1.28",
+    "sha256": "sha256-2dj2vUW9M6ShNCcdvSufGcNGbkVUzVZjZCRdpNW8rGY="
   },
   {
     "publisher": "dbaeumer",
@@ -14,14 +14,14 @@
   {
     "publisher": "denoland",
     "name": "vscode-deno",
-    "version": "3.26.0",
-    "sha256": "sha256-bEIf6z5LXEYQvmbEAMSWVBhXbcGuePu/aHSFvNh72BI="
+    "version": "3.28.0",
+    "sha256": "sha256-HmfqCbfPZH+g3pwNndYmZt8OFbHccS9zzNhoLM7Q34w="
   },
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.11.504",
-    "sha256": "sha256-gZco6ZXj2mkWn0llw88344NR2Ez039jcXQkSsTa5KdM="
+    "version": "2023.11.2304",
+    "sha256": "sha256-6DJHjM+1/u81wqIs8iyxtWk5laf1Wns499d1XID/L4Y="
   },
   {
     "publisher": "esbenp",
@@ -38,20 +38,20 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.133.531",
-    "sha256": "sha256-zuQKCoAUH87KqTx4KPs5v2MDP2F1Ab0Xa7LMZKcpBHE="
+    "version": "1.138.563",
+    "sha256": "sha256-D0KUhjyCYn0AAMYgBKvs2rRvx7mNHjalcH07FAHk8tY="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.77.2023110609",
-    "sha256": "sha256-/mp/uZSk0y82r7mRmUl4WvEq+fzJCnA+bKqacjS+1pQ="
+    "version": "0.77.2023110909",
+    "sha256": "sha256-FKvBy7VHl1EJkg/DvVVDY9ZmU1lTCnLodMrix+alyuQ="
   },
   {
     "publisher": "golang",
     "name": "go",
-    "version": "0.39.1",
-    "sha256": "sha256-gAaTCmBfyPM5dtQ6HSj1ueW6OIuc7N5ylCtEp8PRSE4="
+    "version": "0.40.0",
+    "sha256": "sha256-otAq6ul2l64zpRJdekCb7XZiE2vgpLUfM4NUdRPZX8w="
   },
   {
     "publisher": "jnoortheen",
@@ -68,8 +68,8 @@
   {
     "publisher": "ms-azuretools",
     "name": "vscode-docker",
-    "version": "1.27.0",
-    "sha256": "sha256-zSm4dCIF6/gy3hMuNZIRnAcxWPrsy0sRjyi7cLX7Gjo="
+    "version": "1.28.0",
+    "sha256": "sha256-ACaVwRTN4lu97GDGzxyzX/O10p6fNT3FNLne/todrFo="
   },
   {
     "publisher": "ms-vscode-remote",
