@@ -8,8 +8,6 @@ let
   vscodeSettings = builtins.fromJSON (builtins.readFile ./vscode-settings.json);
 in
 {
-  nixpkgs.config.allowUnfree = true;
-
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
@@ -24,7 +22,8 @@ in
     git
     glxinfo
     gnumake
-    go_1_20
+    go_1_21
+    goreleaser
     google-cloud-sdk
     gotools
     graphviz
@@ -33,13 +32,16 @@ in
     jetbrains-gateway
     jq
     libnotify
+    mitmproxy
     nixpkgs-fmt
     nix-prefetch-docker
     nodejs-18_x
+    portaudio
+    pkg-config
     simplescreenrecorder
     skopeo
     tailscale
-    # terraform
+    terraform
     unzip
     vim
     whois
@@ -103,7 +105,9 @@ in
     font = "Fira Code 14";
   };
 
-  services.flameshot.enable = true;
+  services.flameshot = {
+    enable = true;
+  };
 
   xdg.enable = true;
   xdg.configFile."i3/config".text = builtins.readFile ./config/i3;

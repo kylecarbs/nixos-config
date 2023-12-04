@@ -12,10 +12,12 @@
         ./hardware/vm-aarch64.nix
         home-manager.nixosModules.home-manager
         {
+          home-manager.useGlobalPkgs = true;
           home-manager.users.kyle =
             let
               pkgs = import nixpkgs {
                 inherit system;
+                config.allowUnfree = true;
               };
               homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in
@@ -33,10 +35,12 @@
         ./hardware/desktop-amd64.nix
         home-manager.nixosModules.home-manager
         {
+          home-manager.useGlobalPkgs = true;
           home-manager.users.kyle =
             let
               pkgs = import nixpkgs {
                 system = "x86_64-linux";
+                config.allowUnfree = true;
               };
               homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in

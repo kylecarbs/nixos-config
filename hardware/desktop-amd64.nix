@@ -55,10 +55,10 @@
     Option         "nvidiaXineramaInfoOrder" "DFP-1"
   '';
   # Required for Cuda! This was broken when updating NixOS packages, but try to uncomment in the future!
-  # systemd.services.nvidia-control-devices = {
-  #   wantedBy = [ "multi-user.target" ];
-  #   serviceConfig.ExecStart = "${pkgs.linuxPackages.nvidia_x11.bin}/bin/nvidia-smi";
-  # };
+  systemd.services.nvidia-control-devices = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.ExecStart = "${pkgs.linuxPackages.nvidia_x11.bin}/bin/nvidia-smi";
+  };
 
   nixpkgs.overlays = [
     (import ../overlays/google-chrome.nix)
@@ -81,6 +81,7 @@
 
   # These packages are only available on amd64.
   environment.systemPackages = with pkgs; [
+    cudatoolkit
     google-chrome
     spotify
     slack

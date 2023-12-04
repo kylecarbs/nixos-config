@@ -21,7 +21,7 @@ in
   networking.networkmanager.enable = true;
   services.chrony.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" "ca-derivations" ];
-  time.timeZone = "America/Chicago";
+  time.timeZone = "America/New_York";
 
   # Enable sound with pipewire.
   sound.enable = true;
