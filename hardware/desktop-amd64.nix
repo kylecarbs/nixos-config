@@ -71,14 +71,6 @@
     nvidiaSettings = true;
   };
 
-  # DHCP was adding a local nameserver which was causing DNS issues.
-  environment.etc = {
-    "resolv.conf".text = ''
-      nameserver 8.8.8.8
-      nameserver 1.1.1.1
-    '';
-  };
-
   # These packages are only available on amd64.
   environment.systemPackages = with pkgs; [
     cudatoolkit
