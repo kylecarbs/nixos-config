@@ -40,7 +40,6 @@
 
   swapDevices = [ ];
 
-  networking.useDHCP = false;
   networking.interfaces.wlp41s0.useDHCP = true;
   networking.hostName = "desktop";
 
@@ -78,6 +77,8 @@
     spotify
     slack
     zoom-us
+    mitmproxy
+    mitmproxy2swagger
   ];
   environment.variables.BROWSER = "google-chrome";
 }

@@ -16,6 +16,7 @@ in
     ];
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.android_sdk.accept_license = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
   i18n.defaultLocale = "en_CA.UTF-8";
   networking.networkmanager.enable = true;
@@ -44,7 +45,7 @@ in
     isNormalUser = true;
     description = "Kyle Carberry";
     # Wheel allows sudo without password.
-    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" "adbusers" ];
     shell = pkgs.fish;
   };
   security.sudo.wheelNeedsPassword = false;
@@ -56,6 +57,7 @@ in
   # The NodeJS in VS Code by default fails to link!
   services.vscode-server.enable = true;
   programs.fish.enable = true;
+  programs.adb.enable = true;
   virtualisation.docker.enable = true;
   services.openssh.enable = true;
   services.sysbox.enable = true;

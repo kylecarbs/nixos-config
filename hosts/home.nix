@@ -41,9 +41,11 @@ in
     simplescreenrecorder
     skopeo
     tailscale
+    tesseract
     terraform
     unzip
     vim
+    wails
     whois
     xorg.libxcvt
     yarn
