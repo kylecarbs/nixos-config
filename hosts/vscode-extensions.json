@@ -2,26 +2,26 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.28",
-    "sha256": "sha256-2dj2vUW9M6ShNCcdvSufGcNGbkVUzVZjZCRdpNW8rGY="
+    "version": "0.1.30",
+    "sha256": "sha256-avbNXpPF1ZwdNcXgMcuE1TIOsWJN7XrOaVCCRbl/2P0="
   },
   {
     "publisher": "dbaeumer",
     "name": "vscode-eslint",
-    "version": "2.4.2",
-    "sha256": "sha256-eIjaiVQ7PNJUtOiZlM+lw6VmW07FbMWPtY7UoedWtbw="
+    "version": "2.4.4",
+    "sha256": "sha256-NJGsMme/+4bvED/93SGojYTH03EZbtKe5LyvocywILA="
   },
   {
     "publisher": "denoland",
     "name": "vscode-deno",
-    "version": "3.28.0",
-    "sha256": "sha256-HmfqCbfPZH+g3pwNndYmZt8OFbHccS9zzNhoLM7Q34w="
+    "version": "3.33.3",
+    "sha256": "sha256-kwZYHSMJxFq4XDMHRDDT9v/O5SRLAfC4HVwQnliQPg0="
   },
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2023.11.2304",
-    "sha256": "sha256-6DJHjM+1/u81wqIs8iyxtWk5laf1Wns499d1XID/L4Y="
+    "version": "2024.1.2604",
+    "sha256": "sha256-TkpK1+G2L5uo8BFdR96tWRHOH5iK4X9Ug/lBqHhvIQ8="
   },
   {
     "publisher": "esbenp",
@@ -38,20 +38,20 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.138.563",
-    "sha256": "sha256-D0KUhjyCYn0AAMYgBKvs2rRvx7mNHjalcH07FAHk8tY="
+    "version": "1.155.677",
+    "sha256": "sha256-28exhio6twVrtRgo4AKiYYr+dLHJG0zpkMhE1TXlE5Q="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.77.2023110909",
-    "sha256": "sha256-FKvBy7VHl1EJkg/DvVVDY9ZmU1lTCnLodMrix+alyuQ="
+    "version": "0.79.2024011609",
+    "sha256": "sha256-9gPY1exoGrhiYyhEBJezV71c4j6QVfLTbjNJ9wW7dW0="
   },
   {
     "publisher": "golang",
     "name": "go",
-    "version": "0.40.0",
-    "sha256": "sha256-otAq6ul2l64zpRJdekCb7XZiE2vgpLUfM4NUdRPZX8w="
+    "version": "0.40.3",
+    "sha256": "sha256-FWC9ALnp5ZsUqHFOPS5CcKsqf5O6rpr4oMfenvZlcZY="
   },
   {
     "publisher": "jnoortheen",
@@ -74,14 +74,14 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.318.0",
-    "sha256": "sha256-mhNp7mAxcf/3wMeMTMiYyEtlY+KgSx9BZutTdtgB5dY="
+    "version": "0.330.0",
+    "sha256": "sha256-b8BFMi7Wksh+Y8YYcEkw4N26Z4FT5JIBaYZB+LUjQqU="
   },
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-ssh",
-    "version": "0.107.2023103115",
-    "sha256": "sha256-1Hwja90dtM6hvFMscM0P0e1PysGSkLL9TXKAYnkI3Fk="
+    "version": "0.108.2023112915",
+    "sha256": "sha256-os8qlQKMrBlwQpc3iY6+p7dT+frLKeFSlrHOon1LRfs="
   },
   {
     "publisher": "streetsidesoftware",
@@ -92,14 +92,14 @@
   {
     "publisher": "usernamehw",
     "name": "errorlens",
-    "version": "3.15.0",
-    "sha256": "sha256-2w34ovSpTOWJO95aWxK8izKOYA5fJWsc6O3jTpiqREo="
+    "version": "3.16.0",
+    "sha256": "sha256-Y3M/A5rYLkxQPRIZ0BUjhlkvixDae+wIRUsBn4tREFw="
   },
   {
     "publisher": "yzhang",
     "name": "markdown-all-in-one",
-    "version": "3.5.1",
-    "sha256": "sha256-ZyvkRp0QTjoMEXRGHzp3udGngYcU9EkTCvx8o2CEaBE="
+    "version": "3.6.2",
+    "sha256": "sha256-BIbgUkIuy8clq4G4x1Zd08M8k4u5ZPe80+z6fSAeLdk="
   },
   {
     "publisher": "zxh404",
