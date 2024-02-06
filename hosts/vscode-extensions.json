@@ -2,8 +2,8 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.30",
-    "sha256": "sha256-avbNXpPF1ZwdNcXgMcuE1TIOsWJN7XrOaVCCRbl/2P0="
+    "version": "0.1.31",
+    "sha256": "sha256-Z+ZQp81SPs5lGJ9qOgku1kM2GVTPPOr6H0zbld8GJDs="
   },
   {
     "publisher": "dbaeumer",
@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.1.2604",
-    "sha256": "sha256-TkpK1+G2L5uo8BFdR96tWRHOH5iK4X9Ug/lBqHhvIQ8="
+    "version": "2024.2.610",
+    "sha256": "sha256-8xaetdsCmxtQ0pBe8Bmc2a/NECGkqSMhaKce7glSaIE="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.155.677",
-    "sha256": "sha256-28exhio6twVrtRgo4AKiYYr+dLHJG0zpkMhE1TXlE5Q="
+    "version": "1.157.0",
+    "sha256": "sha256-U7cYe7qmFoThmspmDYakIRgqxFncAoV6G5m3WQvL6Hc="
   },
   {
     "publisher": "github",
