@@ -2,8 +2,8 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.31",
-    "sha256": "sha256-Z+ZQp81SPs5lGJ9qOgku1kM2GVTPPOr6H0zbld8GJDs="
+    "version": "0.1.32",
+    "sha256": "sha256-vnE0mMlpGk4dzfCBObC3vShSmvjffv8dAaQhdQ/LsYc="
   },
   {
     "publisher": "dbaeumer",
@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.2.610",
-    "sha256": "sha256-8xaetdsCmxtQ0pBe8Bmc2a/NECGkqSMhaKce7glSaIE="
+    "version": "2024.2.1304",
+    "sha256": "sha256-6JFQUCuUcsie/shdB6kK6J8WNU4J9YM50vpNChsmCNg="
   },
   {
     "publisher": "esbenp",
@@ -38,14 +38,14 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.157.0",
-    "sha256": "sha256-U7cYe7qmFoThmspmDYakIRgqxFncAoV6G5m3WQvL6Hc="
+    "version": "1.160.706",
+    "sha256": "sha256-vCtBLo/WvafNA6bbChnj+jQ46cLIOqsSX+jXshEs4JA="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.79.2024011609",
-    "sha256": "sha256-9gPY1exoGrhiYyhEBJezV71c4j6QVfLTbjNJ9wW7dW0="
+    "version": "0.81.2024020709",
+    "sha256": "sha256-TG+hG605lrkvuLdf/Wy7vI2LhlXk8Y8idaOY8q01ZLQ="
   },
   {
     "publisher": "golang",
@@ -68,20 +68,20 @@
   {
     "publisher": "ms-azuretools",
     "name": "vscode-docker",
-    "version": "1.28.0",
-    "sha256": "sha256-ACaVwRTN4lu97GDGzxyzX/O10p6fNT3FNLne/todrFo="
+    "version": "1.29.0",
+    "sha256": "sha256-mVRsVsolXj31WhbWnt3Xml+NnIq7Q2uHhUUd1zgW42c="
   },
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.330.0",
-    "sha256": "sha256-b8BFMi7Wksh+Y8YYcEkw4N26Z4FT5JIBaYZB+LUjQqU="
+    "version": "0.343.0",
+    "sha256": "sha256-+RUoZZ57IpRh9QeQn8G4mT8V7qUthyOmokwBAiYL+UU="
   },
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-ssh",
-    "version": "0.108.2023112915",
-    "sha256": "sha256-os8qlQKMrBlwQpc3iY6+p7dT+frLKeFSlrHOon1LRfs="
+    "version": "0.109.2024020215",
+    "sha256": "sha256-mzzNOVsS6FpfWgxeE2RzrElMDmM0aRFSkH63yZZU/4M="
   },
   {
     "publisher": "streetsidesoftware",
