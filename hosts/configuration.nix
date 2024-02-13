@@ -82,8 +82,11 @@ in
   # Change the display manager to i3.
   services.xserver = {
     enable = true;
-    layout = "us";
-    xkbVariant = "";
+
+    xkb = {
+      variant = "";
+      layout = "us";
+    };
 
     desktopManager = {
       xterm.enable = false;

@@ -46,7 +46,7 @@
   # Required for automatic screen resize!
   hardware.parallels.enable = true;
   # The DPI has to be bigger for the smaller screen!
-  services.xserver.dpi = 120;
+  services.xserver.dpi = 180;
 
   nixpkgs.overlays = [
     (import ../overlays/chromium.nix)
