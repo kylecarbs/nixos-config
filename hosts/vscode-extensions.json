@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.2.1411",
-    "sha256": "sha256-NlQhb4o1IK2i/QF3RjWtbm/pNYbaEtVrv6TpRDB5m3I="
+    "version": "2024.2.1420",
+    "sha256": "sha256-GhaLaZlM5xEtfkTrl1oVRdbVZ9px01liZKxntjvsSsY="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.160.708",
-    "sha256": "sha256-QbPUhFnY6Hh6pJzTxJceZb+rKiffy6K5rwUrm3H+u3Q="
+    "version": "1.160.709",
+    "sha256": "sha256-41X0TX7WVWjw2oUrhBZbAdDHObbnNQkiNgM1GJcFiis="
   },
   {
     "publisher": "github",
@@ -74,8 +74,8 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.343.0",
-    "sha256": "sha256-+RUoZZ57IpRh9QeQn8G4mT8V7qUthyOmokwBAiYL+UU="
+    "version": "0.344.0",
+    "sha256": "sha256-SnuHScaJYDPgor14dXE64hu7zsx/t57ECuGAMvE4zoQ="
   },
   {
     "publisher": "ms-vscode-remote",
