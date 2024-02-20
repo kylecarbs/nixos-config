@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.2.1420",
-    "sha256": "sha256-GhaLaZlM5xEtfkTrl1oVRdbVZ9px01liZKxntjvsSsY="
+    "version": "2024.2.1804",
+    "sha256": "sha256-1hsX8a/6aAhajU/Tbghc09phuT18bOBBEWgrqKqBMCc="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.160.709",
-    "sha256": "sha256-41X0TX7WVWjw2oUrhBZbAdDHObbnNQkiNgM1GJcFiis="
+    "version": "1.162.714",
+    "sha256": "sha256-qPdKzmmX3Tdbq+Qw2uNfPDczHgwb6sL2eFRCTzyoN3c="
   },
   {
     "publisher": "github",
@@ -74,14 +74,14 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.344.0",
-    "sha256": "sha256-SnuHScaJYDPgor14dXE64hu7zsx/t57ECuGAMvE4zoQ="
+    "version": "0.346.0",
+    "sha256": "sha256-v36nuM+TrStTIuw0qV/8IkYlauyFTRmKQZ60ve0jVsA="
   },
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-ssh",
-    "version": "0.109.2024020215",
-    "sha256": "sha256-mzzNOVsS6FpfWgxeE2RzrElMDmM0aRFSkH63yZZU/4M="
+    "version": "0.109.2024021915",
+    "sha256": "sha256-inVxqULqk9UgFUlA7f/orkcrjBb7Q+9n625x391bV2E="
   },
   {
     "publisher": "streetsidesoftware",
