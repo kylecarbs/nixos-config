@@ -2,8 +2,8 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.32",
-    "sha256": "sha256-vnE0mMlpGk4dzfCBObC3vShSmvjffv8dAaQhdQ/LsYc="
+    "version": "0.1.33",
+    "sha256": "sha256-U4Q+l3BfavNQxtuCWUdIJKIypKL6S6O+swTfyLz3lNU="
   },
   {
     "publisher": "dbaeumer",
@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.2.1804",
-    "sha256": "sha256-1hsX8a/6aAhajU/Tbghc09phuT18bOBBEWgrqKqBMCc="
+    "version": "2024.2.2404",
+    "sha256": "sha256-d3Pit4z3wgZV3K+dWIAH8RXnXvBjs6M+jlVBLRqCGjw="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.162.714",
-    "sha256": "sha256-qPdKzmmX3Tdbq+Qw2uNfPDczHgwb6sL2eFRCTzyoN3c="
+    "version": "1.165.732",
+    "sha256": "sha256-Vqf822PiXyOKHtLaY/yQ1xrklYFiflO+RfTpONtwFP4="
   },
   {
     "publisher": "github",
@@ -50,8 +50,8 @@
   {
     "publisher": "golang",
     "name": "go",
-    "version": "0.41.0",
-    "sha256": "sha256-k4rW2brxnrKhr+NEErNkfREHN+agYC8shFoaMYgHLiw="
+    "version": "0.41.1",
+    "sha256": "sha256-tSt0IqRuE3nJgMYvdYUz5QDtzOsKKQqyW2KD1FEhkEQ="
   },
   {
     "publisher": "jnoortheen",
@@ -80,8 +80,8 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-ssh",
-    "version": "0.109.2024021915",
-    "sha256": "sha256-inVxqULqk9UgFUlA7f/orkcrjBb7Q+9n625x391bV2E="
+    "version": "0.109.2024022215",
+    "sha256": "sha256-5KW6U/gZqojdjLk1xZ3LhphEw54YCRQr1BSuY+nCtC0="
   },
   {
     "publisher": "streetsidesoftware",
