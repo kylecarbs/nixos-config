@@ -2,6 +2,7 @@
 
 let
   coder = pkgs.callPackage ../pkgs/coder.nix { };
+  devcontainer-cli = pkgs.callPackage ../pkgs/devcontainer-cli.nix { };
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
 
   vscodeExtensions = builtins.fromJSON (builtins.readFile ./vscode-extensions.json);
@@ -16,6 +17,7 @@ in
     bun
     coder
     deno
+    devcontainer-cli
     dig
     fish
     gcc
@@ -38,8 +40,11 @@ in
     nodejs-18_x
     portaudio
     pkg-config
+    devpod-desktop
     simplescreenrecorder
     skopeo
+    sqlc
+    sqlite-vss
     tailscale
     tesseract
     terraform

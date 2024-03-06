@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       "aarch64-linux" = "arm64";
     }.${system}}.tar.gz";
     sha256 = {
-      "x86_64-linux" = "sha256-3gO71Eii3KBjn/oQ1Q3OCJ7S6H12iDYjOfqf43ph1nQ=";
+      "x86_64-linux" = "sha256-jHHNnS7Z7sG1paxErjfZDeszAmMZChN4kzWmQ6cB5Lg=";
       "aarch64-linux" = "sha256-/saSKyx4ZFI/LM+m/vJuaP9RNclellBeKUG5Mx1ezV8=";
     }.${system};
   };
