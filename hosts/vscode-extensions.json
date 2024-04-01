@@ -2,8 +2,8 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.34",
-    "sha256": "sha256-RLgmu+Mq8gQ5YvmBo84+eWjDnQ+mIaKArUcbJzWPvrs="
+    "version": "0.1.35",
+    "sha256": "sha256-gKD92QuQtIqbRlCQ9StajPEYeq6fn/JD8gwx0KaAxZA="
   },
   {
     "publisher": "dbaeumer",
@@ -14,20 +14,20 @@
   {
     "publisher": "denoland",
     "name": "vscode-deno",
-    "version": "3.35.1",
-    "sha256": "sha256-br1MHIkJ9Nd6mSE6SK+yPirM2Trsw+cauV9t+QtIVR8="
+    "version": "3.36.0",
+    "sha256": "sha256-xHf7cI+lCPoImdsnqBNJjT7+8UJs9tXXUm+TgiYmCdA="
   },
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.3.1205",
-    "sha256": "sha256-G/z9RH5BtxaQVZqMKjkxHfYgJNXrif89Z7/KFZisnww="
+    "version": "2024.3.3105",
+    "sha256": "sha256-f+VT+A3x2fzGSi7I3D7DmjOJ3MGjyDWmswQbvp+bDsQ="
   },
   {
     "publisher": "esbenp",
     "name": "prettier-vscode",
-    "version": "10.1.0",
-    "sha256": "sha256-SQuf15Jq84MKBVqK6UviK04uo7gQw9yuw/WEBEXcQAc="
+    "version": "10.4.0",
+    "sha256": "sha256-8+90cZpqyH+wBgPFaX5GaU6E02yBWUoB+T9C2z2Ix8c="
   },
   {
     "publisher": "foxundermoon",
@@ -38,20 +38,20 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.172.764",
-    "sha256": "sha256-OMJeL9CXi9tdq7RHzyGBDxtow19GfsJAXYlbU/u7Nf4="
+    "version": "1.176.796",
+    "sha256": "sha256-2sOhISiBAeSoi7uySIp7GCagWAbN0tmf+SwIaquVej8="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.81.2024020709",
-    "sha256": "sha256-TG+hG605lrkvuLdf/Wy7vI2LhlXk8Y8idaOY8q01ZLQ="
+    "version": "0.83.2024030509",
+    "sha256": "sha256-Ux/TSqzQJjo1lubvL49+iApAPMHm4fYswRr2Oi87JbI="
   },
   {
     "publisher": "golang",
     "name": "go",
-    "version": "0.41.1",
-    "sha256": "sha256-tSt0IqRuE3nJgMYvdYUz5QDtzOsKKQqyW2KD1FEhkEQ="
+    "version": "0.41.2",
+    "sha256": "sha256-eD/9UBYxf8kmqxuzY+hgAT0bqSiYw/BbDv2gyB63zY0="
   },
   {
     "publisher": "jnoortheen",
@@ -74,14 +74,14 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.349.0",
-    "sha256": "sha256-2cSa1gXCDN3vjUTLmJ3flZ8hvcSZERyBuFXZ6tGCKk8="
+    "version": "0.353.0",
+    "sha256": "sha256-ZVTvb/FeEAK6mo2PrwCth9SlkWkGIfwnB7rhwgNGzYk="
   },
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-ssh",
-    "version": "0.109.2024022215",
-    "sha256": "sha256-5KW6U/gZqojdjLk1xZ3LhphEw54YCRQr1BSuY+nCtC0="
+    "version": "0.110.2024032215",
+    "sha256": "sha256-rf0B5xz2FyqmA43bTSC1+CBfsV4099sbS5+Ibxqyd5M="
   },
   {
     "publisher": "streetsidesoftware",
