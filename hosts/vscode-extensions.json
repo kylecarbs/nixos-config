@@ -2,26 +2,26 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.35",
-    "sha256": "sha256-gKD92QuQtIqbRlCQ9StajPEYeq6fn/JD8gwx0KaAxZA="
+    "version": "0.1.36",
+    "sha256": "sha256-N1X8wB2n6JYoFHCP5iHBXHnEaRa9S1zooQZsR5mUeh8="
   },
   {
     "publisher": "dbaeumer",
     "name": "vscode-eslint",
-    "version": "2.4.4",
-    "sha256": "sha256-NJGsMme/+4bvED/93SGojYTH03EZbtKe5LyvocywILA="
+    "version": "3.0.5",
+    "sha256": "sha256-qXePnmM3gLPcry/5g3auhvoBUDTDRYZynviwEkN8s7I="
   },
   {
     "publisher": "denoland",
     "name": "vscode-deno",
-    "version": "3.36.0",
-    "sha256": "sha256-xHf7cI+lCPoImdsnqBNJjT7+8UJs9tXXUm+TgiYmCdA="
+    "version": "3.37.0",
+    "sha256": "sha256-sEAqPHjz4AXkNOtnsSNpO4aYavAYsjzdpHYfwWFkfG0="
   },
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.3.3105",
-    "sha256": "sha256-f+VT+A3x2fzGSi7I3D7DmjOJ3MGjyDWmswQbvp+bDsQ="
+    "version": "2024.4.1305",
+    "sha256": "sha256-ivKxkfDfDBR1TBVlZtCxMf2rT1+Tox3r69eyj/ZUcg0="
   },
   {
     "publisher": "esbenp",
@@ -38,8 +38,8 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.176.796",
-    "sha256": "sha256-2sOhISiBAeSoi7uySIp7GCagWAbN0tmf+SwIaquVej8="
+    "version": "1.180.0",
+    "sha256": "sha256-TxqQzJfynmQkS86jnO6TV8MpRIwlkIPen6MtApT8/Uc="
   },
   {
     "publisher": "github",
@@ -74,8 +74,8 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.353.0",
-    "sha256": "sha256-ZVTvb/FeEAK6mo2PrwCth9SlkWkGIfwnB7rhwgNGzYk="
+    "version": "0.357.0",
+    "sha256": "sha256-lJSJWclZtR20wq7BQ40sIe0Np0ewH6JDqEJVjVuznu4="
   },
   {
     "publisher": "ms-vscode-remote",
