@@ -11,7 +11,7 @@ in
       ../pkgs/sysbox.nix
       (fetchTarball {
         url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
-        sha256 = "0sz8njfxn5bw89n6xhlzsbxkafb6qmnszj4qxy2w0hw2mgmjp829";
+        sha256 = "1mrc6a1qjixaqkv1zqphgnjjcz9jpsdfs1vq45l1pszs9lbiqfvd";
       })
     ];
 
@@ -85,6 +85,12 @@ in
     };
   };
 
+  services.displayManager = {
+      autoLogin.enable = true;
+      autoLogin.user = "kyle";
+      defaultSession = "none+i3";
+  };
+
   # Change the display manager to i3.
   services.xserver = {
     enable = true;
@@ -96,12 +102,6 @@ in
 
     desktopManager = {
       xterm.enable = false;
-    };
-
-    displayManager = {
-      autoLogin.enable = true;
-      autoLogin.user = "kyle";
-      defaultSession = "none+i3";
     };
 
     windowManager.i3 = {

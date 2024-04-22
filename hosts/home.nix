@@ -1,7 +1,9 @@
 { pkgs, ... }:
 
 let
-  coder = pkgs.callPackage ../pkgs/coder.nix { };
+  coder = pkgs.coder.overrideAttrs {
+    channel = "mainline";
+  };
   devcontainer-cli = pkgs.callPackage ../pkgs/devcontainer-cli.nix { };
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
 
@@ -127,12 +129,12 @@ in
   };
 
   xresources.extraConfig = ''
-Xft.autohint: true
-Xft.antialias: true
-Xft.hinting: true
-Xft.hintstyle: hintslight
-Xft.rgba: rgb
-Xft.lcdfilter: lcddefault
+    Xft.autohint: true
+    Xft.antialias: true
+    Xft.hinting: true
+    Xft.hintstyle: hintslight
+    Xft.rgba: rgb
+    Xft.lcdfilter: lcddefault
   '';
 
   # Add all of our binaries!

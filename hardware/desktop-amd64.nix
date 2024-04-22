@@ -75,6 +75,7 @@
     cudatoolkit
     google-chrome
     spotify
+    figma-agent
     slack
     zoom-us
     mitmproxy
