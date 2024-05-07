@@ -11,7 +11,7 @@ in
       ../pkgs/sysbox.nix
       (fetchTarball {
         url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
-        sha256 = "1mrc6a1qjixaqkv1zqphgnjjcz9jpsdfs1vq45l1pszs9lbiqfvd";
+        sha256 = "1rq8mrlmbzpcbv9ys0x88alw30ks70jlmvnfr2j8v830yy5wvw7h";
       })
     ];
 
@@ -27,7 +27,7 @@ in
   nix.gc = {
     automatic = true;
     randomizedDelaySec = "14m";
-    options = "--delete-older-than 10d";
+    options = "--delete-older-than 1d";
   };
 
   # Enable sound with pipewire.
@@ -146,16 +146,8 @@ in
   # Replace the gross Linux emojis with pretty Apple ones!
   fonts.fontconfig.defaultFonts.emoji = [ "Apple Color Emoji" ];
 
-  # Starts PostgreSQL on a UNIX socket at "/var/lib/postgresql"
-  # with a "coder" database.
-  services.postgresql = {
+  services.coder = {
     enable = true;
-    ensureDatabases = [ "coder" ];
-    authentication = pkgs.lib.mkOverride 10 ''
-      #type database  DBuser  address   auth-method
-      local all       all               trust
-      host  all       all     ::1/128   trust
-    '';
   };
 
   # This value determines the NixOS release from which the default

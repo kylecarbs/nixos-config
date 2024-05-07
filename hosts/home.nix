@@ -1,7 +1,8 @@
 { pkgs, ... }:
 
 let
-  coder = pkgs.coder.overrideAttrs {
+  coder = pkgs.coder.override {
+    # Stay on the edge!
     channel = "mainline";
   };
   devcontainer-cli = pkgs.callPackage ../pkgs/devcontainer-cli.nix { };
