@@ -139,6 +139,7 @@ in
   '';
 
   # Add all of our binaries!
+  home.file.".local/bin/chatgpt".source = ../bin/chatgpt;
   home.file.".local/bin/dmenu_emoji".source = ../bin/dmenu_emoji;
   home.file.".local/bin/git-hf".source = ../bin/git-hf;
   home.file.".local/bin/mypulls".source = ../bin/mypulls;
