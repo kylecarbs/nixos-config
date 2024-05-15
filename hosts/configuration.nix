@@ -148,6 +148,7 @@ in
 
   services.coder = {
     enable = true;
+    listenAddress = "127.0.0.1:13337";
   };
 
   # This value determines the NixOS release from which the default
