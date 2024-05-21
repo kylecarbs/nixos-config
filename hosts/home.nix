@@ -20,7 +20,6 @@ in
     bun
     coder
     deno
-    devcontainer-cli
     dig
     fish
     gcc

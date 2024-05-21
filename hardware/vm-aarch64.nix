@@ -46,7 +46,10 @@
   # Required for automatic screen resize!
   hardware.parallels.enable = true;
   # The DPI has to be bigger for the smaller screen!
-  services.xserver.dpi = 180;
+  # DPIs:
+  # - 180: MacBook
+  # - 160: Camilla's 4K Monitor at the office
+  services.xserver.dpi = 160;
 
   nixpkgs.overlays = [
     (import ../overlays/chromium.nix)
