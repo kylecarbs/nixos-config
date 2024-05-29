@@ -2,14 +2,14 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.36",
-    "sha256": "sha256-N1X8wB2n6JYoFHCP5iHBXHnEaRa9S1zooQZsR5mUeh8="
+    "version": "0.1.37",
+    "sha256": "sha256-KTnJYmLvTWRqEPLotm6aRkM3N7Hi2x5+vahkPP9iquI="
   },
   {
     "publisher": "dbaeumer",
     "name": "vscode-eslint",
-    "version": "3.0.5",
-    "sha256": "sha256-qXePnmM3gLPcry/5g3auhvoBUDTDRYZynviwEkN8s7I="
+    "version": "3.0.7",
+    "sha256": "sha256-PirVZb6yaNvBdmJYXY6iGYEuHOiVkYH5LHTVfSUqMQ4="
   },
   {
     "publisher": "denoland",
@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.5.2105",
-    "sha256": "sha256-4M8R9ybHiwviErySa701a2YkRAIQgQqr/pZOP3yAPQM="
+    "version": "2024.5.2905",
+    "sha256": "sha256-WfNGTRGHl3dhdINRDGqdZB6XMqJbMsOEFPGCHX0hYBY="
   },
   {
     "publisher": "esbenp",
@@ -38,14 +38,14 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.194.886",
-    "sha256": "sha256-9kKIOX4Pexvyz17DTuYNB5sMAiCZMkN7QjbEBIKMemM="
+    "version": "1.197.0",
+    "sha256": "sha256-8Wm3thBmgGe+ax+Yw3i3vEBJtObmNLNzX1x7FLSEoF4="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.89.2024051504",
-    "sha256": "sha256-Qu2XxotWEWtgqwjO3i2z/iVBDaG6QaW4RzhoxtJO4oQ="
+    "version": "0.89.2024052904",
+    "sha256": "sha256-lF72wSxc0HExb2XZ8npIztLRoAVhbDga1VRpWVgjF3g="
   },
   {
     "publisher": "golang",
@@ -74,8 +74,8 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.366.0",
-    "sha256": "sha256-Etc/rjwJ47pRjyuLOCf2czlstHs4t71ooC+SvAFzZFY="
+    "version": "0.367.0",
+    "sha256": "sha256-syV4DcKjHKgvvIt2y4amKdIAgVv9GLlI/4VMAzM+C7w="
   },
   {
     "publisher": "ms-vscode-remote",
@@ -86,14 +86,14 @@
   {
     "publisher": "streetsidesoftware",
     "name": "code-spell-checker",
-    "version": "3.0.1",
-    "sha256": "sha256-KeYE6/yO2n3RHPjnJOnOyHsz4XW81y9AbkSC/I975kQ="
+    "version": "4.0.1",
+    "sha256": "sha256-Vxk+PpwwRV7dH8A9hI+DSzPMqH2l//VtrgUV+w8at4g="
   },
   {
     "publisher": "usernamehw",
     "name": "errorlens",
-    "version": "3.17.0",
-    "sha256": "sha256-E0EAzYukaiu/DKREEP4HQjRXPAqwB4cP2PwM1B3c0ok="
+    "version": "3.18.0",
+    "sha256": "sha256-sRZRBUne9IqDBSe4BXyqBqirIyjeP03B2w9+ptNrJl0="
   },
   {
     "publisher": "yzhang",
