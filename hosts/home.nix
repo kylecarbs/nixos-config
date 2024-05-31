@@ -26,7 +26,7 @@ in
     git
     glxinfo
     gnumake
-    go_1_21
+    go_1_22
     goreleaser
     google-cloud-sdk
     gotools
