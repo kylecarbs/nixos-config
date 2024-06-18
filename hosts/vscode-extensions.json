@@ -2,14 +2,14 @@
   {
     "name": "coder-remote",
     "publisher": "coder",
-    "version": "0.1.37",
-    "sha256": "sha256-KTnJYmLvTWRqEPLotm6aRkM3N7Hi2x5+vahkPP9iquI="
+    "version": "1.0.2",
+    "sha256": "sha256-0AqkYmaoVALJ+agUTSvLyNC8BEliSAlBhkiHaPaYieE="
   },
   {
     "publisher": "dbaeumer",
     "name": "vscode-eslint",
-    "version": "3.0.7",
-    "sha256": "sha256-PirVZb6yaNvBdmJYXY6iGYEuHOiVkYH5LHTVfSUqMQ4="
+    "version": "3.0.8",
+    "sha256": "sha256-Yn1tuyujtZnr84/2QzsEoPI3IZoXWdlXZfwV+m+Zgw8="
   },
   {
     "publisher": "denoland",
@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.5.2905",
-    "sha256": "sha256-WfNGTRGHl3dhdINRDGqdZB6XMqJbMsOEFPGCHX0hYBY="
+    "version": "2024.6.1505",
+    "sha256": "sha256-HiF3KtC1shs/9MmamJZ8r+qDBgRS7Qwd6uuRq6yIfP8="
   },
   {
     "publisher": "esbenp",
@@ -38,14 +38,14 @@
   {
     "publisher": "github",
     "name": "copilot",
-    "version": "1.197.0",
-    "sha256": "sha256-8Wm3thBmgGe+ax+Yw3i3vEBJtObmNLNzX1x7FLSEoF4="
+    "version": "1.204.939",
+    "sha256": "sha256-r0bFsRnemthPKK2ue/UYCdj3gbh0KwmgCH1q7etMqD8="
   },
   {
     "publisher": "github",
     "name": "vscode-pull-request-github",
-    "version": "0.89.2024052904",
-    "sha256": "sha256-lF72wSxc0HExb2XZ8npIztLRoAVhbDga1VRpWVgjF3g="
+    "version": "0.89.2024053108",
+    "sha256": "sha256-A0cpURUmdxA5a4eg+tJQJuyBtnDP3WGGMIlRwfAZzeQ="
   },
   {
     "publisher": "golang",
@@ -74,20 +74,20 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.367.0",
-    "sha256": "sha256-syV4DcKjHKgvvIt2y4amKdIAgVv9GLlI/4VMAzM+C7w="
+    "version": "0.373.0",
+    "sha256": "sha256-YPukJnb2zBoeC3PaJtoPAOsUvBCaJ1SyjTB65QICNDg="
   },
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-ssh",
-    "version": "0.112.2024051615",
-    "sha256": "sha256-vnfqb8Bc7UkAUkfNVhazRSubYl/jinaD9wTcxyjwu1k="
+    "version": "0.113.2024061415",
+    "sha256": "sha256-fAVzexCkHkKTWtmH7ilidWETz2d/SLvsS/TyE2oCRSY="
   },
   {
     "publisher": "streetsidesoftware",
     "name": "code-spell-checker",
-    "version": "4.0.1",
-    "sha256": "sha256-Vxk+PpwwRV7dH8A9hI+DSzPMqH2l//VtrgUV+w8at4g="
+    "version": "4.0.3",
+    "sha256": "sha256-CEGwbw5RpFsfB/g2inScIqWB7/3oxgxz7Yuc6V3OiHg="
   },
   {
     "publisher": "usernamehw",
