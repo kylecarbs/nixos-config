@@ -28,13 +28,15 @@ in
     gnumake
     go_1_22
     goreleaser
-    google-cloud-sdk
+    (google-cloud-sdk.withExtraComponents
+      ([ google-cloud-sdk.components.gke-gcloud-auth-plugin ]))
     gotools
     graphviz
     htmlq
     htop
     jetbrains-gateway
     jq
+    kubectl
     libnotify
     mitmproxy
     nixpkgs-fmt
