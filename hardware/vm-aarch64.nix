@@ -47,9 +47,9 @@
   hardware.parallels.enable = true;
   # The DPI has to be bigger for the smaller screen!
   # DPIs:
-  # - 180: MacBook
+  # - 130: MacBook
   # - 160: Camilla's 4K Monitor at the office
-  services.xserver.dpi = 160;
+  services.xserver.dpi = 120;
 
   nixpkgs.overlays = [
     (import ../overlays/chromium.nix)

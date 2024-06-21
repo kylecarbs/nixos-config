@@ -44,7 +44,6 @@ in
     nodejs-18_x
     portaudio
     pkg-config
-    devpod-desktop
     simplescreenrecorder
     skopeo
     sqlc
@@ -54,6 +53,7 @@ in
     terraform
     unzip
     vim
+    vsce
     wails
     whois
     xorg.libxcvt

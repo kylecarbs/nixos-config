@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   compact = fetchurl {
     url = "https://devimages-cdn.apple.com/design/resources/download/SF-Compact.dmg";
-    sha256 = "sha256-Mkf+GK4iuUhZdUdzMW0VUOmXcXcISejhMeZVm0uaRwY=";
+    sha256 = "sha256-L4oLQ34Epw1/wLehU9sXQwUe/LaeKjHRxQAF6u2pfTo=";
   };
 
   mono = fetchurl {
