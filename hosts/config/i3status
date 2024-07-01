@@ -1,10 +1,10 @@
 general {
-
+        separator = "|"
+        colors = true
 }
 
 py3status {
-        separator = True
-        separator_block_width = 27
+        separator = "|"
 }
 
 order += "google_calendar"
@@ -34,25 +34,25 @@ google_calendar {
 }
 
 battery "status" {
-        format = " bat: %percentage "
+        format = "bat: %percentage"
         integer_battery_capacity = true
 }
 
 disk "/" {
-        format = " disk: %percentage_used "
+        format = "disk: %percentage_used"
 }
 
 tztime local {
-        format = " %Y-%m-%d %H:%M:%S "
+        format = "%Y-%m-%d %H:%M:%S"
 }
 
 cpu_usage {
-        format = " cpu: %usage "
+        format = "cpu: %usage"
         degraded_threshold = "25"
 }
 
 memory {
-        format = " mem: %percentage_used "
+        format = "mem: %percentage_used"
         threshold_degraded = "10%"
 }
 
@@ -64,7 +64,7 @@ external_script "extensions" {
 }
 
 external_script "prs" {
-        format = "pr reviews: {output}"
+        format = "prs: {output}"
         script_path = "mypulls"
         cache_timeout = 150
         on_click 3 = "exec xdg-open https://github.com/pulls/review-requested"

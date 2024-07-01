@@ -24,7 +24,10 @@
                 inherit system;
                 config.allowUnfree = true;
               };
-              homeConfig = import ./hosts/home.nix { inherit pkgs; };
+              homeConfig = import ./hosts/home.nix { 
+                inherit pkgs;
+                i3BarHeight = 38;
+              };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
               services.picom.enable = true;

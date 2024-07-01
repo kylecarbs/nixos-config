@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, i3BarHeight ? null, ... }:
 
 let
   coder = pkgs.coder.override {
@@ -10,6 +10,8 @@ let
 
   vscodeExtensions = builtins.fromJSON (builtins.readFile ./vscode-extensions.json);
   vscodeSettings = builtins.fromJSON (builtins.readFile ./vscode-settings.json);
+
+  i3config = builtins.readFile ./config/i3;
 in
 {
   home.stateVersion = "22.05";
@@ -121,7 +123,9 @@ in
   };
 
   xdg.enable = true;
-  xdg.configFile."i3/config".text = builtins.readFile ./config/i3;
+  xdg.configFile."i3/config".text = if i3BarHeight != null
+    then builtins.replaceStrings ["# height replacer"] 
+      ["height ${toString i3BarHeight}"] i3config else i3config;
   xdg.configFile."i3status/config".text = builtins.readFile ./config/i3status;
 
   home.pointerCursor = {
