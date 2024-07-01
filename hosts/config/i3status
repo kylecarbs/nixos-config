@@ -7,7 +7,6 @@ py3status {
         separator = "|"
 }
 
-order += "google_calendar"
 order += "external_script extensions"
 order += "external_script prs"
 order += "battery status"
@@ -15,23 +14,6 @@ order += "disk /"
 order += "cpu_usage"
 order += "memory"
 order += "tztime local"
-
-google_calendar {
-    events_within_hours = 24
-    num_events = 2
-    format = " {events}|\?color=event \u2687"
-    format_event = "[\?color=event {summary}][\?if=is_toggled  ({start_time} - {end_time}, {start_date})|[ {format_timer}]]"
-    format_separator = "  "
-    # Always show countdown.
-    time_to_max = 1000000
-    thresholds = {
-        'event': [(1, '#d0e6ff'), (2, '#bbdaff'), (3, '#99c7ff'),
-            (4, '#86bcff'), (5, '#62a9ff'), (6, '#8c8cff'), (7, '#7979ff')],
-        'time': [(1, '#ffcece'), (2, '#ffbfbf'), (3, '#ff9f9f'),
-            (4, '#ff7f7f'), (5, '#ff5f5f'), (6, '#ff3f3f'), (7, '#ff1f1f')]
-    }
-    warn_threshold = 10
-}
 
 battery "status" {
         format = "bat: %percentage"
@@ -43,7 +25,7 @@ disk "/" {
 }
 
 tztime local {
-        format = "%Y-%m-%d %H:%M:%S"
+        format = "%H:%M:%S %Z"
 }
 
 cpu_usage {
