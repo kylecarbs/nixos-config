@@ -26,7 +26,7 @@
               };
               homeConfig = import ./hosts/home.nix { 
                 inherit pkgs;
-                i3BarHeight = 38;
+                i3BarHeight = 37;
               };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
