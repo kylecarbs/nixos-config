@@ -1,10 +1,12 @@
 { pkgs, i3BarHeight ? null, ... }:
 
 let
-  coder = pkgs.coder.override {
+  coderMainline = (pkgs.coder.override {
     # Stay on the edge!
     channel = "mainline";
-  };
+  }).overrideAttrs (oldAttrs: {
+    postInstall = ":";
+  });
   devcontainer-cli = pkgs.callPackage ../pkgs/devcontainer-cli.nix { };
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
 
@@ -20,7 +22,7 @@ in
     bat
     betterbird-unwrapped
     bun
-    coder
+    coderMainline
     deno
     dig
     fish
@@ -87,6 +89,10 @@ in
     interactiveShellInit = builtins.readFile ./config/config.fish;
   };
 
+  programs.neovim = {
+    enable = true;
+  };
+
   programs.gh = {
     enable = true;
     gitCredentialHelper = {
@@ -123,9 +129,12 @@ in
   };
 
   xdg.enable = true;
-  xdg.configFile."i3/config".text = if i3BarHeight != null
-    then builtins.replaceStrings ["# height replacer"] 
-      ["height ${toString i3BarHeight}"] i3config else i3config;
+  xdg.configFile."i3/config".text =
+    if i3BarHeight != null
+    then
+      builtins.replaceStrings [ "# height replacer" ]
+        [ "height ${toString i3BarHeight}" ]
+        i3config else i3config;
   xdg.configFile."i3status/config".text = builtins.readFile ./config/i3status;
 
   home.pointerCursor = {

@@ -42,7 +42,7 @@ in
   };
 
   # Enable graphics virtualization.
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
   };
 
@@ -145,11 +145,6 @@ in
   fonts.packages = with pkgs; [ apple-emoji apple-fonts fira-code ];
   # Replace the gross Linux emojis with pretty Apple ones!
   fonts.fontconfig.defaultFonts.emoji = [ "Apple Color Emoji" ];
-
-  services.coder = {
-    enable = true;
-    listenAddress = "127.0.0.1:13337";
-  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
