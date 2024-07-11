@@ -62,6 +62,10 @@ in
     whois
     xorg.libxcvt
     yarn
+
+    # Language servers
+    gopls
+    nodePackages.typescript-language-server
   ];
 
   programs.alacritty = {
@@ -91,6 +95,44 @@ in
 
   programs.neovim = {
     enable = true;
+    viAlias = true;
+    vimAlias = true;
+    extraConfig = ''
+      set number
+      set relativenumber
+      set expandtab
+      set tabstop=2
+      set shiftwidth=2
+      set smartindent
+      set termguicolors
+      
+      " Set leader key to space
+      let mapleader = " "
+      
+      " Enable mouse support
+      set mouse=a
+      
+      " Enable clipboard support
+      set clipboard+=unnamedplus
+    '';
+    plugins = with pkgs.vimPlugins; [
+      tokyonight-nvim
+      nvim-tree-lua
+      nvim-lspconfig
+      nvim-cmp
+      cmp-nvim-lsp
+      copilot-vim
+      (nvim-treesitter.withPlugins (plugins: with plugins; [
+        tree-sitter-go
+        tree-sitter-typescript
+        tree-sitter-javascript
+        tree-sitter-html
+        tree-sitter-json
+        tree-sitter-nix
+      ]))
+      vim-fugitive
+      telescope-nvim
+    ];
   };
 
   programs.gh = {
