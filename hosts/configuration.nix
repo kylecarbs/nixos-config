@@ -44,6 +44,7 @@ in
   # Enable graphics virtualization.
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
   };
 
   # Add my user!
@@ -64,7 +65,10 @@ in
   services.vscode-server.enable = true;
   programs.fish.enable = true;
   programs.adb.enable = true;
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    enableNvidia = true;
+  };
   services.openssh.enable = true;
   services.sysbox.enable = true;
   services.tailscale.enable = true;
