@@ -20,8 +20,8 @@
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.7.2305",
-    "sha256": "sha256-/HeT0K+tfF1QhUvrYT6WD9II/igEFhgpmbogc1+PB28="
+    "version": "2024.8.905",
+    "sha256": "sha256-fEWqu6r+5FimsAB4TEH06snVsh8GrYJ+KT08OClU/nM="
   },
   {
     "publisher": "esbenp",
@@ -34,12 +34,6 @@
     "name": "shell-format",
     "version": "7.2.5",
     "sha256": "sha256-kfpRByJDcGY3W9+ELBzDOUMl06D/vyPlN//wPgQhByk="
-  },
-  {
-    "publisher": "github",
-    "name": "copilot",
-    "version": "1.214.998",
-    "sha256": "sha256-Trdh/w+10d7t35h5d52zkh0CP4hUnwXHq7ovuBhLaD0="
   },
   {
     "publisher": "github",
@@ -74,8 +68,8 @@
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.378.0",
-    "sha256": "sha256-89AYVBWfzjuZnA8EVgVJvJF7C3u0KU9uULVJyVJ8H8Y="
+    "version": "0.381.0",
+    "sha256": "sha256-qGDLpEHQBB1x++KD+xrcJTs8oGmZJXjsUojfG3TwczI="
   },
   {
     "publisher": "ms-vscode-remote",
@@ -86,8 +80,14 @@
   {
     "publisher": "streetsidesoftware",
     "name": "code-spell-checker",
-    "version": "4.0.4",
-    "sha256": "sha256-WbEhTIuPqH77IuEDgjPUz9chHM/aYjMdpCI9Kf0KS2Q="
+    "version": "4.0.7",
+    "sha256": "sha256-y+xD8rOa/ljavAF7tdEpaOKEd4gUzfH15WBwMHyW7z4="
+  },
+  {
+    "name": "supermaven",
+    "publisher": "supermaven",
+    "version": "1.0.9",
+    "sha256": "sha256-2cv6dEn5af3VNAHkXAx9Yr2eqeuLh5Stv/JXLWeiRj4="
   },
   {
     "publisher": "usernamehw",
