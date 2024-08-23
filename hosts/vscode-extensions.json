@@ -8,26 +8,26 @@
   {
     "publisher": "dbaeumer",
     "name": "vscode-eslint",
-    "version": "3.0.11",
-    "sha256": "sha256-utac9Xx6K7bIyL4gYB7eh+VNVvK6lQaUHPuiiPP34Fo="
+    "version": "3.0.13",
+    "sha256": "sha256-l5VvhQPxPaQsPhXUbFW2yGJjaqnNvijn4QkXPjf1WXo="
   },
   {
     "publisher": "denoland",
     "name": "vscode-deno",
-    "version": "3.38.0",
-    "sha256": "sha256-wmcMkX1gmFhE6JukvOI3fez05dP7ZFAZz1OxmV8uu4k="
+    "version": "3.38.2",
+    "sha256": "sha256-qi/0142b2e40Ql54lba4VnHbcMhdzcU3PN+4aaBHYhU="
   },
   {
     "publisher": "eamodio",
     "name": "gitlens",
-    "version": "2024.8.905",
-    "sha256": "sha256-fEWqu6r+5FimsAB4TEH06snVsh8GrYJ+KT08OClU/nM="
+    "version": "2024.8.2205",
+    "sha256": "sha256-zzIYmAloVcx3PPLuz1zam1q0EL9ICyK/Mc1AtSX18Ts="
   },
   {
     "publisher": "esbenp",
     "name": "prettier-vscode",
-    "version": "10.4.0",
-    "sha256": "sha256-8+90cZpqyH+wBgPFaX5GaU6E02yBWUoB+T9C2z2Ix8c="
+    "version": "11.0.0",
+    "sha256": "sha256-pNjkJhof19cuK0PsXJ/Q/Zb2H7eoIkfXJMLZJ4lDn7k="
   },
   {
     "publisher": "foxundermoon",
@@ -62,14 +62,14 @@
   {
     "publisher": "ms-azuretools",
     "name": "vscode-docker",
-    "version": "1.29.1",
-    "sha256": "sha256-uleZLIkfOxKan+U56fKEwUjaleig07zdEwQKzsAzan0="
+    "version": "1.29.2",
+    "sha256": "sha256-j68CgHyLTaWZ2tyzLDO34vnlFwABgk5+P9ZaA8q2RDA="
   },
   {
     "publisher": "ms-vscode-remote",
     "name": "remote-containers",
-    "version": "0.381.0",
-    "sha256": "sha256-qGDLpEHQBB1x++KD+xrcJTs8oGmZJXjsUojfG3TwczI="
+    "version": "0.382.0",
+    "sha256": "sha256-KttnLz7wnNS/EgWeN0IJnHfRjAOAXZLYkHZqRRZ3JFo="
   },
   {
     "publisher": "ms-vscode-remote",
@@ -80,8 +80,8 @@
   {
     "publisher": "streetsidesoftware",
     "name": "code-spell-checker",
-    "version": "4.0.7",
-    "sha256": "sha256-y+xD8rOa/ljavAF7tdEpaOKEd4gUzfH15WBwMHyW7z4="
+    "version": "4.0.11",
+    "sha256": "sha256-JIvWbdoyR+1hbs1aPtqgUVJM3/t/j3f7pWi3yj14R1U="
   },
   {
     "name": "supermaven",
