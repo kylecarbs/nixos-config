@@ -22,6 +22,7 @@ in
     bat
     betterbird-unwrapped
     bun
+    cargo
     coderMainline
     deno
     dig
@@ -46,12 +47,13 @@ in
     nixpkgs-fmt
     nix-prefetch-docker
     nodejs-18_x
+    openssl.dev
     portaudio
     pkg-config
+    rustc
     simplescreenrecorder
     skopeo
     sqlc
-    sqlite-vss
     tailscale
     tesseract
     terraform
@@ -78,7 +80,7 @@ in
   };
 
   programs.vscode = {
-    enable = true;
+    enable = false;
     # To add new extensions, add them to the vscode-extensions.json file and
     # then run `make update-vscode-extensions`.
     extensions = (pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions) ++ [
@@ -156,7 +158,7 @@ in
     extraConfig = {
       push.autoSetupRemote = true;
       init.defaultBranch = "main";
-      core.editor = "code --wait";
+      core.editor = "cursor --wait";
     };
   };
 

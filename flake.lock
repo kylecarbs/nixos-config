@@ -1,5 +1,24 @@
 {
   "nodes": {
+    "cursor-arm": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "dirtyRev": "3c75f878aae99e4ce784a1263023d6dc213a553b-dirty",
+        "dirtyShortRev": "3c75f87-dirty",
+        "lastModified": 1728856993,
+        "narHash": "sha256-iddRkaX8QpDI+L+5OvrIFgqCxo0Cc/w3b9D8xt9rOpc=",
+        "type": "git",
+        "url": "file:/home/kyle/projects/kylecarbs/cursor-arm"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:/home/kyle/projects/kylecarbs/cursor-arm"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": "nixpkgs"
@@ -52,6 +71,7 @@
     },
     "root": {
       "inputs": {
+        "cursor-arm": "cursor-arm",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs_2"
       }

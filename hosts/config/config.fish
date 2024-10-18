@@ -74,6 +74,7 @@ bind -M insert \ea accept-autosuggestion execute
 bind -M insert \ee accept-autosuggestion
 bind -M insert \ew nextd-or-forward-word
 
+alias code="cursor"
 alias cat="bat --paging=never"
 alias dotfiles="git --git-dir=/home/kyle/.dotfiles/.git --work-tree=/"
 
