@@ -29,6 +29,7 @@ in
     fish
     gcc
     git
+    git-lfs
     glxinfo
     gnumake
     go_1_22
@@ -146,6 +147,7 @@ in
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
 
     userName = "Kyle Carberry";
     userEmail = "kyle@carberry.com";

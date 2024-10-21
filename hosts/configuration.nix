@@ -14,8 +14,8 @@ in
         sha256 = "1rq8mrlmbzpcbv9ys0x88alw30ks70jlmvnfr2j8v830yy5wvw7h";
       })
     ];
-
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.cudaSupport = true;
   nixpkgs.config.android_sdk.accept_license = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
   i18n.defaultLocale = "en_CA.UTF-8";
@@ -39,7 +39,6 @@ in
     pulse.enable = true;
   };
 
-  # Enable graphics virtualization.
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -62,6 +61,19 @@ in
   # The NodeJS in VS Code by default fails to link!
   services.vscode-server.enable = true;
   programs.fish.enable = true;
+  # See: https://nixos.wiki/wiki/Fish
+  # Warning! As noted in the fish documentation, using fish as your *login* shell (referenced in /etc/passwd)
+  # may cause issues because fish is not POSIX compliant. In particular, this author found systemd's emergency
+  # mode to be completely broken when fish was set as the login shell.
+  programs.bash = {
+    interactiveShellInit = ''
+      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+      then
+        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+      fi
+    '';
+  };
   programs.adb.enable = true;
   virtualisation.docker = {
     enable = true;
@@ -69,7 +81,10 @@ in
   };
   services.openssh.enable = true;
   services.sysbox.enable = true;
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "both";
+  };
   # Useful for VS Code storing credentials.
   services.gnome.gnome-keyring.enable = true;
 

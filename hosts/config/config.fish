@@ -39,6 +39,11 @@ function fish_prompt
   set last_status $status
 
   set_color -o
+
+  if test -n "$IN_NIX_SHELL"
+    set_color $fish_color_command
+    printf 'nix ' 
+  end
   set_color $fish_color_hostname
   printf '%s ' (hostname)
   set_color $fish_color_cwd
@@ -77,6 +82,7 @@ bind -M insert \ew nextd-or-forward-word
 alias code="cursor"
 alias cat="bat --paging=never"
 alias dotfiles="git --git-dir=/home/kyle/.dotfiles/.git --work-tree=/"
+alias ns="nix-shell --command fish"
 
 set -gx PNPM_HOME "/home/kyle/.local/share/pnpm"
 set -gx PATH "$PNPM_HOME" $PATH

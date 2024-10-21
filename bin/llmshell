@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+export NIXPKGS_ALLOW_UNFREE=1
+
+nix-shell --command fish -p \
+    'python312.withPackages(ps: with ps; [ torch ])' \
+    git gitRepo gnupg autoconf curl procps gnumake util-linux m4 gperf \
+    unzip cudatoolkit linuxPackages.nvidia_x11 libGLU libGL xorg.libXi xorg.libXmu \
+    freeglut xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr zlib ncurses5 stdenv.cc binutils \
+    --run '
+    export CUDA_PATH=$(nix eval --raw nixpkgs#cudatoolkit.outPath --impure)
+    export NIX_LINUX_PACKAGES_NVIDIA_X11_LIB=$(nix eval --raw nixpkgs#linuxPackages.nvidia_x11.outPath --impure)
+    export LD_LIBRARY_PATH=$NIX_LINUX_PACKAGES_NVIDIA_X11_LIB/lib:$LD_LIBRARY_PATH:/lib:/usr/lib
+    export EXTRA_LDFLAGS="-L/lib -L$NIX_LINUX_PACKAGES_NVIDIA_X11_LIB/lib"
+    export EXTRA_CCFLAGS="-I/usr/include"
+    bash'
