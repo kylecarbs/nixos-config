@@ -60,6 +60,7 @@
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
               programs.alacritty.settings.font.size = 14;
+              home.packages = homeConfig.home.packages ++[ cursor-arm.packages.x86_64-linux.default ];
             };
         }
       ];

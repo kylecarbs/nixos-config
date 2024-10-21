@@ -7,10 +7,11 @@
         ]
       },
       "locked": {
-        "dirtyRev": "3c75f878aae99e4ce784a1263023d6dc213a553b-dirty",
-        "dirtyShortRev": "3c75f87-dirty",
-        "lastModified": 1728856993,
+        "lastModified": 1728926784,
         "narHash": "sha256-iddRkaX8QpDI+L+5OvrIFgqCxo0Cc/w3b9D8xt9rOpc=",
+        "ref": "refs/heads/main",
+        "rev": "262132f11f0ef7d7ac02909de2eea9ce35a3ef56",
+        "revCount": 10,
         "type": "git",
         "url": "file:/home/kyle/projects/kylecarbs/cursor-arm"
       },
