@@ -41,7 +41,6 @@ in
 
   hardware.graphics = {
     enable = true;
-    enable32Bit = true;
   };
 
   # Add my user!

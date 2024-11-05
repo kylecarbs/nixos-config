@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Proxy all commands through the SOCKS proxy on ams.
+
+HTTPS_PROXY=socks5://ams:1055 HTTP_PROXY=socks5://ams:1055 $@
