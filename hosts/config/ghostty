@@ -1,34 +1,3 @@
-window-theme = "dark"
-confirm-close-surface = false
-macos-option-as-alt = true
-shell-integration = none
-cursor-style = block
-cursor-style-blink = true
-theme = catppuccin-mocha
-clipboard-read = "allow"
-clipboard-paste-protection = false
-
-font-family = "Berkeley Mono"
-font-size = 15
-font-feature = zero
-font-feature = ss01
-font-feature = ss02
-font-feature = ss03
-font-feature = ss04
-font-feature = ss05
-font-feature = ss06
-font-feature = calt
-font-feature = liga
-
-# https://github.com/ryanoasis/nerd-fonts/wiki/Glyph-Sets-and-Code-Points
-# powerline & powerline-extras
-font-codepoint-map = U+e0b0-U+e0b3,U+e0b4-U+e0c8,U+e0cc-U+e0d4,U+e0ca=JetBrainsMono Nerd Font Mono
-
-# font-awesome
-font-codepoint-map = U+f000-U+f2e0,U+e200-U+e2a9=JetBrainsMono Nerd Font Mono
-
-# seti-ui
-font-codepoint-map = U+e5fa-U+e6b1=JetBrainsMono Nerd Font Mono
-
-# codicons
-font-codepoint-map = U+ea60-U+ebeb=JetBrainsMono Nerd Font Mono
+gtk-titlebar = false
+theme = Dark+
+font-size = 14

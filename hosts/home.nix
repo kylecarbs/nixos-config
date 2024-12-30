@@ -43,11 +43,12 @@ in
     jq
     kubectl
     libnotify
+    ghostty
     mitmproxy
     nixpkgs-fmt
     nix-prefetch-docker
     nixos-generators
-    nodejs-22_x
+    nodejs_23
     openssl.dev
     portaudio
     pkg-config
@@ -71,15 +72,6 @@ in
     gopls
     nodePackages.typescript-language-server
   ];
-
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      font = {
-        size = 16;
-      };
-    };
-  };
 
   programs.vscode = {
     enable = false;
@@ -208,4 +200,5 @@ in
   home.file.".local/bin/notion".source = ../bin/notion;
   home.file.".local/bin/superautopets".source = ../bin/superautopets;
   home.file.".local/bin/nix-vscode-extensions".source = ../bin/nix-vscode-extensions;
+  home.file.".config/ghostty/config".source = ./config/ghostty;
 }

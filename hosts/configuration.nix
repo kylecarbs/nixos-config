@@ -76,7 +76,6 @@ in
   programs.adb.enable = true;
   virtualisation.docker = {
     enable = true;
-    enableNvidia = true;
   };
   services.openssh.enable = true;
   services.sysbox.enable = true;
@@ -145,7 +144,7 @@ in
   };
 
   services.postgresql = {
-    enable = true;
+    enable = false;
     ensureDatabases = [ "coder" ];
     enableTCPIP = true;
     authentication = pkgs.lib.mkOverride 10 ''
@@ -157,11 +156,6 @@ in
     };
   };
 
-  # Adjusts the scaling of the display.
-  environment.variables = {
-    GDK_SCALE = "2";
-    GDK_DPI_SCALE = "0.5";
-  };
   # Makes Chrome use dark mode by default!
   environment.etc = {
     "xdg/gtk-3.0/settings.ini".text = ''

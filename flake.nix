@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager";
     cursor-arm = {
-      url = "git+file:/home/kyle/projects/kylecarbs/cursor-arm";
+      url = "github:coder/cursor-arm";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -59,7 +59,6 @@
               homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
-              programs.alacritty.settings.font.size = 14;
               home.packages = homeConfig.home.packages ++[ cursor-arm.packages.x86_64-linux.default ];
             };
         }
