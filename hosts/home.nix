@@ -20,7 +20,6 @@ in
 
   home.packages = with pkgs; [
     bat
-    betterbird-unwrapped
     bun
     cargo
     coderMainline
@@ -40,28 +39,30 @@ in
     graphviz
     htmlq
     htop
-    jetbrains-gateway
+    # jetbrains-gateway
     jq
     kubectl
     libnotify
     mitmproxy
     nixpkgs-fmt
     nix-prefetch-docker
-    nodejs-18_x
+    nixos-generators
+    nodejs-22_x
     openssl.dev
     portaudio
     pkg-config
+
     rustc
     simplescreenrecorder
     skopeo
     sqlc
     tailscale
-    tesseract
+    # tesseract
     terraform
     unzip
     vim
     vsce
-    wails
+    # wails
     whois
     xorg.libxcvt
     yarn

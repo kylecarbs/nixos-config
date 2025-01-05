@@ -102,9 +102,9 @@ in
   };
 
   services.displayManager = {
-      autoLogin.enable = true;
-      autoLogin.user = "kyle";
-      defaultSession = "none+i3";
+    autoLogin.enable = true;
+    autoLogin.user = "kyle";
+    defaultSession = "none+i3";
   };
 
   # Change the display manager to i3.
@@ -141,6 +141,19 @@ in
           python-dateutil
         ]))
       ];
+    };
+  };
+
+  services.postgresql = {
+    enable = true;
+    ensureDatabases = [ "coder" ];
+    enableTCPIP = true;
+    authentication = pkgs.lib.mkOverride 10 ''
+      #type database  DBuser  auth-method
+      local all       all     trust
+    '';
+    settings = {
+      unix_socket_directories = "/var/run/postgresql";
     };
   };
 
