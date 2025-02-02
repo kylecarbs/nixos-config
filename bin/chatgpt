@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-$BROWSER --app="https://chatgpt.com"
