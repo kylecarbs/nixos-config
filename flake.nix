@@ -8,9 +8,13 @@
       url = "github:coder/cursor-arm";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    whispertype = {
+      url = "github:kylecarbs/whispertype";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, cursor-arm }: {
+  outputs = { self, nixpkgs, home-manager, cursor-arm, whispertype }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
     formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.nixpkgs-fmt;
 
@@ -43,11 +47,16 @@
     };
     # My dual-booted desktop.
     nixosConfigurations.desktop-amd64 = nixpkgs.lib.nixosSystem rec {
-      system = "amd64-linux";
+      system = "x86_64-linux";
       modules = [
         ./hardware/desktop-amd64.nix
         home-manager.nixosModules.home-manager
+        whispertype.nixosModules.default
         {
+          services.whispertype = {
+            enable = true;
+            port = 36124;
+          };
           home-manager.useGlobalPkgs = true;
           home-manager.users.kyle =
             let
