@@ -23,6 +23,7 @@ in
     bun
     cargo
     coderMainline
+    code-cursor
     deno
     dig
     fish
@@ -44,7 +45,6 @@ in
     kubectl
     libnotify
     ghostty
-    mitmproxy
     nixpkgs-fmt
     nix-prefetch-docker
     nixos-generators
@@ -58,12 +58,10 @@ in
     skopeo
     sqlc
     tailscale
-    # tesseract
     terraform
     unzip
     vim
     vsce
-    # wails
     whois
     xorg.libxcvt
     yarn

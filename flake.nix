@@ -4,17 +4,13 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager";
-    cursor-arm = {
-      url = "github:coder/cursor-arm";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     whispertype = {
       url = "github:kylecarbs/whispertype";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, cursor-arm, whispertype }: {
+  outputs = { self, nixpkgs, home-manager, whispertype }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
     formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.nixpkgs-fmt;
 
@@ -40,7 +36,6 @@
             nixpkgs.lib.recursiveUpdate homeConfig {
               services.picom.enable = true;
               home.pointerCursor.size = 30;
-              home.packages = homeConfig.home.packages ++[ cursor-arm.packages.${system}.default ];
             };
         }
       ];
@@ -68,7 +63,7 @@
               homeConfig = import ./hosts/home.nix { inherit pkgs; };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
-              home.packages = homeConfig.home.packages ++[ cursor-arm.packages.x86_64-linux.default ];
+              # 
             };
         }
       ];
