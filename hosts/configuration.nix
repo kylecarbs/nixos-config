@@ -6,14 +6,6 @@ let
   apple-fonts = pkgs.callPackage ../pkgs/apple-fonts.nix { };
 in
 {
-  imports =
-    [
-      ../pkgs/sysbox.nix
-      (fetchTarball {
-        url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
-        sha256 = "sha256:09j4kvsxw1d5dvnhbsgih0icbrxqv90nzf0b589rb5z6gnzwjnqf";
-      })
-    ];
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.cudaSupport = true;
   nixpkgs.config.android_sdk.accept_license = true;
@@ -57,8 +49,6 @@ in
   systemd.services."getty@tty1".enable = false;
   systemd.services."autovt@tty1".enable = false;
 
-  # The NodeJS in VS Code by default fails to link!
-  services.vscode-server.enable = true;
   programs.fish.enable = true;
   # See: https://nixos.wiki/wiki/Fish
   # Warning! As noted in the fish documentation, using fish as your *login* shell (referenced in /etc/passwd)
@@ -78,7 +68,6 @@ in
     enable = true;
   };
   services.openssh.enable = true;
-  services.sysbox.enable = true;
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "both";

@@ -7,7 +7,6 @@ py3status {
         separator = "|"
 }
 
-order += "external_script extensions"
 order += "external_script prs"
 order += "battery status"
 order += "disk /"
@@ -36,13 +35,6 @@ cpu_usage {
 memory {
         format = "mem: %percentage_used"
         threshold_degraded = "10%"
-}
-
-external_script "extensions" {
-        format = "extensions: {output}"
-        script_path = "nix-vscode-extensions --status-bar"
-        cache_timeout = 60
-        on_click 3 = "exec nix-vscode-extensions --update --commit"
 }
 
 external_script "prs" {

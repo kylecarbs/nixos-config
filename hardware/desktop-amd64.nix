@@ -77,8 +77,6 @@
     spotify
     slack
     zoom-us
-    mitmproxy
-    mitmproxy2swagger
   ];
   environment.variables.BROWSER = "google-chrome";
 }
