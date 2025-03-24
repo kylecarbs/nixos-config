@@ -66,6 +66,8 @@ in
     xorg.libxcvt
     yarn
 
+    signal-desktop
+
     # Language servers
     gopls
     nodePackages.typescript-language-server
