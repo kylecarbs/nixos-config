@@ -7,6 +7,22 @@ let
   }).overrideAttrs (oldAttrs: {
     postInstall = ":";
   });
+  cursorMainline = pkgs.code-cursor.overrideAttrs (oldAttrs: rec {
+    version = "0.47.9";
+    src = pkgs.appimageTools.wrapType2 {
+      inherit (oldAttrs) pname;
+      inherit version;
+      src = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then pkgs.fetchurl {
+        # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable
+        url = "https://downloads.cursor.com/production/b6fb41b5f36bda05cab7109606e7404a65d1ff32/linux/x64/Cursor-0.47.9-x86_64.AppImage";
+        hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+      } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
+        # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=stable
+        url = "https://downloads.cursor.com/production/b6fb41b5f36bda05cab7109606e7404a65d1ff32/linux/arm64/Cursor-0.47.9-aarch64.AppImage";
+        hash = "sha256-OhaKujLXt06DL43fY5vRaGZe3p8Y1mt22y5OrzM3mMk=";
+      } else (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
+    };
+  });
   devcontainer-cli = pkgs.callPackage ../pkgs/devcontainer-cli.nix { };
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
 
@@ -23,7 +39,7 @@ in
     bun
     cargo
     coderMainline
-    code-cursor
+    cursorMainline
     deno
     dig
     fish
