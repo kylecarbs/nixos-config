@@ -4,14 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager";
-    whispertype = {
-      url = "github:kylecarbs/whispertype";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
 
-  outputs = { self, nixpkgs, home-manager, whispertype, vscode-server }: {
+  outputs = { self, nixpkgs, home-manager, vscode-server }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
     formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.nixpkgs-fmt;
 
@@ -48,12 +44,7 @@
         ./hardware/desktop-amd64.nix
         home-manager.nixosModules.home-manager
         vscode-server.nixosModules.default
-        whispertype.nixosModules.default
         {
-          services.whispertype = {
-            enable = true;
-            port = 36124;
-          };
           services.vscode-server = {
             enable = true;
             installPath = "$HOME/.cursor-server";
