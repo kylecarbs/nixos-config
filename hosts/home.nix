@@ -48,7 +48,7 @@ in
     git-lfs
     glxinfo
     gnumake
-    go_1_22
+    go_1_23
     goreleaser
     (google-cloud-sdk.withExtraComponents
       ([ google-cloud-sdk.components.gke-gcloud-auth-plugin ]))
