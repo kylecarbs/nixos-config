@@ -8,7 +8,7 @@ let
     postInstall = ":";
   });
   cursorMainline = pkgs.code-cursor.overrideAttrs (oldAttrs: rec {
-    version = "0.48.2";
+    version = "0.48.9";
     src = pkgs.appimageTools.wrapType2 {
       inherit (oldAttrs) pname;
       inherit version;
@@ -18,8 +18,8 @@ let
         hash = "sha256-OXL9C+Gnq8nrjCjvZxcHLKkyoK1BRsE+0J61j92HFok=";
       } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
         # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/b6fb41b5f36bda05cab7109606e7404a65d1ff32/linux/arm64/Cursor-0.47.9-aarch64.AppImage";
-        hash = "sha256-OhaKujLXt06DL43fY5vRaGZe3p8Y1mt22y5OrzM3mMk=";
+        url = "https://downloads.cursor.com/production/61e99179e4080fecf9d8b92c6e2e3e00fbfb53f4/linux/arm64/Cursor-0.48.9-aarch64.AppImage";
+        hash = "sha256-RMDYoQSIO0jukhC5j1TjpwCcK0tEnvoVpXbFOxp/K8o=";
       } else (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
     };
   });
