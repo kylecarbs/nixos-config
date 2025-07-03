@@ -8,14 +8,14 @@ let
     postInstall = ":";
   });
   cursorMainline = pkgs.code-cursor.overrideAttrs (oldAttrs: rec {
-    version = "0.50.5";
+    version = "1.1.6";
     src = pkgs.appimageTools.wrapType2 {
       inherit (oldAttrs) pname;
       inherit version;
       src = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then pkgs.fetchurl {
         # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/96e5b01ca25f8fbd4c4c10bc69b15f6228c80771/linux/x64/Cursor-0.50.5-x86_64.AppImage";
-        hash = "sha256-DUWIgQYD3Wj6hF7NBb00OGRynKmXcFldWFUA6W8CZeM=";
+        url = "https://downloads.cursor.com/production/5b19bac7a947f54e4caa3eb7e4c5fbf832389853/linux/x64/Cursor-1.1.6-x86_64.AppImage";
+        hash = "sha256-T0vJRs14tTfT2kqnrQWPFXVCIcULPIud1JEfzjqcEIM=";
       } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
         # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
         url = "https://downloads.cursor.com/production/61e99179e4080fecf9d8b92c6e2e3e00fbfb53f4/linux/arm64/Cursor-0.48.9-aarch64.AppImage";
@@ -73,6 +73,7 @@ in
     simplescreenrecorder
     skopeo
     sqlc
+    stripe-cli
     tailscale
     terraform
     unzip
