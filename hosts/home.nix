@@ -8,7 +8,7 @@ let
     postInstall = ":";
   });
   cursorMainline = pkgs.code-cursor.overrideAttrs (oldAttrs: rec {
-    version = "1.1.6";
+    version = "1.2.1";
     src = pkgs.appimageTools.wrapType2 {
       inherit (oldAttrs) pname;
       inherit version;
@@ -18,10 +18,20 @@ let
         hash = "sha256-T0vJRs14tTfT2kqnrQWPFXVCIcULPIud1JEfzjqcEIM=";
       } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
         # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/61e99179e4080fecf9d8b92c6e2e3e00fbfb53f4/linux/arm64/Cursor-0.48.9-aarch64.AppImage";
-        hash = "sha256-RMDYoQSIO0jukhC5j1TjpwCcK0tEnvoVpXbFOxp/K8o=";
+        url = "https://downloads.cursor.com/production/031e7e0ff1e2eda9c1a0f5df67d44053b059c5df/linux/arm64/Cursor-1.2.1-aarch64.AppImage";
+        hash = "sha256-Otg+NyW1DmrqIb0xqZCfJ4ys61/DBOQNgaAR8PMOCfg=";
       } else (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
     };
+  });
+  bunMainline = (pkgs.bun.overrideAttrs rec {
+    version = "1.2.19";
+    passthru.sources = {
+      "aarch64-linux" = pkgs.fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
+        hash = "sha256-/P1HHNvVp4/Uo5DinMzSu3AEpJ01K6A3rzth1P1dC4M=";
+      };
+    };
+    src = passthru.sources.${pkgs.stdenv.hostPlatform.system};
   });
   devcontainer-cli = pkgs.callPackage ../pkgs/devcontainer-cli.nix { };
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
@@ -36,7 +46,7 @@ in
 
   home.packages = with pkgs; [
     bat
-    bun
+    bunMainline
     cargo
     coderMainline
     cursorMainline
