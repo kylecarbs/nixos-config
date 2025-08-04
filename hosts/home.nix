@@ -83,7 +83,7 @@ in
     openssl.dev
     portaudio
     pkg-config
-    postgres
+    postgresql
     rustc
     simplescreenrecorder
     skopeo
