@@ -17,6 +17,7 @@ order += "tztime local"
 battery "status" {
         format = "bat: %percentage"
         integer_battery_capacity = true
+        path = "/sys/class/power_supply/BAT1/uevent"
 }
 
 disk "/" {

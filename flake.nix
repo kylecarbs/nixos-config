@@ -37,6 +37,29 @@
         }
       ];
     };
+    nixosConfigurations.laptop-amd64 = nixpkgs.lib.nixosSystem rec {
+      system = "x86_64-linux";
+      modules = [
+        ./hardware/laptop-amd64.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.users.kyle =
+            let
+              pkgs = import nixpkgs {
+                system = "x86_64-linux";
+                config.allowUnfree = true;
+              };
+              homeConfig = import ./hosts/home.nix {
+                inherit pkgs;
+                i3ModKey = "Mod1";  # Use Alt key for laptop
+              };
+           in
+           nixpkgs.lib.recursiveUpdate homeConfig {
+           };
+        }
+      ];
+    };
     # My dual-booted desktop.
     nixosConfigurations.desktop-amd64 = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";

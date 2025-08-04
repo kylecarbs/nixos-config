@@ -1,4 +1,4 @@
-{ pkgs, i3BarHeight ? null, ... }:
+{ pkgs, i3BarHeight ? null, i3ModKey ? "Mod4", ... }:
 
 let
   coderMainline = (pkgs.coder.override {
@@ -30,6 +30,10 @@ let
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
         hash = "sha256-/P1HHNvVp4/Uo5DinMzSu3AEpJ01K6A3rzth1P1dC4M=";
       };
+      "x86_64-linux" = pkgs.fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
+        hash = "sha256-w9PBTppeyD/2fQrP525DFa0G2p809Z/HsTgTeCyvH2Y=";
+      };
     };
     src = passthru.sources.${pkgs.stdenv.hostPlatform.system};
   });
@@ -45,6 +49,7 @@ in
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
+    arandr
     bat
     bunMainline
     cargo
@@ -78,7 +83,7 @@ in
     openssl.dev
     portaudio
     pkg-config
-
+    postgres
     rustc
     simplescreenrecorder
     skopeo
@@ -196,11 +201,16 @@ in
 
   xdg.enable = true;
   xdg.configFile."i3/config".text =
-    if i3BarHeight != null
-    then
-      builtins.replaceStrings [ "# height replacer" ]
-        [ "height ${toString i3BarHeight}" ]
-        i3config else i3config;
+    let
+      configWithHeight = if i3BarHeight != null
+        then builtins.replaceStrings [ "# height replacer" ]
+               [ "height ${toString i3BarHeight}" ]
+               i3config 
+        else i3config;
+    in
+      builtins.replaceStrings [ "set $mod Mod4" ]
+        [ "set $mod ${i3ModKey}" ]
+        configWithHeight;
   xdg.configFile."i3status/config".text = builtins.readFile ./config/i3status;
 
   home.pointerCursor = {
