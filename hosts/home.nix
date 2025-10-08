@@ -8,14 +8,14 @@ let
     postInstall = ":";
   });
   cursorMainline = pkgs.code-cursor.overrideAttrs (oldAttrs: rec {
-    version = "1.2.1";
+    version = "1.7.28";
     src = pkgs.appimageTools.wrapType2 {
       inherit (oldAttrs) pname;
       inherit version;
       src = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then pkgs.fetchurl {
         # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/5b19bac7a947f54e4caa3eb7e4c5fbf832389853/linux/x64/Cursor-1.1.6-x86_64.AppImage";
-        hash = "sha256-T0vJRs14tTfT2kqnrQWPFXVCIcULPIud1JEfzjqcEIM=";
+        url = "https://downloads.cursor.com/production/adb0f9e3e4f184bba7f3fa6dbfd72ad0ebb8cfd8/linux/x64/Cursor-1.7.28-x86_64.AppImage";
+        hash = "sha256-ZB/xGGKyVnfmNASWtfkmoxvzzkXa2pUlmgY2Bb9f5lU=";
       } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
         # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
         url = "https://downloads.cursor.com/production/031e7e0ff1e2eda9c1a0f5df67d44053b059c5df/linux/arm64/Cursor-1.2.1-aarch64.AppImage";
@@ -36,6 +36,9 @@ let
       };
     };
     src = passthru.sources.${pkgs.stdenv.hostPlatform.system};
+  });
+  rustcMainline = pkgs.rustc.overrideAttrs (oldAttrs: {
+    version = "1.88.0";
   });
   devcontainer-cli = pkgs.callPackage ../pkgs/devcontainer-cli.nix { };
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
@@ -75,6 +78,7 @@ in
     jq
     kubectl
     libnotify
+    lld
     ghostty
     nixpkgs-fmt
     nix-prefetch-docker
@@ -84,7 +88,7 @@ in
     portaudio
     pkg-config
     postgresql
-    rustc
+    rustcMainline
     simplescreenrecorder
     skopeo
     sqlc

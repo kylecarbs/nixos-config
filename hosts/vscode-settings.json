@@ -34,5 +34,6 @@
   "terminal.integrated.fontSize": 15,
   "window.dialogStyle": "custom",
   "window.menuBarVisibility": "toggle",
-  "workbench.colorTheme": "Min Dark"
+  "workbench.colorTheme": "Min Dark",
+  "terminal.integrated.shellIntegration.enabled": false
 }
