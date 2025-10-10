@@ -29,6 +29,12 @@
   boot.initrd.luks.devices."luks-f262b404-e34e-4a98-8965-0b5f80c3240c".device = "/dev/disk/by-uuid/f262b404-e34e-4a98-8965-0b5f80c3240c";
   boot.initrd.luks.devices."luks-3292d5bb-e0c1-4862-aedc-7589dd5022f2".device = "/dev/disk/by-uuid/3292d5bb-e0c1-4862-aedc-7589dd5022f2";
   
+  # This disables power saving for the wifi driver.
+  # When this is enabled it intermittently drops out.
+  boot.extraModprobeConfig = ''
+  options mt7921e power_save=0
+'';
+
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/000E-AB73";
       fsType = "vfat";

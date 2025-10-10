@@ -12,6 +12,13 @@ in
   boot.loader.efi.efiSysMountPoint = "/boot";
   i18n.defaultLocale = "en_CA.UTF-8";
   networking.networkmanager.enable = true;
+  environment.etc."NetworkManager/conf.d/10-wifi.conf".text = ''
+[connection]
+wifi.powersave=2
+
+[device]
+wifi.scan-rand-mac-address=yes
+'';
   services.chrony.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" "ca-derivations" ];
   time.timeZone = "America/New_York";
@@ -129,6 +136,15 @@ in
           python-dateutil
         ]))
       ];
+    };
+
+    # Touchpad configuration for Framework laptop
+    libinput = {
+      enable = true;
+      touchpad = {
+        tapping = true;
+        clickMethod = "clickfinger";
+      };
     };
   };
 
