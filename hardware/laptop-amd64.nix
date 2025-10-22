@@ -61,7 +61,33 @@
 
   services.logind.lidSwitch = "suspend";
   services.xserver.dpi = 160;
-  
+
+  powerManagement.powertop.enable = true;
+  services.tlp = {
+    enable = true;
+    settings = {
+      # CPU scaling for AMD
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+      
+      # AMD CPU boost
+      CPU_BOOST_ON_AC = 1;
+      CPU_BOOST_ON_BAT = 0;
+      
+      # Enable audio power saving
+      SOUND_POWER_SAVE_ON_AC = 0;
+      SOUND_POWER_SAVE_ON_BAT = 1;
+      
+      # Battery charge thresholds (if your laptop supports it)
+      START_CHARGE_THRESH_BAT0 = 40;
+      STOP_CHARGE_THRESH_BAT0 = 80;
+      
+      # Runtime power management for PCI(e) devices
+      RUNTIME_PM_ON_AC = "on";
+      RUNTIME_PM_ON_BAT = "auto";
+    };
+  };
+
   environment.systemPackages = with pkgs; [
     blueman
     google-chrome
