@@ -95,4 +95,5 @@
     slack
     zoom-us
   ];
+  environment.variables.BROWSER = "google-chrome";
 }
