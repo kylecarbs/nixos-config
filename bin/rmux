@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+$BROWSER --app="http://desktop:3000/"
