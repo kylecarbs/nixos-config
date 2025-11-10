@@ -14,8 +14,8 @@ let
       inherit version;
       src = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then pkgs.fetchurl {
         # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/adb0f9e3e4f184bba7f3fa6dbfd72ad0ebb8cfd8/linux/x64/Cursor-1.7.28-x86_64.AppImage";
-        hash = "sha256-ZB/xGGKyVnfmNASWtfkmoxvzzkXa2pUlmgY2Bb9f5lU=";
+        url = "https://downloads.cursor.com/production/8e4da76ad196925accaa169efcae28c45454cce3/linux/x64/Cursor-2.0.43-x86_64.AppImage";
+        hash = "sha256-ok+7uBlI9d3a5R5FvMaWlbPM6tX2eCse7jZ7bmlPExY=";
       } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
         # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
         url = "https://downloads.cursor.com/production/031e7e0ff1e2eda9c1a0f5df67d44053b059c5df/linux/arm64/Cursor-1.2.1-aarch64.AppImage";
