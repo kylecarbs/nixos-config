@@ -24,7 +24,7 @@ let
     };
   });
   bunMainline = (pkgs.bun.overrideAttrs rec {
-    version = "1.2.19";
+    version = "1.3.2";
     passthru.sources = {
       "aarch64-linux" = pkgs.fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
@@ -32,7 +32,7 @@ let
       };
       "x86_64-linux" = pkgs.fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-w9PBTppeyD/2fQrP525DFa0G2p809Z/HsTgTeCyvH2Y=";
+        hash = "sha256-DLVqRIS9d2Sj7vm55nq0V4QJgSh7RnlJdNHmYSy/Zwk=";
       };
     };
     src = passthru.sources.${pkgs.stdenv.hostPlatform.system};
