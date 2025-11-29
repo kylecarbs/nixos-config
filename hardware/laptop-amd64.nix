@@ -19,6 +19,12 @@
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
+
+    input = {
+      General = {
+        ClassicBondedOnly = false;
+      };
+    };
   };
 
   fileSystems."/" =
