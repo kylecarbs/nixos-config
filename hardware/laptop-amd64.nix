@@ -32,8 +32,11 @@
   # This disables power saving for the wifi driver.
   # When this is enabled it intermittently drops out.
   boot.extraModprobeConfig = ''
-  options mt7921e power_save=0
+  options mt7925e power_save=0
+  options mt7925e disable_aspm=1
 '';
+
+
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/000E-AB73";
@@ -60,7 +63,19 @@
   ];
 
   services.logind.lidSwitch = "suspend";
-  services.xserver.dpi = 160;
+  services.xserver = {
+    dpi = 160;
+
+    displayManager.sessionCommands = ''
+      KB_NAME="Apple Inc. Magic Keyboard with Numeric Keypad"
+      KB_ID=$(xinput list --id-only "$KB_NAME" 2>/dev/null || true)
+
+      if [ -n "$KB_ID" ]; then
+        # Swap alt and super
+        setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
+      fi
+    '';
+  }
 
   powerManagement.powertop.enable = true;
   services.tlp = {
