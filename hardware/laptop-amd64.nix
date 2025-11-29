@@ -75,7 +75,7 @@
         setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
       fi
     '';
-  }
+  };
 
   powerManagement.powertop.enable = true;
   services.tlp = {
