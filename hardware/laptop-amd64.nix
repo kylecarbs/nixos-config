@@ -27,6 +27,11 @@
     };
   };
 
+  networking.networkmanager = {
+    enable = true;
+    wifi.powersave = false;
+  };
+
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/db2170a7-c6a2-4169-8e36-8bf794cbb49b";
       fsType = "ext4";

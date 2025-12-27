@@ -1,0 +1,44 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p appimage-run curl
+set -euo pipefail
+
+# Directory to store downloaded AppImage
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/mux"
+mkdir -p "$CACHE_DIR"
+
+# Fetch latest release info from GitHub API
+echo "Checking for latest Mux release..." >&2
+RELEASE_INFO=$(curl -sL https://api.github.com/repos/coder/mux/releases/latest)
+LATEST_VERSION=$(echo "$RELEASE_INFO" | grep -m1 '"tag_name"' | cut -d'"' -f4)
+VERSION_NUMBER="${LATEST_VERSION#v}"  # Remove 'v' prefix if present
+
+APPIMAGE_NAME="mux-${VERSION_NUMBER}-x86_64.AppImage"
+APPIMAGE_PATH="$CACHE_DIR/$APPIMAGE_NAME"
+
+# Check if we already have this version downloaded
+if [ -f "$APPIMAGE_PATH" ]; then
+    echo "Using cached Mux $LATEST_VERSION" >&2
+else
+    echo "Downloading Mux $LATEST_VERSION..." >&2
+    DOWNLOAD_URL=$(echo "$RELEASE_INFO" | grep '"browser_download_url"' | grep 'x86_64.AppImage"' | cut -d'"' -f4)
+    
+    if [ -z "$DOWNLOAD_URL" ]; then
+        echo "Error: Could not find x86_64.AppImage download URL" >&2
+        exit 1
+    fi
+    
+    # Clean up old versions before downloading new one
+    echo "Cleaning up old versions..." >&2
+    find "$CACHE_DIR" -name "mux-*.AppImage" -type f -delete
+    
+    # Download to temporary file first
+    TEMP_FILE="${APPIMAGE_PATH}.tmp"
+    curl -L -o "$TEMP_FILE" "$DOWNLOAD_URL"
+    chmod +x "$TEMP_FILE"
+    mv "$TEMP_FILE" "$APPIMAGE_PATH"
+    
+    echo "Download complete!" >&2
+fi
+
+# Run the AppImage using appimage-run for NixOS
+exec appimage-run "$APPIMAGE_PATH" "$@"

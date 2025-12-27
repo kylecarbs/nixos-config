@@ -235,6 +235,7 @@ in
   # Add all of our binaries!
   home.file.".local/bin/ams".source = ../bin/ams;
   home.file.".local/bin/rmux".source = ../bin/rmux;
+  home.file.".local/bin/lmux".source = ../bin/lmux;
   home.file.".local/bin/chat".source = ../bin/chat;
   home.file.".local/bin/dmenu_emoji".source = ../bin/dmenu_emoji;
   home.file.".local/bin/git-hf".source = ../bin/git-hf;
