@@ -22,7 +22,7 @@ let
     src = passthru.sources.${pkgs.stdenv.hostPlatform.system};
   });
   rustcMainline = pkgs.rustc.overrideAttrs (oldAttrs: {
-    version = "1.88.0";
+    version = "1.93.0";
   });
   devcontainer-cli = pkgs.callPackage ../pkgs/devcontainer-cli.nix { };
   jetbrains-gateway = pkgs.callPackage ../pkgs/jetbrains-gateway.nix { };
