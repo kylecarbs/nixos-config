@@ -12,12 +12,17 @@ in
   boot.loader.efi.efiSysMountPoint = "/boot";
   i18n.defaultLocale = "en_CA.UTF-8";
   networking.networkmanager.enable = true;
+  networking.networkmanager.settings = {
+    device = {
+      "wifi.scan-rand-mac-address" = "no";
+    };
+    connection = {
+      "wifi.cloned-mac-address" = "permanent";
+    };
+  };
   environment.etc."NetworkManager/conf.d/10-wifi.conf".text = ''
 [connection]
 wifi.powersave=2
-
-[device]
-wifi.scan-rand-mac-address=yes
 '';
   services.chrony.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" "ca-derivations" ];
@@ -70,7 +75,6 @@ wifi.scan-rand-mac-address=yes
       fi
     '';
   };
-  programs.adb.enable = true;
   virtualisation.docker = {
     enable = true;
   };

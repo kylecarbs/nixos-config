@@ -7,22 +7,6 @@ let
   }).overrideAttrs (oldAttrs: {
     postInstall = ":";
   });
-  cursorMainline = pkgs.code-cursor.overrideAttrs (oldAttrs: rec {
-    version = "1.7.28";
-    src = pkgs.appimageTools.wrapType2 {
-      inherit (oldAttrs) pname;
-      inherit version;
-      src = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then pkgs.fetchurl {
-        # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/60d42bed27e5775c43ec0428d8c653c49e58e26a/linux/x64/Cursor-2.1.39-x86_64.AppImage";
-        hash = "sha256-SsKhW8q/AzOn1HqykhwaVHyTVm+OqTUiFtda7XDiAho=";
-      } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
-        # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/031e7e0ff1e2eda9c1a0f5df67d44053b059c5df/linux/arm64/Cursor-1.2.1-aarch64.AppImage";
-        hash = "sha256-Otg+NyW1DmrqIb0xqZCfJ4ys61/DBOQNgaAR8PMOCfg=";
-      } else (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
-    };
-  });
   bunMainline = (pkgs.bun.overrideAttrs rec {
     version = "1.3.2";
     passthru.sources = {
@@ -57,16 +41,16 @@ in
     bunMainline
     cargo
     coderMainline
-    cursorMainline
+    code-cursor
     deno
     dig
     fish
     gcc
     git
     git-lfs
-    glxinfo
+    mesa-demos
     gnumake
-    go_1_23
+    go_1_25
     goreleaser
     (google-cloud-sdk.withExtraComponents
       ([ google-cloud-sdk.components.gke-gcloud-auth-plugin ]))
@@ -83,7 +67,7 @@ in
     nixpkgs-fmt
     nix-prefetch-docker
     nixos-generators
-    nodejs_23
+    nodejs_24
     openssl.dev
     portaudio
     pkg-config
