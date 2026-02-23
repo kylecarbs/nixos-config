@@ -86,6 +86,13 @@ wifi.powersave=2
   # Useful for VS Code storing credentials.
   services.gnome.gnome-keyring.enable = true;
 
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc
+    zlib
+    openssl
+  ];
+
   location.provider = "geoclue2";
   services.redshift = {
     enable = true;
