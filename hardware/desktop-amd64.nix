@@ -47,7 +47,7 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # Makes the scaling look nice on my display!
-  services.xserver.dpi = 125;
+  services.xserver.dpi = 150;
   services.xserver.videoDrivers = [ "nvidia" ];
   # This is necessary for 144fps in Chrome!
   services.xserver.screenSection = ''
@@ -64,11 +64,20 @@
   ];
 
   hardware.nvidia = {
-    # Fixes screen tearing!
+    # Use latest driver (590.x) which fixes DSC/HDMI FRL issues for 5120x2160@165Hz
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
     modesetting.enable = true;
     open = false;
     nvidiaSettings = true;
   };
+
+  # Disable DPMS at X server level to prevent HDMI 2.1 FRL link training failures
+  services.xserver.serverFlagsSection = ''
+    Option "BlankTime" "0"
+    Option "StandbyTime" "0"
+    Option "SuspendTime" "0"
+    Option "OffTime" "0"
+  '';
 
   # These packages are only available on amd64.
   environment.systemPackages = with pkgs; [
