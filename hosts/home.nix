@@ -21,6 +21,23 @@ let
     };
     src = passthru.sources.${pkgs.stdenv.hostPlatform.system};
   });
+  cursorMainline = pkgs.code-cursor.overrideAttrs (oldAttrs: rec {
+    version = "3.3.30";
+    src = pkgs.appimageTools.extract {
+      inherit (oldAttrs) pname;
+      inherit version;
+      src = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then pkgs.fetchurl {
+        # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest
+        url = "https://downloads.cursor.com/production/3dc559280adc5f931ade8e25c7b85393842acf34/linux/x64/Cursor-3.3.30-x86_64.AppImage";
+        hash = "sha256-dx/ddEBUK6lHn98nP/k907M8inOvjOUHUzyJFLFmCRs=";
+      } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
+        # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
+        url = "https://downloads.cursor.com/production/031e7e0ff1e2eda9c1a0f5df67d44053b059c5df/linux/arm64/Cursor-1.2.1-aarch64.AppImage";
+        hash = "sha256-Otg+NyW1DmrqIb0xqZCfJ4ys61/DBOQNgaAR8PMOCfg=";
+      } else (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
+    };
+    sourceRoot = "${oldAttrs.pname}-${version}-extracted/usr/share/cursor";
+  });
   rustcMainline = pkgs.rustc.overrideAttrs (oldAttrs: {
     version = "1.93.0";
   });
@@ -41,7 +58,7 @@ in
     bunMainline
     cargo
     coderMainline
-    code-cursor
+    cursorMainline
     deno
     dig
     fish
