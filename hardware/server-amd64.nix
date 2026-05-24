@@ -22,8 +22,8 @@
   boot.swraid.enable = true;
   boot.swraid.mdadmConf = ''
     MAILADDR root
-    # Append ARRAY lines from:
-    #   mdadm --detail --scan
+    ARRAY /dev/md/md2 metadata=1.2 name=md2 UUID=5cc9078a:426e1dcb:06756778:9c57194d
+    ARRAY /dev/md/md3 metadata=1.2 name=md3 UUID=30756e26:dec79c67:dc178d4d:43de828d
   '';
 
   boot.loader.grub = {
