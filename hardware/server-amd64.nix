@@ -60,9 +60,29 @@
   ];
 
   networking.hostName = "dev";
+  networking.useDHCP = false;
+  networking.useNetworkd = true;
 
-  # Replace this with explicit OVH network config if the audit shows static networking.
-  networking.useDHCP = lib.mkDefault true;
+  systemd.network.enable = true;
+  systemd.network.networks."10-ovh-primary" = {
+    matchConfig.MACAddress = "a0:42:3f:4d:c1:04";
+
+    networkConfig = {
+      DHCP = "ipv4";
+      IPv6AcceptRA = false;
+    };
+
+    address = [
+      "2604:2dc0:100:6389::/64"
+    ];
+
+    routes = [
+      {
+        Gateway = "2604:2dc0:100:63ff:ff:ff:ff:ff";
+        GatewayOnLink = true;
+      }
+    ];
+  };
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
