@@ -106,8 +106,8 @@ in
     signal-desktop
 
     # Language servers
-    gopls
-    nodePackages.typescript-language-server
+    (pkgs.lib.hiPrio gopls)
+    typescript-language-server
   ];
 
   programs.vscode = {
