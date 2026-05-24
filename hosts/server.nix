@@ -7,11 +7,48 @@ let
     "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCsaay9uprFzsnYG308Ule9vLDdKRJ1cf15ac5SBw3aeRp1bBsEbQaybyTGkFIA2JC2Na1EJS5gi+Y7LOdVGpLJ+JeMrhvVM+wu2tZoS7LdnzhZgtYSNCoCcJsr1P5gSx/1ydJzxUHu/t8DPmN7gUmF4pslAvBZAhwFFlcncgMgwXnLhSl6L4EQrULM+dNYeqRkNg/pl5ilh3rgSpswOd3Dn11EI4dTBwittFBXtV6XvXScK24BRGQKyEun9bun8hANCbgxKTZ/WAXSSChfEGrBBVgY86IoKZiwC7WaiMvd8OtNS6iNnlN0TJOZyyYF1a+m4rJgcLT/M+Q+orBoVYPzPBqY46E5ZGMKNNo3PovdTeT9/uD/NXlQziuwdxURfXWX/7ZSidVpYPHtVdukd9qYUWUyQDE97CNk88JpvBBWQfee3m/2OOOm5yjzwtF27Th65N7NtKMtDNitzg2vurEqbxLTWR69TckOjhOKswA76vps8TAQjigpUSkHBDj8xds= kyle@desktop"
   ];
 
-  polydexTailscaleServeConfig = {
+  tailscaleServeServices = {
+    polydex = {
+      endpoints = {
+        "tcp:8123" = "tcp://127.0.0.1:8123";
+        "tcp:9000" = "tcp://127.0.0.1:9000";
+      };
+      after = [ "docker.service" ];
+      wants = [ "docker.service" ];
+    };
+    dev = {
+      endpoints = {
+        "tcp:18081" = "tcp://127.0.0.1:18081";
+      };
+    };
+  };
+
+  mkTailscaleServeConfig = service: {
     version = "0.0.1";
-    endpoints = {
-      "tcp:8123" = "tcp://127.0.0.1:8123";
-      "tcp:9000" = "tcp://127.0.0.1:9000";
+    inherit (service) endpoints;
+  };
+
+  mkTailscaleServeService = name: service: {
+    description = "Publish ${name} through Tailscale Service";
+    after = [ "network-online.target" "tailscaled.service" ] ++ (service.after or [ ]);
+    wants = [ "network-online.target" "tailscaled.service" ] ++ (service.wants or [ ]);
+    wantedBy = [ "multi-user.target" ];
+    path = [ pkgs.tailscale ];
+    script = ''
+      tailscale serve set-config --service=svc:${name} /etc/tailscale/${name}-service.json
+      tailscale serve advertise svc:${name}
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecReload = "${pkgs.writeShellScript "tailscale-${name}-reload" ''
+        set -euo pipefail
+        ${pkgs.tailscale}/bin/tailscale serve set-config --service=svc:${name} /etc/tailscale/${name}-service.json
+        ${pkgs.tailscale}/bin/tailscale serve advertise svc:${name}
+      ''}";
+      ExecStop = "${pkgs.writeShellScript "tailscale-${name}-stop" ''
+        ${pkgs.tailscale}/bin/tailscale serve drain svc:${name} || true
+      ''}";
     };
   };
 in
@@ -80,32 +117,17 @@ in
     useRoutingFeatures = "both";
   };
 
-  environment.etc."tailscale/polydex-service.json".text =
-    builtins.toJSON polydexTailscaleServeConfig;
+  environment.etc = lib.mapAttrs'
+    (name: service:
+      lib.nameValuePair "tailscale/${name}-service.json" {
+        text = builtins.toJSON (mkTailscaleServeConfig service);
+      })
+    tailscaleServeServices;
 
-  systemd.services.tailscale-polydex = {
-    description = "Publish Polydex ClickHouse through Tailscale Service";
-    after = [ "network-online.target" "tailscaled.service" "docker.service" ];
-    wants = [ "network-online.target" "tailscaled.service" "docker.service" ];
-    wantedBy = [ "multi-user.target" ];
-    path = [ pkgs.tailscale ];
-    script = ''
-      tailscale serve set-config --service=svc:polydex /etc/tailscale/polydex-service.json
-      tailscale serve advertise svc:polydex
-    '';
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecReload = "${pkgs.writeShellScript "tailscale-polydex-reload" ''
-        set -euo pipefail
-        ${pkgs.tailscale}/bin/tailscale serve set-config --service=svc:polydex /etc/tailscale/polydex-service.json
-        ${pkgs.tailscale}/bin/tailscale serve advertise svc:polydex
-      ''}";
-      ExecStop = "${pkgs.writeShellScript "tailscale-polydex-stop" ''
-        ${pkgs.tailscale}/bin/tailscale serve drain svc:polydex || true
-      ''}";
-    };
-  };
+  systemd.services = lib.mapAttrs'
+    (name: service:
+      lib.nameValuePair "tailscale-${name}" (mkTailscaleServeService name service))
+    tailscaleServeServices;
 
   networking.firewall = {
     enable = true;
