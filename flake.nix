@@ -88,5 +88,18 @@
         }
       ];
     };
+    nixosConfigurations.server-amd64 = nixpkgs.lib.nixosSystem rec {
+      system = "x86_64-linux";
+      modules = [
+        ./hardware/server-amd64.nix
+        vscode-server.nixosModules.default
+        {
+          services.vscode-server = {
+            enable = true;
+            installPath = "$HOME/.cursor-server";
+          };
+        }
+      ];
+    };
   };
 }
