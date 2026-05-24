@@ -16,7 +16,7 @@ let
       after = [ "docker.service" ];
       wants = [ "docker.service" ];
     };
-    dev = {
+    codex = {
       endpoints = {
         "tcp:18081" = "tcp://127.0.0.1:18081";
       };
