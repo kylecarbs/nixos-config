@@ -92,12 +92,28 @@
       system = "x86_64-linux";
       modules = [
         ./hardware/server-amd64.nix
+        home-manager.nixosModules.home-manager
         vscode-server.nixosModules.default
         {
           services.vscode-server = {
             enable = true;
             installPath = "$HOME/.cursor-server";
           };
+
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+
+          home-manager.users.kyle =
+            let
+              pkgs = import nixpkgs {
+                system = "x86_64-linux";
+                config.allowUnfree = true;
+              };
+              homeConfig = import ./hosts/home.nix { inherit pkgs; };
+            in
+            nixpkgs.lib.recursiveUpdate homeConfig {
+              # Server-specific overrides can go here.
+            };
         }
       ];
     };
