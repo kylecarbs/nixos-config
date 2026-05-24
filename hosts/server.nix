@@ -33,16 +33,17 @@ in
     openssl
   ];
 
-  users.groups.ubuntu = {
+  users.groups.kyle = {
     gid = 1000;
   };
 
-  users.users.ubuntu = {
+  users.users.kyle = {
     isNormalUser = true;
     uid = 1000;
-    group = "ubuntu";
-    description = "Ubuntu";
+    group = "kyle";
+    description = "Kyle Carberry";
     extraGroups = [ "wheel" "docker" ];
+    home = "/home/kyle";
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = sshKeys;
   };
