@@ -2,8 +2,7 @@
 
 let
   sshKeys = [
-    # Replace with your real public SSH key before installing.
-    "ssh-ed25519 REPLACE_ME"
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCsaay9uprFzsnYG308Ule9vLDdKRJ1cf15ac5SBw3aeRp1bBsEbQaybyTGkFIA2JC2Na1EJS5gi+Y7LOdVGpLJ+JeMrhvVM+wu2tZoS7LdnzhZgtYSNCoCcJsr1P5gSx/1ydJzxUHu/t8DPmN7gUmF4pslAvBZAhwFFlcncgMgwXnLhSl6L4EQrULM+dNYeqRkNg/pl5ilh3rgSpswOd3Dn11EI4dTBwittFBXtV6XvXScK24BRGQKyEun9bun8hANCbgxKTZ/WAXSSChfEGrBBVgY86IoKZiwC7WaiMvd8OtNS6iNnlN0TJOZyyYF1a+m4rJgcLT/M+Q+orBoVYPzPBqY46E5ZGMKNNo3PovdTeT9/uD/NXlQziuwdxURfXWX/7ZSidVpYPHtVdukd9qYUWUyQDE97CNk88JpvBBWQfee3m/2OOOm5yjzwtF27Th65N7NtKMtDNitzg2vurEqbxLTWR69TckOjhOKswA76vps8TAQjigpUSkHBDj8xds= kyle@desktop"
   ];
 in
 {
