@@ -65,6 +65,7 @@ end
 set -x N_PREFIX $HOME/n
 set PATH $PATH $N_PREFIX/bin
 set PATH $PATH $HOME/bin
+set PATH $PATH $HOME/.local/bin
 set PATH $PATH $HOME/go/bin
 set PATH $PATH $HOME/.cargo/bin
 set PATH $PATH /usr/local/go/bin
