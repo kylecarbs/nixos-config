@@ -90,6 +90,7 @@ in
     pkg-config
     postgresql
     rustcMainline
+    screen
     simplescreenrecorder
     skopeo
     sqlc

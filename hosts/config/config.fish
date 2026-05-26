@@ -84,6 +84,8 @@ alias code="cursor"
 alias cat="bat --paging=never"
 alias dotfiles="git --git-dir=/home/kyle/.dotfiles/.git --work-tree=/"
 alias ns="nix-shell --command fish"
+alias codex="codex --yolo"
+alias claude="claude --dangerously-skip-permissions"
 
 set -gx PNPM_HOME "/home/kyle/.local/share/pnpm"
 set -gx PATH "$PNPM_HOME" $PATH
