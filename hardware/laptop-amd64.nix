@@ -130,7 +130,13 @@
     '';
   };
 
-  powerManagement.powertop.enable = true;
+  # Enable bolt to auto-authorize known Thunderbolt devices (e.g. the
+  # Surface dock) so DP tunnels come up after reboot.
+  services.hardware.bolt.enable = true;
+
+  # powertop --auto-tune resets brightness to ~1% on boot; TLP already
+  # handles power management so powertop is redundant here.
+  powerManagement.powertop.enable = false;
   services.tlp = {
     enable = true;
     settings = {
