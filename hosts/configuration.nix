@@ -26,7 +26,8 @@ wifi.powersave=2
 '';
   services.chrony.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" "ca-derivations" ];
-  time.timeZone = "America/New_York";
+  time.timeZone = null;
+  services.automatic-timezoned.enable = true;
 
   nix.gc = {
     automatic = true;
