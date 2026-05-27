@@ -226,10 +226,10 @@ in
   };
 
   xresources.extraConfig = ''
-    Xft.autohint: true
+    Xft.autohint: false
     Xft.antialias: true
     Xft.hinting: true
-    Xft.hintstyle: hintslight
+    Xft.hintstyle: hintfull
     Xft.rgba: rgb
     Xft.lcdfilter: lcddefault
   '';

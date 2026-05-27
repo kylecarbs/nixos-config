@@ -74,6 +74,15 @@
   ];
 
   services.logind.lidSwitch = "suspend";
+
+  # Work around Framework Laptop 13 AMD Ryzen AI 300 internal microphone capture
+  # exposing a source but returning invalid/silent audio through the UCM profile.
+  services.pipewire.wireplumber.extraConfig."10-disable-alsa-ucm-for-framework-dmic" = {
+    "monitor.alsa.properties" = {
+      "alsa.use-ucm" = false;
+    };
+  };
+
   services.xserver = {
     dpi = 160;
 
