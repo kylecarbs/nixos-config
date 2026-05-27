@@ -87,6 +87,31 @@ wifi.powersave=2
   # Useful for VS Code storing credentials.
   services.gnome.gnome-keyring.enable = true;
 
+  boot.kernel.sysctl = {
+    # BBR congestion control — better throughput and latency than cubic,
+    # especially on wifi and lossy links
+    "net.ipv4.tcp_congestion_control" = "bbr";
+    "net.core.default_qdisc" = "fq";
+
+    # Enable TCP fast open for client and server
+    "net.ipv4.tcp_fastopen" = 3;
+
+    # Don't reset congestion window after idle
+    "net.ipv4.tcp_slow_start_after_idle" = 0;
+
+    # Probe for MTU to avoid fragmentation
+    "net.ipv4.tcp_mtu_probing" = 1;
+
+    # Lower unsent data threshold for better interactive latency
+    "net.ipv4.tcp_notsent_lowat" = 16384;
+
+    # Increase socket buffer limits for throughput
+    "net.core.rmem_max" = 16777216;
+    "net.core.wmem_max" = 16777216;
+    "net.ipv4.tcp_rmem" = "4096 131072 16777216";
+    "net.ipv4.tcp_wmem" = "4096 65536 16777216";
+  };
+
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
     stdenv.cc.cc
