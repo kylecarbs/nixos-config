@@ -103,7 +103,7 @@
         script = pkgs.writeShellScript "apple-keyboard-remap" ''
           # Wait for xinput to register the device
           sleep 1
-          KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad Keyboard"
+          KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad"
           KB_ID=$(${pkgs.xorg.xinput}/bin/xinput list --id-only "$KB_NAME" 2>/dev/null || true)
           if [ -n "$KB_ID" ]; then
             ${pkgs.xorg.setxkbmap}/bin/setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
@@ -121,7 +121,7 @@
 
     displayManager.sessionCommands = ''
       # Remap Apple keyboard on login if already plugged in
-      KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad Keyboard"
+      KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad"
       KB_ID=$(xinput list --id-only "$KB_NAME" 2>/dev/null || true)
 
       if [ -n "$KB_ID" ]; then
