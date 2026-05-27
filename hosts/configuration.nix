@@ -103,8 +103,8 @@ wifi.powersave=2
       night = "1";
     };
     temperature = {
-      day = 5500;
-      night = 4000;
+      day = 6500;
+      night = 4500;
     };
   };
 
