@@ -11,7 +11,7 @@
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "thunderbolt" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
+  boot.kernelModules = [ "kvm-amd" "hid_apple" ];
   boot.extraModulePackages = [ ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -45,6 +45,7 @@
   boot.extraModprobeConfig = ''
   options mt7925e power_save=0
   options mt7925e disable_aspm=1
+  options hid_apple swap_fn_leftctrl=1
 '';
 
 
