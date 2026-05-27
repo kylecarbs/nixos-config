@@ -83,15 +83,47 @@
     };
   };
 
+  # When the Apple Magic Keyboard is plugged in, swap left Alt and Super
+  # so it matches macOS muscle memory.
+  services.udev.extraRules = ''
+    # Disable USB autosuspend for Razer DeathAdder Essential mouse
+    ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="1532", ATTR{idProduct}=="0098", ATTR{power/control}="on"
+
+    # When Apple Magic Keyboard is plugged in, run xkb remap
+    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}="apple-keyboard-remap.service"
+  '';
+
+  # Systemd user service to remap the Apple keyboard on hotplug
+  systemd.user.services.apple-keyboard-remap = {
+    description = "Remap Apple Magic Keyboard layout";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = let
+        script = pkgs.writeShellScript "apple-keyboard-remap" ''
+          # Wait for xinput to register the device
+          sleep 1
+          KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad Keyboard"
+          KB_ID=$(${pkgs.xorg.xinput}/bin/xinput list --id-only "$KB_NAME" 2>/dev/null || true)
+          if [ -n "$KB_ID" ]; then
+            ${pkgs.xorg.setxkbmap}/bin/setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
+          fi
+        '';
+      in "${script}";
+    };
+    environment = {
+      DISPLAY = ":0";
+    };
+  };
+
   services.xserver = {
     dpi = 160;
 
     displayManager.sessionCommands = ''
-      KB_NAME="Apple Inc. Magic Keyboard with Numeric Keypad"
+      # Remap Apple keyboard on login if already plugged in
+      KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad Keyboard"
       KB_ID=$(xinput list --id-only "$KB_NAME" 2>/dev/null || true)
 
       if [ -n "$KB_ID" ]; then
-        # Swap alt and super
         setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
       fi
     '';
