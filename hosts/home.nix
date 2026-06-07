@@ -235,6 +235,7 @@ in
   '';
 
   # Add all of our binaries!
+  home.file.".local/bin/rd".source = ../bin/rd;
   home.file.".local/bin/ams".source = ../bin/ams;
   home.file.".local/bin/rmux".source = ../bin/rmux;
   home.file.".local/bin/lmux".source = ../bin/lmux;

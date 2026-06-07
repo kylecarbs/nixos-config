@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+arg="${1:?Usage: rd [user@]host:path | host:path | path}"
+
+if [[ "$arg" == *:* ]]; then
+  host="${arg%%:*}"
+  host="${host##*@}"
+  path="${arg#*:}"
+else
+  host="dev"
+  path="$arg"
+fi
+
+exec cursor --remote "ssh-remote+$host" "$path"
