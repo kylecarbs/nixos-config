@@ -254,4 +254,12 @@ in
   home.file.".local/bin/superautopets".source = ../bin/superautopets;
   home.file.".local/bin/nix-vscode-extensions".source = ../bin/nix-vscode-extensions;
   home.file.".config/ghostty/config".source = ./config/ghostty;
+  home.file.".codex/AGENTS.md".source = ./config/AGENTS.md;
+  home.file.".claude/CLAUDE.md".source = ./config/AGENTS.md;
+  home.file.".codex/skills/code-review".source = ./config/skills/code-review;
+  home.file.".codex/skills/code-style".source = ./config/skills/code-style;
+  home.file.".codex/skills/update-docs".source = ./config/skills/update-docs;
+  home.file.".claude/skills/code-review".source = ./config/skills/code-review;
+  home.file.".claude/skills/code-style".source = ./config/skills/code-style;
+  home.file.".claude/skills/update-docs".source = ./config/skills/update-docs;
 }
