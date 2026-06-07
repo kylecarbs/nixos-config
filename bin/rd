@@ -11,4 +11,9 @@ else
   path="$arg"
 fi
 
+if ! ssh "$host" "test -d $path"; then
+  echo "error: $host:$path does not exist" >&2
+  exit 1
+fi
+
 exec cursor --remote "ssh-remote+$host" "$path"
