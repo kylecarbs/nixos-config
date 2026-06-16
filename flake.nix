@@ -81,7 +81,11 @@
               };
            in
            nixpkgs.lib.recursiveUpdate homeConfig {
-             services.picom.enable = true;
+             services.picom = {
+               enable = true;
+               backend = "glx";
+               vSync = true;
+             };
            };
         }
       ];
