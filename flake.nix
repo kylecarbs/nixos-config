@@ -81,6 +81,7 @@
               };
            in
            nixpkgs.lib.recursiveUpdate homeConfig {
+             services.picom.enable = true;
            };
         }
       ];

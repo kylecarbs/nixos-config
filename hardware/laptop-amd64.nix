@@ -9,7 +9,7 @@
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.kernelModules = [ "xe" ];  # Early modesetting for Intel Arc GPU
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
   boot.loader.systemd-boot.enable = true;
@@ -43,6 +43,12 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.npu.enable = true;
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  # Intel Panther Lake (Arc B390) GPU acceleration
+  hardware.graphics.extraPackages = with pkgs; [
+    intel-media-driver  # VA-API hardware video decode/encode
+    vpl-gpu-rt          # Intel oneVPL GPU runtime
+  ];
 
   nixpkgs.overlays = [
     (import ../overlays/google-chrome.nix)
