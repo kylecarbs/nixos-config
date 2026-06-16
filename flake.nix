@@ -67,7 +67,7 @@
         ./hardware/laptop-amd64.nix
         home-manager.nixosModules.home-manager
         {
-          system.stateVersion = "26.11";
+          system.stateVersion = nixpkgs.lib.mkForce "26.11";
           home-manager.useGlobalPkgs = true;
           home-manager.users.kyle =
             let
