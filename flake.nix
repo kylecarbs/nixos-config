@@ -60,12 +60,14 @@
         }
       ];
     };
+    # Dell XPS 14"
     nixosConfigurations.laptop-amd64 = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
       modules = [
         ./hardware/laptop-amd64.nix
         home-manager.nixosModules.home-manager
         {
+          system.stateVersion = "26.11";
           home-manager.useGlobalPkgs = true;
           home-manager.users.kyle =
             let
