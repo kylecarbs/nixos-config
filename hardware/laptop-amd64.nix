@@ -12,6 +12,13 @@
   boot.initrd.kernelModules = [ "xe" ];  # Early modesetting for Intel Arc GPU
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+
+  # Disable Panel Self Refresh and Panel Replay — known to cause input lag
+  # and stale frame updates on Intel Xe GPUs (Panther Lake / Arc).
+  boot.kernelParams = [
+    "xe.enable_psr=0"
+    "xe.enable_panel_replay=0"
+  ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
