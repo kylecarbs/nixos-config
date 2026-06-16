@@ -4,6 +4,9 @@
 vm:
 	sudo nixos-rebuild switch --flake .#vm-aarch64
 
+framework:
+	sudo nixos-rebuild switch --flake .#laptop-framework
+
 laptop:
 	sudo nixos-rebuild switch --flake .#laptop-amd64
 
