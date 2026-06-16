@@ -41,6 +41,11 @@
     };
 
   boot.initrd.luks.devices."cryptroot".device = "/dev/disk/by-uuid/9b073aa2-9766-450e-b3f0-efcaf97075c8";
+  boot.initrd.luks.devices."swap".device = "/dev/disk/by-uuid/51fd2dcd-725b-44f7-a6a7-4fec4f73013c";
+
+  swapDevices = [
+    { device = "/dev/mapper/swap"; }
+  ];
 
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/E631-1227";
