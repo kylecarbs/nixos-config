@@ -85,8 +85,44 @@
     };
   };
 
+  # When the Apple Magic Keyboard is plugged in, swap left Alt and Super
+  # so it matches macOS muscle memory.
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}="apple-keyboard-remap.service"
+  '';
+
+  systemd.user.services.apple-keyboard-remap = {
+    description = "Remap Apple Magic Keyboard layout";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = let
+        script = pkgs.writeShellScript "apple-keyboard-remap" ''
+          sleep 1
+          KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad"
+          KB_ID=$(${pkgs.xorg.xinput}/bin/xinput list --id-only "$KB_NAME" 2>/dev/null || true)
+          if [ -n "$KB_ID" ]; then
+            ${pkgs.xorg.setxkbmap}/bin/setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
+          fi
+        '';
+      in "${script}";
+    };
+    environment = {
+      DISPLAY = ":0";
+    };
+  };
+
   services.xserver = {
     dpi = 160;
+
+    displayManager.sessionCommands = ''
+      # Remap Apple keyboard on login if already plugged in
+      KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad"
+      KB_ID=$(xinput list --id-only "$KB_NAME" 2>/dev/null || true)
+
+      if [ -n "$KB_ID" ]; then
+        setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
+      fi
+    '';
   };
 
   environment.systemPackages = with pkgs; [
