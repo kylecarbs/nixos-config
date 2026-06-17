@@ -15,46 +15,25 @@
     nixosConfigurations.vm-aarch64 = nixpkgs.lib.nixosSystem rec {
       system = "aarch64-linux";
       modules = [
-        ./hardware/vm-aarch64.nix
         home-manager.nixosModules.home-manager
+        ./hosts/gui.nix
+        ./hardware/vm-aarch64.nix
         {
-          home-manager.useGlobalPkgs = true;
-          home-manager.users.kyle =
-            let
-              pkgs = import nixpkgs {
-                inherit system;
-                config.allowUnfree = true;
-              };
-              homeConfig = import ./hosts/home-gui.nix {
-                inherit pkgs;
-                swayBarHeight = 37;
-              };
-            in
-            nixpkgs.lib.recursiveUpdate homeConfig {
-              home.pointerCursor.size = 30;
-            };
+          kyle.gui = {
+            swayBarHeight = 37;
+            pointerCursorSize = 30;
+          };
         }
       ];
     };
     nixosConfigurations.laptop-framework = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
       modules = [
-        ./hardware/laptop-framework.nix
         home-manager.nixosModules.home-manager
+        ./hosts/gui.nix
+        ./hardware/laptop-framework.nix
         {
-          home-manager.useGlobalPkgs = true;
-          home-manager.users.kyle =
-            let
-              pkgs = import nixpkgs {
-                system = "x86_64-linux";
-                config.allowUnfree = true;
-              };
-              homeConfig = import ./hosts/home-gui.nix {
-                inherit pkgs;
-                swayModKey = "Mod1"; # Use Alt key for laptop
-              };
-            in
-            nixpkgs.lib.recursiveUpdate homeConfig { };
+          kyle.gui.swayModKey = "Mod1";
         }
       ];
     };
@@ -62,27 +41,18 @@
     nixosConfigurations.laptop-amd64 = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
       modules = [
-        ./hardware/laptop-amd64.nix
         home-manager.nixosModules.home-manager
+        ./hosts/gui.nix
+        ./hardware/laptop-amd64.nix
         {
+          kyle.gui = {
+            swayModKey = "Mod1";
+            swayExtraConfig = ''
+              output eDP-1 mode 2880x1800@120Hz scale 1.5 position 0 0
+              output DP-1 mode 5120x2160@165.06Hz scale 1.5 position 1920 0
+            '';
+          };
           system.stateVersion = nixpkgs.lib.mkForce "26.11";
-          home-manager.useGlobalPkgs = true;
-          home-manager.users.kyle =
-            let
-              pkgs = import nixpkgs {
-                system = "x86_64-linux";
-                config.allowUnfree = true;
-              };
-              homeConfig = import ./hosts/home-gui.nix {
-                inherit pkgs;
-                swayModKey = "Mod1"; # Use Alt key for laptop
-                swayExtraConfig = ''
-                  output eDP-1 mode 2880x1800@120Hz scale 1.5 position 0 0
-                  output DP-1 mode 5120x2160@165.06Hz scale 1.5 position 1920 0
-                '';
-              };
-            in
-            nixpkgs.lib.recursiveUpdate homeConfig { };
         }
       ];
     };
@@ -90,56 +60,30 @@
     nixosConfigurations.desktop-amd64 = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
       modules = [
-        ./hardware/desktop-amd64.nix
         home-manager.nixosModules.home-manager
         vscode-server.nixosModules.default
+        ./hosts/gui.nix
+        ./hardware/desktop-amd64.nix
         {
           services.vscode-server = {
             enable = true;
             installPath = "$HOME/.cursor-server";
           };
-          home-manager.useGlobalPkgs = true;
-          home-manager.users.kyle =
-            let
-              pkgs = import nixpkgs {
-                system = "x86_64-linux";
-                config.allowUnfree = true;
-                config.cudaSupport = true;
-              };
-              homeConfig = import ./hosts/home-gui.nix { inherit pkgs; };
-            in
-            nixpkgs.lib.recursiveUpdate homeConfig {
-              # 
-            };
         }
       ];
     };
     nixosConfigurations.server-amd64 = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
       modules = [
-        ./hardware/server-amd64.nix
         home-manager.nixosModules.home-manager
         vscode-server.nixosModules.default
+        ./hosts/server.nix
+        ./hardware/server-amd64.nix
         {
           services.vscode-server = {
             enable = true;
             installPath = "$HOME/.cursor-server";
           };
-
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-
-          home-manager.users.kyle =
-            let
-              pkgs = import nixpkgs {
-                system = "x86_64-linux";
-                config.allowUnfree = true;
-              };
-              homeConfig = import ./hosts/home.nix { inherit pkgs; };
-            in
-            nixpkgs.lib.recursiveUpdate homeConfig {
-              # Server-specific overrides can go here.
-            };
         }
       ];
     };
