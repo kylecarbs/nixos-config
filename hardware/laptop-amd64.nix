@@ -10,17 +10,22 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "xe" ];  # Early modesetting for Intel Arc GPU
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "kvm-intel" "hid_apple" ];
   boot.extraModulePackages = [ ];
   boot.extraModprobeConfig = ''
     options hid_apple swap_fn_leftctrl=1
   '';
 
-  # Disable Panel Self Refresh and Panel Replay — known to cause input lag
-  # and stale frame updates on Intel Xe GPUs (Panther Lake / Arc).
+  # Disable Intel display power-saving paths that can cause stutter or stale
+  # frames in high-bandwidth, mixed-refresh external monitor setups.
   boot.kernelParams = [
     "xe.enable_psr=0"
     "xe.enable_panel_replay=0"
+    "xe.enable_fbc=0"
+    "xe.enable_dc=0"
+    "xe.disable_power_well=0"
+    "xe.enable_sagv=0"
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -72,12 +77,18 @@
   services.logind.lidSwitch = "suspend";
 
   services.hardware.bolt.enable = true;
+  services.fwupd.enable = true;
 
   services.tlp = {
     enable = true;
     settings = {
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      # Let Intel HWP balance CPU bursts against the integrated GPU's shared
+      # package power budget. The performance governor can starve display/GPU
+      # work under PL1 when CPU load spikes.
+      CPU_SCALING_GOVERNOR_ON_AC = "powersave";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+      CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+      PLATFORM_PROFILE_ON_AC = "performance";
 
       CPU_BOOST_ON_AC = 1;
       CPU_BOOST_ON_BAT = 0;
@@ -122,7 +133,18 @@
   services.xserver = {
     dpi = 160;
 
+    # Prefer the primary monitor's vblank timing in mixed-refresh X11 setups.
+    deviceSection = ''
+      Option "AsyncFlipSecondaries" "true"
+    '';
+
     displayManager.sessionCommands = ''
+      if ${pkgs.xrandr}/bin/xrandr --query | grep -q "^DP-1 connected"; then
+        ${pkgs.xrandr}/bin/xrandr \
+          --output eDP-1 --mode 2880x1800 --rate 120 --pos 0x0 \
+          --output DP-1 --primary --mode 5120x2160 --rate 165.06 --pos 2880x0
+      fi
+
       # Remap Apple keyboard on login if already plugged in
       KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad"
       KB_ID=$(xinput list --id-only "$KB_NAME" 2>/dev/null || true)
