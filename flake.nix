@@ -25,13 +25,12 @@
                 inherit system;
                 config.allowUnfree = true;
               };
-              homeConfig = import ./hosts/home.nix { 
+              homeConfig = import ./hosts/home.nix {
                 inherit pkgs;
-                i3BarHeight = 37;
+                swayBarHeight = 37;
               };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
-              services.picom.enable = true;
               home.pointerCursor.size = 30;
             };
         }
@@ -52,11 +51,10 @@
               };
               homeConfig = import ./hosts/home.nix {
                 inherit pkgs;
-                i3ModKey = "Mod1";  # Use Alt key for laptop
+                swayModKey = "Mod1"; # Use Alt key for laptop
               };
-           in
-           nixpkgs.lib.recursiveUpdate homeConfig {
-           };
+            in
+            nixpkgs.lib.recursiveUpdate homeConfig { };
         }
       ];
     };
@@ -77,11 +75,14 @@
               };
               homeConfig = import ./hosts/home.nix {
                 inherit pkgs;
-                i3ModKey = "Mod1";  # Use Alt key for laptop
+                swayModKey = "Mod1"; # Use Alt key for laptop
+                swayExtraConfig = ''
+                  output eDP-1 mode 2880x1800@120Hz scale 1.5 position 0 0
+                  output DP-1 mode 5120x2160@165.06Hz scale 1.5 position 1920 0
+                '';
               };
-           in
-           nixpkgs.lib.recursiveUpdate homeConfig {
-           };
+            in
+            nixpkgs.lib.recursiveUpdate homeConfig { };
         }
       ];
     };

@@ -1,17 +1,24 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p xdotool
+#! nix-shell -i bash -p jq sway
 
 $BROWSER --app="https://chatgpt.com"
-
-WINDOW=$(xdotool search --name "chatgpt" | head -n 1)
-
-SCREEN_WIDTH=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1)
-SCREEN_HEIGHT=$(xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f2)
 
 WINDOW_WIDTH=480
 WINDOW_HEIGHT=480
 
-POS_X=$((SCREEN_WIDTH - WINDOW_WIDTH - 20))
-POS_Y=$((SCREEN_HEIGHT - WINDOW_HEIGHT - 20))
+if [ -z "${WAYLAND_DISPLAY:-}" ] || ! command -v swaymsg >/dev/null 2>&1; then
+  exit
+fi
 
-i3-msg "[id=$WINDOW] floating enable, sticky enable, resize set 480 480, move position $POS_X $POS_Y"
+sleep 1
+
+read -r OUTPUT_X OUTPUT_Y OUTPUT_WIDTH OUTPUT_HEIGHT < <(
+  swaymsg -t get_outputs |
+    jq -r '.[] | select(.focused) | .rect | "\(.x) \(.y) \(.width) \(.height)"' |
+    head -n 1
+)
+
+POS_X=$((OUTPUT_X + OUTPUT_WIDTH - WINDOW_WIDTH - 20))
+POS_Y=$((OUTPUT_Y + OUTPUT_HEIGHT - WINDOW_HEIGHT - 20))
+
+swaymsg "[title=\".*[Cc]hat[Gg][Pp][Tt].*\"] floating enable, sticky enable, resize set $WINDOW_WIDTH $WINDOW_HEIGHT, move position $POS_X $POS_Y"

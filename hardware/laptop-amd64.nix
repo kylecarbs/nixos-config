@@ -4,12 +4,13 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
       ../hosts/configuration.nix
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ "xe" ];  # Early modesetting for Intel Arc GPU
+  boot.initrd.kernelModules = [ "xe" ]; # Early modesetting for Intel Arc GPU
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelModules = [ "kvm-intel" "hid_apple" ];
   boot.extraModulePackages = [ ];
@@ -41,7 +42,8 @@
   };
 
   fileSystems."/" =
-    { device = "/dev/mapper/cryptroot";
+    {
+      device = "/dev/mapper/cryptroot";
       fsType = "ext4";
     };
 
@@ -53,7 +55,8 @@
   ];
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/E631-1227";
+    {
+      device = "/dev/disk/by-uuid/E631-1227";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
@@ -66,15 +69,15 @@
 
   # Intel Panther Lake (Arc B390) GPU acceleration
   hardware.graphics.extraPackages = with pkgs; [
-    intel-media-driver  # VA-API hardware video decode/encode
-    vpl-gpu-rt          # Intel oneVPL GPU runtime
+    intel-media-driver # VA-API hardware video decode/encode
+    vpl-gpu-rt # Intel oneVPL GPU runtime
   ];
 
   nixpkgs.overlays = [
     (import ../overlays/google-chrome.nix)
   ];
 
-  services.logind.lidSwitch = "suspend";
+  services.logind.settings.Login.HandleLidSwitch = "suspend";
 
   services.hardware.bolt.enable = true;
   services.fwupd.enable = true;
@@ -104,55 +107,8 @@
     };
   };
 
-  # When the Apple Magic Keyboard is plugged in, swap left Alt and Super
-  # so it matches macOS muscle memory.
-  services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="input", ATTR{name}=="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad", TAG+="systemd", ENV{SYSTEMD_USER_WANTS}="apple-keyboard-remap.service"
-  '';
-
-  systemd.user.services.apple-keyboard-remap = {
-    description = "Remap Apple Magic Keyboard layout";
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = let
-        script = pkgs.writeShellScript "apple-keyboard-remap" ''
-          sleep 1
-          KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad"
-          KB_ID=$(${pkgs.xorg.xinput}/bin/xinput list --id-only "$KB_NAME" 2>/dev/null || true)
-          if [ -n "$KB_ID" ]; then
-            ${pkgs.xorg.setxkbmap}/bin/setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
-          fi
-        '';
-      in "${script}";
-    };
-    environment = {
-      DISPLAY = ":0";
-    };
-  };
-
   services.xserver = {
     dpi = 160;
-
-    # Prefer the primary monitor's vblank timing in mixed-refresh X11 setups.
-    deviceSection = ''
-      Option "AsyncFlipSecondaries" "true"
-    '';
-
-    displayManager.sessionCommands = ''
-      if ${pkgs.xrandr}/bin/xrandr --query | grep -q "^DP-1 connected"; then
-        ${pkgs.xrandr}/bin/xrandr \
-          --output eDP-1 --mode 2880x1800 --rate 120 --pos 0x0 \
-          --output DP-1 --primary --mode 5120x2160 --rate 165.06 --pos 2880x0
-      fi
-
-      # Remap Apple keyboard on login if already plugged in
-      KB_NAME="Apple Inc. Magic Keyboard with Touch ID and Numeric Keypad"
-      KB_ID=$(xinput list --id-only "$KB_NAME" 2>/dev/null || true)
-
-      if [ -n "$KB_ID" ]; then
-        setxkbmap -device "$KB_ID" -layout us -option altwin:swap_lalt_lwin
-      fi
-    '';
   };
 
   environment.systemPackages = with pkgs; [

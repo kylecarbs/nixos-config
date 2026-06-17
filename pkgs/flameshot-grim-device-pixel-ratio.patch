@@ -1,0 +1,67 @@
+diff --git a/src/utils/screengrabber.cpp b/src/utils/screengrabber.cpp
+index 3884eef8..8d75eddd 100644
+--- a/src/utils/screengrabber.cpp
++++ b/src/utils/screengrabber.cpp
+@@ -42,6 +42,13 @@ void ScreenGrabber::generalGrimScreenshot(bool& ok, QPixmap& res)
+     Process.start(program, arguments);
+     if (Process.waitForFinished()) {
+         res.load(imgPath, "ppm");
++        QRect logicalGeo = logicalDesktopGeometry();
++        if (!res.isNull() && !logicalGeo.isEmpty() &&
++            res.size() != logicalGeo.size()) {
++            res.setDevicePixelRatio(res.height() * 1.0f /
++                                    logicalGeo.height());
++        }
++
+         QFile imgFile(imgPath);
+         imgFile.remove();
+         ok = true;
+@@ -254,7 +261,14 @@ QPixmap ScreenGrabber::grabScreen(QScreen* screen, bool& ok)
+     if (m_info.waylandDetected()) {
+         p = grabEntireDesktop(ok);
+         if (ok) {
+-            return p.copy(geometry);
++            qreal dpr = p.devicePixelRatio();
++            QRect scaledGeometry(qRound(geometry.x() * dpr),
++                                 qRound(geometry.y() * dpr),
++                                 qRound(geometry.width() * dpr),
++                                 qRound(geometry.height() * dpr));
++            QPixmap screenPixmap = p.copy(scaledGeometry);
++            screenPixmap.setDevicePixelRatio(dpr);
++            return screenPixmap;
+         }
+     } else {
+         ok = true;
+diff --git a/src/widgets/capture/capturewidget.cpp b/src/widgets/capture/capturewidget.cpp
+index c1628d6e..0fb9489c 100644
+--- a/src/widgets/capture/capturewidget.cpp
++++ b/src/widgets/capture/capturewidget.cpp
+@@ -107,7 +107,27 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
+     if (fullScreen) {
+         // Grab Screenshot
+         bool ok = true;
+-        m_context.screenshot = ScreenGrabber().grabEntireDesktop(ok);
++#if defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
++        if (qEnvironmentVariableIsSet("WAYLAND_DISPLAY")) {
++            QScreen* captureScreen = QGuiAppCurrentScreen().currentScreen();
++            const QString outputName =
++              qEnvironmentVariable("FLAMESHOT_WAYLAND_OUTPUT");
++            if (!outputName.isEmpty()) {
++                for (QScreen* const screen : QGuiApplication::screens()) {
++                    if (screen->name() == outputName) {
++                        captureScreen = screen;
++                        break;
++                    }
++                }
++            }
++            m_context.screenshot =
++              ScreenGrabber().grabScreen(captureScreen, ok);
++        } else {
++            m_context.screenshot = ScreenGrabber().grabEntireDesktop(ok);
++        }
++#else
++        m_context.screenshot = ScreenGrabber().grabEntireDesktop(ok);
++#endif
+         if (!ok) {
+             AbstractLogger::error() << tr("Unable to capture screen");
+             this->close();

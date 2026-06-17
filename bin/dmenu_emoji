@@ -9,14 +9,14 @@ case "$1" in
     ;;
   "copy")
     input=$(tee)
-    if [ ! -z "$input" ]; then
+    if [ -n "$input" ]; then
       emoji=${input:0:2}
-      emoji=$(echo $emoji | xargs)
-      echo -n "$emoji" | xclip -selection c
+      emoji=$(echo "$emoji" | xargs)
+      echo -n "$emoji" | wl-copy
     fi
     ;;
   "")
-    bash $0 list | rofi -dmenu -i -theme-str '#window { width: 25%; }' -p "Name" | bash $0 copy
+    bash "$0" list | rofi -dmenu -i -theme-str '#window { width: 25%; }' -p "Name" | bash "$0" copy
     ;;
 esac
 

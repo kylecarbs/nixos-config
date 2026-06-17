@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+output=$(
+  swaymsg -t get_outputs |
+    jq -r '.[] | select(.active and .focused) | .name' |
+    head -n 1
+)
+
+if [ -n "$output" ]; then
+  exec env QT_QPA_PLATFORM=wayland FLAMESHOT_WAYLAND_OUTPUT="$output" flameshot gui
+fi
+
+exec env QT_QPA_PLATFORM=wayland flameshot gui

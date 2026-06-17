@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+target=$(
+  swaymsg -t get_outputs |
+    jq -r '
+      [.[] | select(.active)] as $outputs |
+      ($outputs | map(.focused) | index(true)) as $focused |
+      if ($outputs | length) < 2 or $focused == null then
+        empty
+      else
+        $outputs[(($focused + 1) % ($outputs | length))].name
+      end
+    '
+)
+
+if [ -n "$target" ]; then
+  swaymsg move workspace to output "$target"
+fi

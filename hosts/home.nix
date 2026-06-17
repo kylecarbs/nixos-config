@@ -1,4 +1,4 @@
-{ pkgs, i3BarHeight ? null, i3ModKey ? "Mod4", ... }:
+{ pkgs, swayBarHeight ? null, swayModKey ? "Mod4", swayExtraConfig ? "", ... }:
 
 let
   coderMainline = (pkgs.coder.override {
@@ -26,15 +26,20 @@ let
     src = pkgs.appimageTools.extract {
       inherit (oldAttrs) pname;
       inherit version;
-      src = if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then pkgs.fetchurl {
-        # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/3dc559280adc5f931ade8e25c7b85393842acf34/linux/x64/Cursor-3.3.30-x86_64.AppImage";
-        hash = "sha256-dx/ddEBUK6lHn98nP/k907M8inOvjOUHUzyJFLFmCRs=";
-      } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgs.fetchurl {
-        # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
-        url = "https://downloads.cursor.com/production/031e7e0ff1e2eda9c1a0f5df67d44053b059c5df/linux/arm64/Cursor-1.2.1-aarch64.AppImage";
-        hash = "sha256-Otg+NyW1DmrqIb0xqZCfJ4ys61/DBOQNgaAR8PMOCfg=";
-      } else (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
+      src =
+        if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then
+          pkgs.fetchurl
+            {
+              # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest
+              url = "https://downloads.cursor.com/production/3dc559280adc5f931ade8e25c7b85393842acf34/linux/x64/Cursor-3.3.30-x86_64.AppImage";
+              hash = "sha256-dx/ddEBUK6lHn98nP/k907M8inOvjOUHUzyJFLFmCRs=";
+            } else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then
+          pkgs.fetchurl
+            {
+              # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
+              url = "https://downloads.cursor.com/production/031e7e0ff1e2eda9c1a0f5df67d44053b059c5df/linux/arm64/Cursor-1.2.1-aarch64.AppImage";
+              hash = "sha256-Otg+NyW1DmrqIb0xqZCfJ4ys61/DBOQNgaAR8PMOCfg=";
+            } else (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
     };
     sourceRoot = "${oldAttrs.pname}-${version}-extracted/usr/share/cursor";
   });
@@ -47,13 +52,12 @@ let
   vscodeExtensions = builtins.fromJSON (builtins.readFile ./vscode-extensions.json);
   vscodeSettings = builtins.fromJSON (builtins.readFile ./vscode-settings.json);
 
-  i3config = builtins.readFile ./config/i3;
+  swayConfig = builtins.readFile ./config/sway;
 in
 {
   home.stateVersion = "22.05";
 
   home.packages = with pkgs; [
-    arandr
     bat
     bunMainline
     cargo
@@ -91,7 +95,6 @@ in
     postgresql
     rustcMainline
     screen
-    simplescreenrecorder
     skopeo
     sqlc
     stripe-cli
@@ -101,7 +104,6 @@ in
     vim
     vsce
     whois
-    xorg.libxcvt
     yarn
 
     signal-desktop
@@ -115,17 +117,21 @@ in
     enable = false;
     # To add new extensions, add them to the vscode-extensions.json file and
     # then run `make update-vscode-extensions`.
-    extensions = (pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions) ++ [
-      # Terraform has a custom build script!
-      pkgs.vscode-extensions.hashicorp.terraform
-    ];
+    profiles.default.extensions =
+      (pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions) ++ [
+        # Terraform has a custom build script!
+        pkgs.vscode-extensions.hashicorp.terraform
+      ];
   };
 
   programs.ssh = {
     enable = true;
-    controlMaster = "auto";
-    controlPath = "~/.ssh/sockets/%r@%h-%p";
-    controlPersist = "10m";
+    enableDefaultConfig = false;
+    settings."*" = {
+      ControlMaster = "auto";
+      ControlPath = "~/.ssh/sockets/%r@%h-%p";
+      ControlPersist = "10m";
+    };
   };
 
   programs.fish = {
@@ -136,6 +142,8 @@ in
 
   programs.neovim = {
     enable = true;
+    withPython3 = true;
+    withRuby = true;
     viAlias = true;
     vimAlias = true;
     extraConfig = ''
@@ -187,15 +195,15 @@ in
     enable = true;
     lfs.enable = true;
 
-    userName = "Kyle Carberry";
-    userEmail = "kyle@carberry.com";
-
-    aliases = {
-      p = "push -u origin HEAD";
-      c = "checkout";
-    };
-
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Kyle Carberry";
+        email = "kyle@carberry.com";
+      };
+      alias = {
+        p = "push -u origin HEAD";
+        c = "checkout";
+      };
       push.autoSetupRemote = true;
       init.defaultBranch = "main";
       core.editor = "cursor --wait";
@@ -204,30 +212,69 @@ in
 
   programs.rofi = {
     enable = true;
+    package = pkgs.rofi;
     theme = "Arc-Dark";
     font = "Fira Code 14";
   };
 
-  services.flameshot = {
+  dconf = {
     enable = true;
+    settings."org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      gtk-theme = "Adwaita-dark";
+    };
+  };
+
+  gtk = {
+    enable = true;
+    theme = {
+      package = pkgs.gnome-themes-extra;
+      name = "Adwaita-dark";
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.theme = {
+      package = pkgs.gnome-themes-extra;
+      name = "Adwaita-dark";
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
   };
 
   xdg.enable = true;
-  xdg.configFile."i3/config".text =
+  xdg.configFile."sway/config".text =
     let
-      configWithHeight = if i3BarHeight != null
-        then builtins.replaceStrings [ "# height replacer" ]
-               [ "height ${toString i3BarHeight}" ]
-               i3config 
-        else i3config;
-    in
-      builtins.replaceStrings [ "set $mod Mod4" ]
-        [ "set $mod ${i3ModKey}" ]
+      configWithHeight =
+        if swayBarHeight != null
+        then
+          builtins.replaceStrings [ "# height replacer" ]
+            [ "height ${toString swayBarHeight}" ]
+            swayConfig
+        else swayConfig;
+      configWithExtra = builtins.replaceStrings [ "# extra config replacer" ]
+        [ swayExtraConfig ]
         configWithHeight;
-  xdg.configFile."i3status/config".text = builtins.readFile ./config/i3status;
+    in
+    builtins.replaceStrings [ "set $mod Mod4" ]
+      [ "set $mod ${swayModKey}" ]
+      configWithExtra;
+  xdg.configFile."py3status/config".text = builtins.readFile ./config/py3status;
+  xdg.configFile."flameshot/flameshot.ini" = {
+    force = true;
+    text = ''
+      [General]
+      disabledGrimWarning=true
+      drawThickness=18
+      savePath=/home/kyle/Downloads
+      useGrimAdapter=true
+    '';
+  };
 
   home.pointerCursor = {
     x11.enable = true;
+    gtk.enable = true;
     package = pkgs.vanilla-dmz;
     name = "Vanilla-DMZ";
   };
@@ -248,6 +295,8 @@ in
   home.file.".local/bin/lmux".source = ../bin/lmux;
   home.file.".local/bin/chat".source = ../bin/chat;
   home.file.".local/bin/dmenu_emoji".source = ../bin/dmenu_emoji;
+  home.file.".local/bin/sway_focused_flameshot".source = ../bin/sway_focused_flameshot;
+  home.file.".local/bin/sway_workspace_next_output".source = ../bin/sway_workspace_next_output;
   home.file.".local/bin/git-hf".source = ../bin/git-hf;
   home.file.".local/bin/mypulls".source = ../bin/mypulls;
   home.file.".local/bin/notion".source = ../bin/notion;

@@ -4,6 +4,11 @@
 let
   apple-emoji = pkgs.callPackage ../pkgs/apple-emoji.nix { };
   apple-fonts = pkgs.callPackage ../pkgs/apple-fonts.nix { };
+  flameshotWayland = pkgs.flameshot.overrideAttrs (oldAttrs: {
+    patches = (oldAttrs.patches or [ ]) ++ [
+      ../pkgs/flameshot-grim-device-pixel-ratio.patch
+    ];
+  });
 in
 {
   nixpkgs.config.allowUnfree = true;
@@ -21,9 +26,9 @@ in
     };
   };
   environment.etc."NetworkManager/conf.d/10-wifi.conf".text = ''
-[connection]
-wifi.powersave=2
-'';
+    [connection]
+    wifi.powersave=2
+  '';
   services.chrony.enable = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" "impure-derivations" "ca-derivations" ];
   time.timeZone = null;
@@ -35,7 +40,7 @@ wifi.powersave=2
     options = "--delete-older-than 1d";
   };
 
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -120,26 +125,59 @@ wifi.powersave=2
   ];
 
   location.provider = "geoclue2";
-  services.redshift = {
-    enable = true;
-    brightness = {
-      # Note the string values below.
-      day = "1";
-      night = "1";
-    };
-    temperature = {
-      day = 6500;
-      night = 4500;
-    };
-  };
 
   services.displayManager = {
     autoLogin.enable = true;
     autoLogin.user = "kyle";
-    defaultSession = "none+i3";
+    defaultSession = "sway";
   };
 
-  # Change the display manager to i3.
+  programs.sway = {
+    enable = true;
+    xwayland.enable = true;
+    extraOptions = [ "--unsupported-gpu" ];
+    extraPackages = with pkgs; [
+      dunst
+      flameshotWayland
+      gammastep
+      grim
+      i3status
+      libnotify
+      networkmanagerapplet
+      rofi
+      slurp
+      swayidle
+      swaylock
+      wdisplays
+      wf-recorder
+      wl-clipboard
+
+      # Required for py3status to work.
+      (python3.withPackages (p: with p; [
+        google-api-python-client
+        httplib2
+        py3status
+        python-dateutil
+      ]))
+    ];
+  };
+
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = [ "wlr" "gtk" ];
+  };
+
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    MOZ_ENABLE_WAYLAND = "1";
+    QT_QPA_PLATFORM = "wayland";
+    XDG_CURRENT_DESKTOP = "sway";
+    XDG_SESSION_DESKTOP = "sway";
+  };
+
+  # Keep X enabled for LightDM and Xwayland compatibility.
   services.xserver = {
     enable = true;
 
@@ -152,36 +190,14 @@ wifi.powersave=2
       xterm.enable = false;
     };
 
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        dmenu
-        dunst
-        i3blocks
-        i3lock
-        i3status
-        rofi
-        xclip
-        xorg.libXcursor
-        xorg.libXi
+  };
 
-        # Required for py3status to work!
-        (python3.withPackages (p: with p; [
-          google-api-python-client
-          httplib2
-          py3status
-          python-dateutil
-        ]))
-      ];
-    };
-
-    # Touchpad configuration for Framework laptop
-    libinput = {
-      enable = true;
-      touchpad = {
-        tapping = true;
-        clickMethod = "clickfinger";
-      };
+  # Touchpad configuration for Framework laptop and Sway sessions.
+  services.libinput = {
+    enable = true;
+    touchpad = {
+      tapping = true;
+      clickMethod = "clickfinger";
     };
   };
 
