@@ -25,7 +25,7 @@
                 inherit system;
                 config.allowUnfree = true;
               };
-              homeConfig = import ./hosts/home.nix {
+              homeConfig = import ./hosts/home-gui.nix {
                 inherit pkgs;
                 swayBarHeight = 37;
               };
@@ -49,7 +49,7 @@
                 system = "x86_64-linux";
                 config.allowUnfree = true;
               };
-              homeConfig = import ./hosts/home.nix {
+              homeConfig = import ./hosts/home-gui.nix {
                 inherit pkgs;
                 swayModKey = "Mod1"; # Use Alt key for laptop
               };
@@ -73,7 +73,7 @@
                 system = "x86_64-linux";
                 config.allowUnfree = true;
               };
-              homeConfig = import ./hosts/home.nix {
+              homeConfig = import ./hosts/home-gui.nix {
                 inherit pkgs;
                 swayModKey = "Mod1"; # Use Alt key for laptop
                 swayExtraConfig = ''
@@ -106,7 +106,7 @@
                 config.allowUnfree = true;
                 config.cudaSupport = true;
               };
-              homeConfig = import ./hosts/home.nix { inherit pkgs; };
+              homeConfig = import ./hosts/home-gui.nix { inherit pkgs; };
             in
             nixpkgs.lib.recursiveUpdate homeConfig {
               # 
