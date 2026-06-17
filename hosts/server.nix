@@ -53,32 +53,13 @@ let
   };
 in
 {
-  nixpkgs.config.allowUnfree = true;
+  imports = [
+    ./base.nix
+  ];
 
-  i18n.defaultLocale = "en_CA.UTF-8";
   time.timeZone = "America/New_York";
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-    "impure-derivations"
-    "ca-derivations"
-  ];
-
-  nix.gc = {
-    automatic = true;
-    randomizedDelaySec = "14m";
-    options = "--delete-older-than 7d";
-  };
-
-  programs.fish.enable = true;
-
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    stdenv.cc.cc
-    zlib
-    openssl
-  ];
+  nix.gc.options = "--delete-older-than 7d";
 
   users.groups.kyle = {
     gid = 1000;
@@ -89,18 +70,13 @@ in
     uid = 1000;
     group = "kyle";
     description = "Kyle Carberry";
-    extraGroups = [ "wheel" "docker" ];
     home = "/home/kyle";
-    shell = pkgs.fish;
     openssh.authorizedKeys.keys = sshKeys;
   };
 
   users.users.root.openssh.authorizedKeys.keys = sshKeys;
 
-  security.sudo.wheelNeedsPassword = false;
-
   services.openssh = {
-    enable = true;
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
@@ -108,14 +84,7 @@ in
     };
   };
 
-  services.chrony.enable = true;
-
-  virtualisation.docker.enable = true;
-
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "both";
-  };
+  home-manager.useUserPackages = true;
 
   environment.etc = lib.mapAttrs'
     (name: service:

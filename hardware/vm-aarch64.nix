@@ -7,7 +7,6 @@
   imports =
     [
       (modulesPath + "/profiles/qemu-guest.nix")
-      ../hosts/configuration.nix
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "virtio_pci" "usbhid" ];
