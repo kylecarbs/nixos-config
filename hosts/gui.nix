@@ -36,7 +36,6 @@ let
     sourceRoot = "${oldAttrs.pname}-${version}-extracted/usr/share/cursor";
   });
 
-  vscodeExtensions = builtins.fromJSON (builtins.readFile ./vscode-extensions.json);
   swayConfig = builtins.readFile ./config/sway;
 
   configWithHeight =
@@ -244,17 +243,6 @@ in
 
       programs.git.settings.core.editor = lib.mkForce "cursor --wait";
 
-      programs.vscode = {
-        enable = false;
-        # To add new extensions, add them to the vscode-extensions.json file and
-        # then run `make update-vscode-extensions`.
-        profiles.default.extensions =
-          (pkgs.vscode-utils.extensionsFromVscodeMarketplace vscodeExtensions) ++ [
-            # Terraform has a custom build script.
-            pkgs.vscode-extensions.hashicorp.terraform
-          ];
-      };
-
       programs.rofi = {
         enable = true;
         package = pkgs.rofi;
@@ -328,7 +316,6 @@ in
       home.file.".local/bin/sway_workspace_next_output".source = ../bin/sway_workspace_next_output;
       home.file.".local/bin/notion".source = ../bin/notion;
       home.file.".local/bin/superautopets".source = ../bin/superautopets;
-      home.file.".local/bin/nix-vscode-extensions".source = ../bin/nix-vscode-extensions;
       home.file.".config/ghostty/config".source = ./config/ghostty;
     };
   };
