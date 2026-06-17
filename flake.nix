@@ -9,34 +9,7 @@
 
   outputs = { self, nixpkgs, home-manager, vscode-server }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
-    formatter.aarch64-linux = nixpkgs.legacyPackages.aarch64-linux.nixpkgs-fmt;
 
-    # A UTM VM on my M2 Macbook used when traveling or at coffee shops.
-    nixosConfigurations.vm-aarch64 = nixpkgs.lib.nixosSystem rec {
-      system = "aarch64-linux";
-      modules = [
-        home-manager.nixosModules.home-manager
-        ./hosts/gui.nix
-        ./hardware/vm-aarch64.nix
-        {
-          kyle.gui = {
-            swayBarHeight = 37;
-            pointerCursorSize = 30;
-          };
-        }
-      ];
-    };
-    nixosConfigurations.laptop-framework = nixpkgs.lib.nixosSystem rec {
-      system = "x86_64-linux";
-      modules = [
-        home-manager.nixosModules.home-manager
-        ./hosts/gui.nix
-        ./hardware/laptop-framework.nix
-        {
-          kyle.gui.swayModKey = "Mod1";
-        }
-      ];
-    };
     # Dell XPS 14"
     nixosConfigurations.laptop-amd64 = nixpkgs.lib.nixosSystem rec {
       system = "x86_64-linux";
