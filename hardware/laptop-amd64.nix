@@ -73,6 +73,13 @@
   ];
 
   nixpkgs.overlays = [
+    (final: prev: {
+      wlroots_0_20 = prev.wlroots_0_20.overrideAttrs (oldAttrs: {
+        patches = (oldAttrs.patches or [ ]) ++ [
+          ../pkgs/wlroots-atomic-ebusy-blocking-retry.patch
+        ];
+      });
+    })
     (import ../overlays/google-chrome.nix)
   ];
 

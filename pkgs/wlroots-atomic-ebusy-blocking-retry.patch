@@ -1,0 +1,87 @@
+diff --git a/backend/drm/atomic.c b/backend/drm/atomic.c
+index 0b24b65e..3f7148f2 100644
+--- a/backend/drm/atomic.c
++++ b/backend/drm/atomic.c
+@@ -1,3 +1,4 @@
++#include <errno.h>
+ #include <drm_fourcc.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+@@ -63,6 +64,36 @@ static void atomic_begin(struct atomic *atom) {
+ 	}
+ }
+ 
++static void log_atomic_ebusy_state(const struct wlr_drm_device_state *state,
++		struct wlr_drm_page_flip *page_flip) {
++	if (state->connectors_len != 1) {
++		wlr_log(WLR_ERROR, "Atomic EBUSY state: connectors=%zu, modeset=%d, "
++			"nonblock=%d, page_flip=%d", state->connectors_len,
++			state->modeset, state->nonblock, page_flip != NULL);
++		return;
++	}
++
++	const struct wlr_drm_connector_state *conn_state = &state->connectors[0];
++	struct wlr_drm_connector *conn = conn_state->connector;
++	float refresh = (float)calculate_refresh_rate(&conn_state->mode) / 1000;
++	wlr_drm_conn_log(conn, WLR_ERROR, "Atomic EBUSY state: modeset=%d, "
++		"nonblock=%d, active=%d, pending_page_flip=%d, page_flip=%d, "
++		"committed=0x%x, mode=%dx%d @ %.3f Hz", state->modeset,
++		state->nonblock, conn_state->active, conn->pending_page_flip != NULL,
++		page_flip != NULL, (unsigned)conn_state->base->committed,
++		conn_state->mode.hdisplay, conn_state->mode.vdisplay, refresh);
++}
++
++static void log_atomic_commit_errno(const struct wlr_drm_device_state *state,
++		enum wlr_log_importance level, const char *msg) {
++	if (state->connectors_len == 1) {
++		struct wlr_drm_connector *conn = state->connectors[0].connector;
++		wlr_drm_conn_log_errno(conn, level, "%s", msg);
++	} else {
++		wlr_log_errno(level, "%s", msg);
++	}
++}
++
+ static bool atomic_commit(struct atomic *atom, struct wlr_drm_backend *drm,
+ 		const struct wlr_drm_device_state *state,
+ 		struct wlr_drm_page_flip *page_flip, uint32_t flags) {
+@@ -72,17 +103,35 @@ static bool atomic_commit(struct atomic *atom, struct wlr_drm_backend *drm,
+ 
+ 	int ret = drmModeAtomicCommit(drm->fd, atom->req, flags, page_flip);
+ 	if (ret != 0) {
++		int commit_errno = errno;
+ 		enum wlr_log_importance log_level = WLR_ERROR;
+ 		if (flags & DRM_MODE_ATOMIC_TEST_ONLY) {
+ 			log_level = WLR_DEBUG;
+ 		}
+ 
+-		if (state->connectors_len == 1) {
+-			struct wlr_drm_connector *conn = state->connectors[0].connector;
+-			wlr_drm_conn_log_errno(conn, log_level, "Atomic commit failed");
+-		} else {
+-			wlr_log_errno(log_level, "Atomic commit failed");
++		if (commit_errno == EBUSY &&
++				(flags & DRM_MODE_ATOMIC_NONBLOCK) &&
++				!(flags & DRM_MODE_ATOMIC_TEST_ONLY)) {
++			uint32_t retry_flags = flags & ~DRM_MODE_ATOMIC_NONBLOCK;
++			ret = drmModeAtomicCommit(drm->fd, atom->req, retry_flags, page_flip);
++			if (ret == 0) {
++				return true;
++			}
++
++			int retry_errno = errno;
++			errno = retry_errno;
++			log_atomic_commit_errno(state, WLR_ERROR,
++				"Atomic blocking retry after EBUSY failed");
++			char *flags_str = atomic_commit_flags_str(flags);
++			wlr_log(WLR_ERROR, "(Atomic commit flags: %s)",
++				flags_str ? flags_str : "<error>");
++			free(flags_str);
++			log_atomic_ebusy_state(state, page_flip);
+ 		}
++
++		errno = commit_errno;
++		log_atomic_commit_errno(state, log_level, "Atomic commit failed");
++
+ 		char *flags_str = atomic_commit_flags_str(flags);
+ 		wlr_log(WLR_DEBUG, "(Atomic commit flags: %s)",
+ 			flags_str ? flags_str : "<error>");
