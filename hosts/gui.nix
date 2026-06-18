@@ -141,6 +141,7 @@ in
       extraOptions = [ "--unsupported-gpu" ];
       extraPackages = with pkgs; [
         dunst
+        brightnessctl
         flameshotWayland
         gammastep
         grim
