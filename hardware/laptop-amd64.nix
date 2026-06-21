@@ -11,11 +11,8 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "xe" ]; # Early modesetting for Intel Arc GPU
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelModules = [ "kvm-intel" "hid_apple" ];
+  boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
-  boot.extraModprobeConfig = ''
-    options hid_apple swap_fn_leftctrl=1
-  '';
 
   # Disable Intel display power-saving paths that can cause stutter or stale
   # frames in high-bandwidth, mixed-refresh external monitor setups.

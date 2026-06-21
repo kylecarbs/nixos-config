@@ -24,6 +24,11 @@ input "1452:802:Apple_Inc._Magic_Keyboard_with_Touch_ID_and_Numeric_Keypad" {
         xkb_options altwin:swap_lalt_lwin
 }
 
+input "1452:620:Apple_Inc._Magic_Keyboard_with_Numeric_Keypad" {
+        xkb_layout us
+        xkb_options altwin:swap_lalt_lwin
+}
+
 input type:touchpad {
         tap enabled
         click_method clickfinger
