@@ -134,6 +134,10 @@ let
     { };
 
   libcameraOv08x40 = pkgs.libcamera.overrideAttrs (oldAttrs: {
+    buildInputs = (oldAttrs.buildInputs or [ ]) ++ [
+      pkgs.libglvnd
+    ];
+
     patches = (oldAttrs.patches or [ ]) ++ [
       (pkgs.fetchpatch {
         url = "https://patchwork.libcamera.org/patch/26876/mbox/";
