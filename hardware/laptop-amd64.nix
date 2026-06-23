@@ -6,6 +6,7 @@
   imports =
     [
       (modulesPath + "/installer/scan/not-detected.nix")
+      ./ipu7-camera.nix
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
@@ -25,6 +26,7 @@
     "xe.enable_sagv=0"
   ];
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
 
   hardware.bluetooth = {

@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Kyle Camera Local Quirk <kyle@example.invalid>
+Subject: [PATCH] media: i2c: ov08x40: avoid broken binned modes on IPU7
+
+The 1928-wide binned modes produce black frames on this IPU7/OV08X40
+laptop, while full sensor modes produce valid frames. Keep the mode
+tables in place, but stop advertising the binned modes through the
+mode filter so libcamera's simple pipeline selects a full sensor mode
+and scales from there.
+---
+ drivers/media/i2c/ov08x40.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/media/i2c/ov08x40.c b/drivers/media/i2c/ov08x40.c
+index 31062eedbd71..1bc3b5b3a53a 100644
+--- a/drivers/media/i2c/ov08x40.c
++++ b/drivers/media/i2c/ov08x40.c
+@@ -1761,6 +1761,14 @@ static bool filter_by_mipi_lanes(const void *array, size_t index,
+ 	const struct ov08x40_mode *mode = array;
+ 	const struct ov08x40 *ov08x = context;
+ 
++	/*
++	 * The binned 1928-wide modes trigger IPU7 stream errors and black
++	 * frames on this platform. Force clients through the full sensor mode
++	 * until the bad binned register set is fixed upstream.
++	 */
++	if (mode->width == 1928)
++		return false;
++
+ 	return mode->lanes == ov08x->mipi_lanes;
+ }
+ 
+-- 
+2.54.0
