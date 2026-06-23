@@ -1,0 +1,141 @@
+From: Kyle Camera Local Quirk <kyle@example.invalid>
+Subject: [PATCH] pipewire-v4l2: expose YUYV through ffmpeg conversion
+
+The IPU7/OV08X40 camera reaches PipeWire through libcamera as RGB-only
+formats. Browsers can consume that through the PipeWire camera path, but Zoom
+only sees the camera through the legacy V4L2 shim and fails to render the
+stock pw-v4l2 AR24/XR24 stream. Advertise YUYV as a compatibility format,
+force PipeWire's ffmpeg video converter for that format, and map buffers so
+legacy mmap V4L2 clients can dequeue converted YUYV frames.
+
+--- a/pipewire-v4l2/src/pipewire-v4l2.c
++++ b/pipewire-v4l2/src/pipewire-v4l2.c
+@@ -1103,6 +1103,37 @@
+ 	return NULL;
+ }
+ 
++static bool is_compat_format(uint32_t fourcc)
++{
++	return fourcc == V4L2_PIX_FMT_YUYV;
++}
++
++static int fill_format_from_fourcc(struct v4l2_format *fmt,
++		uint32_t fourcc, uint32_t width, uint32_t height)
++{
++	const struct format_info *fi;
++
++	fi = format_info_from_fourcc(fourcc);
++	if (fi == NULL)
++		return -EINVAL;
++	if (width == 0 || height == 0)
++		return -EINVAL;
++
++	spa_zero(*fmt);
++	fmt->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
++	fmt->fmt.pix.pixelformat = fi->fourcc;
++	fmt->fmt.pix.field = V4L2_FIELD_NONE;
++	fmt->fmt.pix.width = width;
++	fmt->fmt.pix.height = height;
++	fmt->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
++	fmt->fmt.pix.bytesperline =
++		SPA_ROUND_UP_N(fmt->fmt.pix.width, 4) * fi->bpp;
++	fmt->fmt.pix.sizeimage = fmt->fmt.pix.bytesperline *
++		SPA_ROUND_UP_N(fmt->fmt.pix.height, 2);
++
++	return 0;
++}
++
+ static int format_to_info(const struct v4l2_format *arg, struct spa_video_info *info)
+ {
+ 	const struct format_info *fi;
+@@ -1392,6 +1423,7 @@
+ 	struct global *g = file->node;
+ 	struct param *p;
+ 	bool found = false;
++	bool compat = is_compat_format(arg->pixel_format);
+ 
+ 	pw_log_info("index: %u", arg->index);
+ 	pw_log_info("format: %.4s", (char*)&arg->pixel_format);
+@@ -1421,7 +1453,7 @@
+ 		if (fi == NULL)
+ 			continue;
+ 
+-		if (fi->fourcc != arg->pixel_format)
++		if (!compat && fi->fourcc != arg->pixel_format)
+ 			continue;
+ 
+ 		const struct spa_pod_prop *size_prop = spa_pod_find_prop(p->param, NULL, SPA_FORMAT_VIDEO_size);
+@@ -1598,6 +1630,18 @@
+ 	}
+ 	pw_thread_loop_unlock(file->loop);
+ 
++	if (!found && count == arg->index) {
++		const struct format_info *fi;
++
++		fi = format_info_from_fourcc(V4L2_PIX_FMT_YUYV);
++		if (fi != NULL) {
++			arg->flags = 0;
++			arg->pixelformat = fi->fourcc;
++			snprintf((char*)arg->description, sizeof(arg->description), "%s", fi->desc);
++			found = true;
++		}
++	}
++
+ 	if (!found)
+ 		return -EINVAL;
+ 
+@@ -1661,6 +1705,7 @@
+ 	struct param *p;
+ 	struct global *g = file->node;
+ 	struct v4l2_format best_fmt = *fmt;
++	uint32_t requested_fourcc = fmt->fmt.pix.pixelformat;
+ 	int best = -1;
+ 
+ 	pw_log_info("in: type: %u", fmt->type);
+@@ -1700,7 +1745,12 @@
+ 			best_fmt = tmp;
+ 		}
+ 	}
+-	*fmt = best_fmt;
++	if (is_compat_format(requested_fourcc) &&
++	    fill_format_from_fourcc(fmt, requested_fourcc,
++		    fmt->fmt.pix.width, fmt->fmt.pix.height) == 0) {
++		/* Let PipeWire's stream adapter attempt conversion to this V4L2-friendly format. */
++	} else
++		*fmt = best_fmt;
+ 	pw_log_info("out: format: %.4s", (char*)&fmt->fmt.pix.pixelformat);
+ 	pw_log_info("out: width: %u", fmt->fmt.pix.width);
+ 	pw_log_info("out: height: %u", fmt->fmt.pix.height);
+@@ -1730,6 +1780,9 @@
+ 	struct spa_pod_builder b = SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
+ 	const struct spa_pod *params[1];
+ 	struct pw_properties *props;
++	enum pw_stream_flags stream_flags = PW_STREAM_FLAG_DONT_RECONNECT |
++		PW_STREAM_FLAG_AUTOCONNECT |
++		PW_STREAM_FLAG_RT_PROCESS;
+ 
+ 	params[0] = fmt_to_param(&b, SPA_PARAM_EnumFormat, &file->v4l2_format);
+ 	if (params[0] == NULL) {
+@@ -1748,6 +1801,11 @@
+ 	pw_properties_set(props, PW_KEY_CLIENT_API, "v4l2");
+ 	pw_properties_setf(props, PW_KEY_APP_NAME, "%s", pw_get_prgname());
+ 
++	if (is_compat_format(file->v4l2_format.fmt.pix.pixelformat)) {
++		pw_properties_set(props, "video.adapt.converter", "video.convert.ffmpeg");
++		stream_flags |= PW_STREAM_FLAG_MAP_BUFFERS;
++	}
++
+ 	if (pw_properties_get(props, PW_KEY_MEDIA_TYPE) == NULL)
+ 		pw_properties_set(props, PW_KEY_MEDIA_TYPE, "Video");
+ 	if (pw_properties_get(props, PW_KEY_MEDIA_CATEGORY) == NULL)
+@@ -1769,9 +1827,7 @@
+ 	pw_stream_connect(file->stream,
+ 			PW_DIRECTION_INPUT,
+ 			g->id,
+-			PW_STREAM_FLAG_DONT_RECONNECT |
+-			PW_STREAM_FLAG_AUTOCONNECT |
+-			PW_STREAM_FLAG_RT_PROCESS,
++			stream_flags,
+ 			params, 1);
+ 
+ 	pw_thread_loop_get_time (file->loop, &abstime,

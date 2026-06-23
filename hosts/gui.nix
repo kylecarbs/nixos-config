@@ -6,6 +6,8 @@ let
   apple-emoji = pkgs.callPackage ../pkgs/apple-emoji.nix { };
   apple-fonts = pkgs.callPackage ../pkgs/apple-fonts.nix { };
   flameshotWayland = pkgs.flameshot.overrideAttrs (oldAttrs: {
+    # Flameshot's grim path needs explicit output-scale handling on Wayland so
+    # HiDPI screenshots crop the selected monitor instead of physical pixels.
     patches = (oldAttrs.patches or [ ]) ++ [
       ../pkgs/flameshot-grim-device-pixel-ratio.patch
     ];

@@ -46,6 +46,9 @@ let
 
         src = kernel.src;
 
+        # Firmware reports this OV08X40 module as upright even though the
+        # installed sensor is physically inverted, so libcamera clients need a
+        # kernel fwnode rotation quirk to display the image right-side up.
         patches = [
           ../patches/linux/ipu-bridge-dell-xps-14-da14260-ov08x40-rotation.patch
         ];
@@ -93,6 +96,9 @@ let
 
         src = kernel.src;
 
+        # The upstream sensor driver is missing crop-selection metadata, and
+        # this platform's 1928-wide binned modes produce black IPU7 frames.
+        # Carry both quirks until the kernel exposes a working OV08X40 mode set.
         patches = [
           ../patches/linux/ov08x40-get-selection.patch
           ../patches/linux/ov08x40-disable-binned-modes.patch
@@ -138,6 +144,9 @@ let
       pkgs.libglvnd
     ];
 
+    # These upstream libcamera patches make the simple pipeline usable for
+    # OV08X40/IPU7: add the sensor helper needed by AGC and fix simple-IPA
+    # black-level handling for CPU/GPU software ISP output.
     patches = (oldAttrs.patches or [ ]) ++ [
       (pkgs.fetchpatch {
         url = "https://patchwork.libcamera.org/patch/26876/mbox/";
@@ -162,8 +171,31 @@ let
     ];
   });
 
-  pipewireWithLibcamera = pkgs.pipewire.override {
+  pipewireWithLibcamera = (pkgs.pipewire.override {
     libcamera = libcameraOv08x40;
+  }).overrideAttrs (oldAttrs: {
+    # Zoom uses the legacy V4L2 camera path. Stock pw-v4l2 exposes this camera
+    # as RGB-only, which Zoom detects but does not render; this patch provides
+    # a converted YUYV stream for legacy clients.
+    patches = (oldAttrs.patches or [ ]) ++ [
+      ../patches/pipewire/pw-v4l2-yuyv-compat-format.patch
+    ];
+  });
+
+  # Keep the workaround scoped to the IPU7 laptop. Browser clients use native
+  # PipeWire, but the Zoom desktop app needs pw-v4l2 to see the converted YUYV
+  # compatibility stream.
+  zoomWithIpu7Camera = pkgs.symlinkJoin {
+    name = "zoom-us-ipu7-camera";
+    paths = [ pkgs.zoom-us ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      rm -f $out/bin/zoom $out/bin/zoom-us
+      makeWrapper ${pipewireWithLibcamera}/bin/pw-v4l2 $out/bin/zoom \
+        --add-flags ${pkgs.zoom-us}/bin/zoom
+      makeWrapper ${pipewireWithLibcamera}/bin/pw-v4l2 $out/bin/zoom-us \
+        --add-flags ${pkgs.zoom-us}/bin/zoom-us
+    '';
   };
 
 in
@@ -223,4 +255,8 @@ in
       }
     ];
   };
+
+  environment.systemPackages = [
+    zoomWithIpu7Camera
+  ];
 }

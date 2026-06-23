@@ -1,3 +1,12 @@
+From: Kyle Local Packaging <kyle@example.invalid>
+Subject: [PATCH] backend/drm: retry nonblocking atomic commits after EBUSY
+
+On the laptop's Intel display stack, Sway/wlroots can hit transient
+nonblocking atomic commit EBUSY failures in high-bandwidth external monitor
+setups. A blocking retry usually succeeds and avoids a visible compositor
+hiccup or stale frame. Keep extra logging around the retry so the workaround
+is diagnosable if upstream DRM/wlroots behavior changes.
+
 diff --git a/backend/drm/atomic.c b/backend/drm/atomic.c
 index 0b24b65e..3f7148f2 100644
 --- a/backend/drm/atomic.c

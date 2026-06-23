@@ -1,3 +1,13 @@
+From: Kyle Local Packaging <kyle@example.invalid>
+Subject: [PATCH] flameshot: preserve Wayland output scale for grim captures
+
+On Sway/Wayland, Flameshot captures through grim and then crops the full
+desktop image using logical screen geometry. On HiDPI or mixed-DPI outputs,
+the raw pixmap is in physical pixels while the selected screen geometry is in
+logical pixels, so Flameshot crops the wrong region or captures the wrong
+monitor. Preserve the grim image devicePixelRatio and scale the crop rectangle
+so screenshots line up with the active output.
+
 diff --git a/src/utils/screengrabber.cpp b/src/utils/screengrabber.cpp
 index 3884eef8..8d75eddd 100644
 --- a/src/utils/screengrabber.cpp

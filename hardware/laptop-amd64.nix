@@ -74,6 +74,8 @@
   nixpkgs.overlays = [
     (final: prev: {
       wlroots_0_20 = prev.wlroots_0_20.overrideAttrs (oldAttrs: {
+        # Avoid transient Intel DRM EBUSY failures causing visible Sway frame
+        # stalls on the laptop's external-monitor setup.
         patches = (oldAttrs.patches or [ ]) ++ [
           ../pkgs/wlroots-atomic-ebusy-blocking-retry.patch
         ];
@@ -121,7 +123,6 @@
     google-chrome
     spotify
     slack
-    zoom-us
   ];
   environment.variables.BROWSER = "google-chrome";
 }
