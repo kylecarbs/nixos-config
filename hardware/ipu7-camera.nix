@@ -176,7 +176,7 @@ let
   }).overrideAttrs (oldAttrs: {
     # Zoom uses the legacy V4L2 camera path. Stock pw-v4l2 exposes this camera
     # as RGB-only, which Zoom detects but does not render; this patch provides
-    # a converted YUYV stream for legacy clients.
+    # a converted YUYV stream and nudges legacy clients toward 1080p/30.
     patches = (oldAttrs.patches or [ ]) ++ [
       ../patches/pipewire/pw-v4l2-yuyv-compat-format.patch
     ];

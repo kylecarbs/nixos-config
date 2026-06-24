@@ -5,18 +5,30 @@ The IPU7/OV08X40 camera reaches PipeWire through libcamera as RGB-only
 formats. Browsers can consume that through the PipeWire camera path, but Zoom
 only sees the camera through the legacy V4L2 shim and fails to render the
 stock pw-v4l2 AR24/XR24 stream. Advertise YUYV as a compatibility format,
-force PipeWire's ffmpeg video converter for that format, and map buffers so
-legacy mmap V4L2 clients can dequeue converted YUYV frames.
+prefer it when legacy clients ask for defaults, default that path to 1080p,
+advertise a 30 fps frame interval for HD modes, force PipeWire's ffmpeg video
+converter for that format, and map buffers so legacy mmap V4L2 clients can
+dequeue converted YUYV frames.
 
 --- a/pipewire-v4l2/src/pipewire-v4l2.c
 +++ b/pipewire-v4l2/src/pipewire-v4l2.c
-@@ -1103,6 +1103,37 @@
+@@ -1103,6 +1103,144 @@
  	return NULL;
  }
  
 +static bool is_compat_format(uint32_t fourcc)
 +{
 +	return fourcc == V4L2_PIX_FMT_YUYV;
++}
++
++#define COMPAT_DEFAULT_WIDTH		1920u
++#define COMPAT_DEFAULT_HEIGHT		1080u
++#define COMPAT_DEFAULT_FPS_NUM		30u
++#define COMPAT_DEFAULT_FPS_DENOM	1u
++
++static bool is_compat_size(uint32_t width, uint32_t height)
++{
++	return width <= COMPAT_DEFAULT_WIDTH && height <= COMPAT_DEFAULT_HEIGHT;
 +}
 +
 +static int fill_format_from_fourcc(struct v4l2_format *fmt,
@@ -45,46 +57,345 @@ legacy mmap V4L2 clients can dequeue converted YUYV frames.
 +	return 0;
 +}
 +
++static bool format_param_has_size(const struct spa_pod *param,
++		uint32_t width, uint32_t height)
++{
++	const struct spa_pod_prop *size_prop;
++	const struct spa_pod *size_pods;
++	const struct spa_rectangle *sizes;
++	uint32_t n_sizes, choice;
++
++	size_prop = spa_pod_find_prop(param, NULL, SPA_FORMAT_VIDEO_size);
++	if (size_prop == NULL)
++		return false;
++
++	size_pods = spa_pod_get_values(&size_prop->value, &n_sizes, &choice);
++	if (size_pods == NULL || n_sizes == 0)
++		return false;
++
++	sizes = SPA_POD_BODY_CONST(size_pods);
++	if (size_pods->type != SPA_TYPE_Rectangle || size_pods->size != sizeof(*sizes))
++		return false;
++
++	switch (choice) {
++	case SPA_CHOICE_Enum:
++		n_sizes -= 1;
++		sizes += 1;
++		SPA_FALLTHROUGH;
++	case SPA_CHOICE_None:
++		for (size_t i = 0; i < n_sizes; i++) {
++			if (sizes[i].width == width && sizes[i].height == height)
++				return true;
++		}
++		return false;
++	case SPA_CHOICE_Range:
++		if (n_sizes < 3)
++			return false;
++		return width >= sizes[1].width && width <= sizes[2].width &&
++			height >= sizes[1].height && height <= sizes[2].height;
++	case SPA_CHOICE_Step:
++		if (n_sizes < 4 || sizes[3].width == 0 || sizes[3].height == 0)
++			return false;
++		if (width < sizes[1].width || width > sizes[2].width ||
++		    height < sizes[1].height || height > sizes[2].height)
++			return false;
++		return (width - sizes[1].width) % sizes[3].width == 0 &&
++			(height - sizes[1].height) % sizes[3].height == 0;
++	default:
++		return false;
++	}
++}
++
++static bool compat_size_supported_locked(struct file *file,
++		uint32_t width, uint32_t height)
++{
++	struct param *p;
++
++	if (file->node == NULL)
++		return false;
++
++	spa_list_for_each(p, &file->node->param_list, link) {
++		uint32_t media_type, media_subtype;
++
++		if (p->id != SPA_PARAM_EnumFormat || p->param == NULL)
++			continue;
++
++		if (spa_format_parse(p->param, &media_type, &media_subtype) < 0)
++			continue;
++		if (media_type != SPA_MEDIA_TYPE_video)
++			continue;
++
++		if (format_param_has_size(p->param, width, height))
++			return true;
++	}
++
++	return false;
++}
++
++static int fill_compat_format_locked(struct file *file, struct v4l2_format *fmt,
++		uint32_t fourcc, uint32_t width, uint32_t height)
++{
++	if (!is_compat_format(fourcc))
++		return -EINVAL;
++
++	if (!is_compat_size(width, height))
++		return -EINVAL;
++
++	if (!compat_size_supported_locked(file, width, height))
++		return -EINVAL;
++
++	return fill_format_from_fourcc(fmt, fourcc, width, height);
++}
++
++static int fill_default_compat_format_locked(struct file *file,
++		struct v4l2_format *fmt)
++{
++	return fill_compat_format_locked(file, fmt, V4L2_PIX_FMT_YUYV,
++			COMPAT_DEFAULT_WIDTH, COMPAT_DEFAULT_HEIGHT);
++}
++
  static int format_to_info(const struct v4l2_format *arg, struct spa_video_info *info)
  {
  	const struct format_info *fi;
-@@ -1392,6 +1423,7 @@
+@@ -1392,11 +1530,24 @@
  	struct global *g = file->node;
  	struct param *p;
  	bool found = false;
 +	bool compat = is_compat_format(arg->pixel_format);
++	uint32_t compat_fourcc = 0;
  
  	pw_log_info("index: %u", arg->index);
  	pw_log_info("format: %.4s", (char*)&arg->pixel_format);
-@@ -1421,7 +1453,7 @@
+ 
+ 	pw_thread_loop_lock(file->loop);
++	if (compat && compat_size_supported_locked(file,
++			COMPAT_DEFAULT_WIDTH, COMPAT_DEFAULT_HEIGHT)) {
++		if (arg->index == 0) {
++			arg->type = V4L2_FRMSIZE_TYPE_DISCRETE;
++			arg->discrete.width = COMPAT_DEFAULT_WIDTH;
++			arg->discrete.height = COMPAT_DEFAULT_HEIGHT;
++			found = true;
++			goto exit_unlock;
++		}
++		count = 1;
++	}
+ 	spa_list_for_each(p, &g->param_list, link) {
+ 		const struct format_info *fi;
+ 		uint32_t media_type, media_subtype, format;
+@@ -1421,8 +1572,14 @@
  		if (fi == NULL)
  			continue;
  
 -		if (fi->fourcc != arg->pixel_format)
-+		if (!compat && fi->fourcc != arg->pixel_format)
++		if (compat) {
++			if (compat_fourcc == 0)
++				compat_fourcc = fi->fourcc;
++			else if (fi->fourcc != compat_fourcc)
++				break;
++		} else if (fi->fourcc != arg->pixel_format) {
  			continue;
++		}
  
  		const struct spa_pod_prop *size_prop = spa_pod_find_prop(p->param, NULL, SPA_FORMAT_VIDEO_size);
-@@ -1598,6 +1630,18 @@
+ 		if (!size_prop)
+@@ -1445,7 +1602,14 @@
+ 		case SPA_CHOICE_None:
+ 			arg->type = V4L2_FRMSIZE_TYPE_DISCRETE;
+ 
+-			for (size_t i = 0; i < n_sizes; i++, count++) {
++			for (size_t i = 0; i < n_sizes; i++) {
++				if (compat && !is_compat_size(sizes[i].width, sizes[i].height))
++					continue;
++				if (compat &&
++				    sizes[i].width == COMPAT_DEFAULT_WIDTH &&
++				    sizes[i].height == COMPAT_DEFAULT_HEIGHT)
++					continue;
++
+ 				arg->discrete.width = sizes[i].width;
+ 				arg->discrete.height = sizes[i].height;
+ 
+@@ -1456,6 +1620,8 @@
+ 					found = true;
+ 					break;
+ 				}
++
++				count++;
+ 			}
+ 
+ 			break;
+@@ -1468,6 +1634,15 @@
+ 			arg->stepwise.min_height = sizes[1].height;
+ 			arg->stepwise.max_width = sizes[2].width;
+ 			arg->stepwise.max_height = sizes[2].height;
++			if (compat) {
++				arg->stepwise.max_width = SPA_MIN(arg->stepwise.max_width,
++						COMPAT_DEFAULT_WIDTH);
++				arg->stepwise.max_height = SPA_MIN(arg->stepwise.max_height,
++						COMPAT_DEFAULT_HEIGHT);
++				if (arg->stepwise.min_width > arg->stepwise.max_width ||
++				    arg->stepwise.min_height > arg->stepwise.max_height)
++					continue;
++			}
+ 			arg->stepwise.step_width = arg->stepwise.step_height = 1;
+ 
+ 			pw_log_debug("count:%u %.4s (%ux%u)-(%ux%u)", count, (char*)&fi->fourcc,
+@@ -1491,6 +1666,15 @@
+ 			arg->stepwise.min_height = sizes[1].height;
+ 			arg->stepwise.max_width = sizes[2].width;
+ 			arg->stepwise.max_height = sizes[2].height;
++			if (compat) {
++				arg->stepwise.max_width = SPA_MIN(arg->stepwise.max_width,
++						COMPAT_DEFAULT_WIDTH);
++				arg->stepwise.max_height = SPA_MIN(arg->stepwise.max_height,
++						COMPAT_DEFAULT_HEIGHT);
++				if (arg->stepwise.min_width > arg->stepwise.max_width ||
++				    arg->stepwise.min_height > arg->stepwise.max_height)
++					continue;
++			}
+ 			arg->stepwise.step_width = sizes[3].width;
+ 			arg->stepwise.step_height = sizes[3].height;
+ 
+@@ -1514,6 +1698,7 @@
+ 		if (found)
+ 			break;
  	}
++exit_unlock:
  	pw_thread_loop_unlock(file->loop);
  
-+	if (!found && count == arg->index) {
-+		const struct format_info *fi;
-+
-+		fi = format_info_from_fourcc(V4L2_PIX_FMT_YUYV);
-+		if (fi != NULL) {
-+			arg->flags = 0;
-+			arg->pixelformat = fi->fourcc;
-+			snprintf((char*)arg->description, sizeof(arg->description), "%s", fi->desc);
-+			found = true;
-+		}
-+	}
-+
  	if (!found)
+@@ -1547,6 +1732,7 @@
+ 	uint32_t count = 0, last_fourcc = 0;
+ 	struct global *g = file->node;
+ 	struct param *p;
++	const struct format_info *compat_fi;
+ 	bool found = false;
+ 
+ 	pw_log_info("index: %u", arg->index);
+@@ -1555,48 +1741,62 @@
+ 	if (arg->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
  		return -EINVAL;
  
-@@ -1661,6 +1705,7 @@
+-	pw_thread_loop_lock(file->loop);
+-	spa_list_for_each(p, &g->param_list, link) {
+-		const struct format_info *fi;
+-		uint32_t media_type, media_subtype, format;
++	compat_fi = format_info_from_fourcc(V4L2_PIX_FMT_YUYV);
++	if (compat_fi != NULL) {
++		if (arg->index == 0) {
++			arg->flags = 0;
++			arg->pixelformat = compat_fi->fourcc;
++			snprintf((char*)arg->description, sizeof(arg->description),
++					"%s", compat_fi->desc);
++			found = true;
++		}
++		count++;
++	}
+ 
+-		if (p->id != SPA_PARAM_EnumFormat || p->param == NULL)
+-			continue;
++	if (!found) {
++		pw_thread_loop_lock(file->loop);
++		spa_list_for_each(p, &g->param_list, link) {
++			const struct format_info *fi;
++			uint32_t media_type, media_subtype, format;
+ 
+-		if (spa_format_parse(p->param, &media_type, &media_subtype) < 0)
+-			continue;
+-		if (media_type != SPA_MEDIA_TYPE_video)
+-			continue;
+-		if (media_subtype == SPA_MEDIA_SUBTYPE_raw) {
+-			if (spa_pod_parse_object(p->param,
+-					SPA_TYPE_OBJECT_Format, NULL,
+-					SPA_FORMAT_VIDEO_format, SPA_POD_Id(&format)) < 0)
++			if (p->id != SPA_PARAM_EnumFormat || p->param == NULL)
+ 				continue;
+-		} else {
+-			format = SPA_VIDEO_FORMAT_ENCODED;
+-		}
+ 
+-		fi = format_info_from_media_type(media_type, media_subtype, format);
+-		if (fi == NULL)
+-			continue;
++			if (spa_format_parse(p->param, &media_type, &media_subtype) < 0)
++				continue;
++			if (media_type != SPA_MEDIA_TYPE_video)
++				continue;
++			if (media_subtype == SPA_MEDIA_SUBTYPE_raw) {
++				if (spa_pod_parse_object(p->param,
++						SPA_TYPE_OBJECT_Format, NULL,
++						SPA_FORMAT_VIDEO_format, SPA_POD_Id(&format)) < 0)
++					continue;
++			} else {
++				format = SPA_VIDEO_FORMAT_ENCODED;
++			}
+ 
+-		if (fi->fourcc == last_fourcc)
+-			continue;
+-		pw_log_info("count:%d fourcc:%.4s last:%.4s", count,
+-				(char*)&fi->fourcc, (char*)&last_fourcc);
++			fi = format_info_from_media_type(media_type, media_subtype, format);
++			if (fi == NULL)
++				continue;
+ 
+-		arg->flags = fi->format == SPA_VIDEO_FORMAT_ENCODED ? V4L2_FMT_FLAG_COMPRESSED : 0;
+-		arg->pixelformat = fi->fourcc;
+-		snprintf((char*)arg->description, sizeof(arg->description), "%s",
+-				fi->desc ? fi->desc : "Unknown");
+-		last_fourcc = fi->fourcc;
+-		if (count == arg->index) {
+-			found = true;
+-			break;
++			if (fi->fourcc == last_fourcc)
++				continue;
++			pw_log_info("count:%d fourcc:%.4s last:%.4s", count,
++					(char*)&fi->fourcc, (char*)&last_fourcc);
++
++			arg->flags = fi->format == SPA_VIDEO_FORMAT_ENCODED ? V4L2_FMT_FLAG_COMPRESSED : 0;
++			arg->pixelformat = fi->fourcc;
++			snprintf((char*)arg->description, sizeof(arg->description), "%s",
++					fi->desc ? fi->desc : "Unknown");
++			last_fourcc = fi->fourcc;
++			if (count == arg->index) {
++				found = true;
++				break;
++			}
++			count++;
+ 		}
+-		count++;
++		pw_thread_loop_unlock(file->loop);
+ 	}
+-	pw_thread_loop_unlock(file->loop);
+ 
+ 	if (!found)
+ 		return -EINVAL;
+@@ -1624,15 +1824,19 @@
+ 		struct v4l2_format tmp;
+ 		bool found = false;
+ 
+-		spa_list_for_each(p, &g->param_list, link) {
+-			if (p->id != SPA_PARAM_EnumFormat || p->param == NULL)
+-				continue;
++		if (fill_default_compat_format_locked(file, &tmp) == 0) {
++			found = true;
++		} else {
++			spa_list_for_each(p, &g->param_list, link) {
++				if (p->id != SPA_PARAM_EnumFormat || p->param == NULL)
++					continue;
+ 
+-			if (param_to_fmt(p->param, &tmp) < 0)
+-				continue;
++				if (param_to_fmt(p->param, &tmp) < 0)
++					continue;
+ 
+-			found = true;
+-			break;
++				found = true;
++				break;
++			}
+ 		}
+ 		if (!found) {
+ 			res = -EINVAL;
+@@ -1661,6 +1865,7 @@
  	struct param *p;
  	struct global *g = file->node;
  	struct v4l2_format best_fmt = *fmt;
@@ -92,31 +403,91 @@ legacy mmap V4L2 clients can dequeue converted YUYV frames.
  	int best = -1;
  
  	pw_log_info("in: type: %u", fmt->type);
-@@ -1700,7 +1745,12 @@
+@@ -1671,6 +1876,20 @@
+ 	pw_log_info("in: width: %u", fmt->fmt.pix.width);
+ 	pw_log_info("in: height: %u", fmt->fmt.pix.height);
+ 	pw_log_info("in: field: %u", fmt->fmt.pix.field);
++
++	if (requested_fourcc == 0) {
++		uint32_t width = fmt->fmt.pix.width;
++		uint32_t height = fmt->fmt.pix.height;
++
++		if (width == 0 || height == 0) {
++			width = COMPAT_DEFAULT_WIDTH;
++			height = COMPAT_DEFAULT_HEIGHT;
++		}
++		if (fill_compat_format_locked(file, fmt, V4L2_PIX_FMT_YUYV,
++				width, height) == 0)
++			goto log_result;
++	}
++
+ 	spa_list_for_each(p, &g->param_list, link) {
+ 		struct v4l2_format tmp;
+ 		int score;
+@@ -1700,7 +1919,22 @@
  			best_fmt = tmp;
  		}
  	}
--	*fmt = best_fmt;
-+	if (is_compat_format(requested_fourcc) &&
-+	    fill_format_from_fourcc(fmt, requested_fourcc,
-+		    fmt->fmt.pix.width, fmt->fmt.pix.height) == 0) {
-+		/* Let PipeWire's stream adapter attempt conversion to this V4L2-friendly format. */
-+	} else
-+		*fmt = best_fmt;
++	if (is_compat_format(requested_fourcc)) {
++		uint32_t width = fmt->fmt.pix.width;
++		uint32_t height = fmt->fmt.pix.height;
++
++		if (width == 0 || height == 0) {
++			width = COMPAT_DEFAULT_WIDTH;
++			height = COMPAT_DEFAULT_HEIGHT;
++		}
++		if (fill_compat_format_locked(file, fmt, requested_fourcc,
++				width, height) == 0) {
++			/* Let PipeWire's stream adapter attempt conversion to this V4L2-friendly format. */
++			goto log_result;
++		}
++	}
+ 	*fmt = best_fmt;
++log_result:
  	pw_log_info("out: format: %.4s", (char*)&fmt->fmt.pix.pixelformat);
  	pw_log_info("out: width: %u", fmt->fmt.pix.width);
  	pw_log_info("out: height: %u", fmt->fmt.pix.height);
-@@ -1730,6 +1780,9 @@
+@@ -1724,12 +1958,39 @@
+ {
+ 	int res;
+ 	struct global *g = file->node;
++	struct param *p;
+ 	struct timespec abstime;
+ 	const char *error = NULL;
+ 	uint8_t buffer[1024];
  	struct spa_pod_builder b = SPA_POD_BUILDER_INIT(buffer, sizeof(buffer));
  	const struct spa_pod *params[1];
  	struct pw_properties *props;
 +	enum pw_stream_flags stream_flags = PW_STREAM_FLAG_DONT_RECONNECT |
 +		PW_STREAM_FLAG_AUTOCONNECT |
 +		PW_STREAM_FLAG_RT_PROCESS;
++
++	if (file->v4l2_format.fmt.pix.pixelformat == 0) {
++		bool found = false;
++
++		if (fill_default_compat_format_locked(file, &file->v4l2_format) == 0) {
++			found = true;
++		} else {
++			spa_list_for_each(p, &g->param_list, link) {
++				if (p->id != SPA_PARAM_EnumFormat || p->param == NULL)
++					continue;
++
++				if (param_to_fmt(p->param, &file->v4l2_format) < 0)
++					continue;
++
++				found = true;
++				break;
++			}
++		}
++		if (!found) {
++			res = -EINVAL;
++			goto exit;
++		}
++	}
  
  	params[0] = fmt_to_param(&b, SPA_PARAM_EnumFormat, &file->v4l2_format);
  	if (params[0] == NULL) {
-@@ -1748,6 +1801,11 @@
+@@ -1748,6 +2009,11 @@
  	pw_properties_set(props, PW_KEY_CLIENT_API, "v4l2");
  	pw_properties_setf(props, PW_KEY_APP_NAME, "%s", pw_get_prgname());
  
@@ -128,7 +499,7 @@ legacy mmap V4L2 clients can dequeue converted YUYV frames.
  	if (pw_properties_get(props, PW_KEY_MEDIA_TYPE) == NULL)
  		pw_properties_set(props, PW_KEY_MEDIA_TYPE, "Video");
  	if (pw_properties_get(props, PW_KEY_MEDIA_CATEGORY) == NULL)
-@@ -1769,9 +1827,7 @@
+@@ -1769,9 +2035,7 @@
  	pw_stream_connect(file->stream,
  			PW_DIRECTION_INPUT,
  			g->id,
@@ -139,3 +510,61 @@ legacy mmap V4L2 clients can dequeue converted YUYV frames.
  			params, 1);
  
  	pw_thread_loop_get_time (file->loop, &abstime,
+@@ -1826,6 +2090,31 @@
+ 	return res;
+ }
+ 
++static int vidioc_enum_frameintervals(struct file *file,
++		struct v4l2_frmivalenum *arg)
++{
++	bool found;
++
++	if (arg->index > 0 || !is_compat_format(arg->pixel_format))
++		return -EINVAL;
++	if (!is_compat_size(arg->width, arg->height))
++		return -EINVAL;
++
++	pw_thread_loop_lock(file->loop);
++	found = compat_size_supported_locked(file, arg->width, arg->height);
++	pw_thread_loop_unlock(file->loop);
++
++	if (!found)
++		return -EINVAL;
++
++	arg->type = V4L2_FRMIVAL_TYPE_DISCRETE;
++	arg->discrete.numerator = COMPAT_DEFAULT_FPS_DENOM;
++	arg->discrete.denominator = COMPAT_DEFAULT_FPS_NUM;
++	memset(arg->reserved, 0, sizeof(arg->reserved));
++
++	return 0;
++}
++
+ static int vidioc_g_parm(struct file *file, struct v4l2_streamparm *arg)
+ {
+ 	if (arg->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+@@ -1867,6 +2156,15 @@
+ 		break;
+ 	}
+ 
++	if (!found &&
++	    (is_compat_format(file->v4l2_format.fmt.pix.pixelformat) ||
++	     file->v4l2_format.fmt.pix.pixelformat == 0) &&
++	    compat_size_supported_locked(file, COMPAT_DEFAULT_WIDTH, COMPAT_DEFAULT_HEIGHT)) {
++		num = COMPAT_DEFAULT_FPS_NUM;
++		denom = COMPAT_DEFAULT_FPS_DENOM;
++		found = true;
++	}
++
+ 	if (!found) {
+ 		pw_thread_loop_unlock(file->loop);
+ 		return -EINVAL;
+@@ -2462,6 +2760,9 @@
+ 	case VIDIOC_ENUM_FRAMESIZES:
+ 		res = vidioc_enum_framesizes(file, (struct v4l2_frmsizeenum *)arg);
+ 		break;
++	case VIDIOC_ENUM_FRAMEINTERVALS:
++		res = vidioc_enum_frameintervals(file, (struct v4l2_frmivalenum *)arg);
++		break;
+ 	case VIDIOC_ENUM_FMT:
+ 		res = vidioc_enum_fmt(file, (struct v4l2_fmtdesc *)arg);
+ 		break;
