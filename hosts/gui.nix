@@ -236,6 +236,7 @@ in
         mesa-demos
         libnotify
         ghostty
+        pavucontrol
         signal-desktop
       ];
 
