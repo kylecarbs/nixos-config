@@ -19,8 +19,13 @@
         ./hardware/laptop-amd64.nix
         {
           kyle.gui = {
-            swayModKey = "Mod1";
+            swayModKey = "Mod4";
             swayExtraConfig = ''
+              input "1:1:AT_Translated_Set_2_keyboard" {
+                xkb_layout us
+                xkb_options altwin:swap_lalt_lwin
+              }
+
               output eDP-1 mode 2880x1800@120Hz scale 1.5 position 0 0
               output DP-1 mode 5120x2160@165.06Hz scale 1.5 position 1920 0
             '';
