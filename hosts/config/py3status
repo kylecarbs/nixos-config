@@ -8,16 +8,19 @@ py3status {
 }
 
 order += "external_script prs"
-order += "battery status"
+order += "battery_level"
 order += "disk /"
 order += "cpu_usage"
 order += "memory"
 order += "tztime local"
 
-battery "status" {
-        format = "bat: %percentage"
-        integer_battery_capacity = true
-        path = "/sys/class/power_supply/BAT0/uevent"
+battery_level {
+        format = "bat: {percent}% {power:.1f}W"
+        battery_id = 0
+        measurement_mode = "sys"
+        hide_seconds = true
+        notification = true
+        cache_timeout = 5
 }
 
 disk "/" {

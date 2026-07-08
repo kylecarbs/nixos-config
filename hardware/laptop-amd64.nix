@@ -12,8 +12,12 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "xe" ]; # Early modesetting for Intel Arc GPU
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-intel" "hid_apple" ];
   boot.extraModulePackages = [ ];
+  boot.extraModprobeConfig = ''
+    # Make the Apple Magic Keyboard's bottom-left Fn key act as Ctrl.
+    options hid_apple swap_fn_leftctrl=1
+  '';
 
   # Disable Intel display power-saving paths that can cause stutter or stale
   # frames in high-bandwidth, mixed-refresh external monitor setups.
@@ -106,7 +110,8 @@
       SOUND_POWER_SAVE_ON_AC = 0;
       SOUND_POWER_SAVE_ON_BAT = 1;
 
-      START_CHARGE_THRESH_BAT0 = 40;
+      # Dell firmware rejects start thresholds below 50, causing TLP to skip battery care.
+      START_CHARGE_THRESH_BAT0 = 75;
       STOP_CHARGE_THRESH_BAT0 = 80;
 
       RUNTIME_PM_ON_AC = "on";

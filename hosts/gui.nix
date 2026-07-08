@@ -37,6 +37,43 @@ let
     };
     sourceRoot = "${oldAttrs.pname}-${version}-extracted/usr/share/cursor";
   });
+  wpVolume = pkgs.writeShellScriptBin "wp_volume" ''
+    set -euo pipefail
+
+    unmute_default_sink_chain() {
+      wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
+
+      local driver_id
+      driver_id="$(
+        wpctl inspect @DEFAULT_AUDIO_SINK@ |
+          awk -F'= "' '$1 ~ /node.driver-id/ { sub(/"$/, "", $2); print $2; exit }'
+      )"
+
+      if [[ -n "$driver_id" ]]; then
+        wpctl set-mute "$driver_id" 0
+      fi
+    }
+
+    case "''${1:-}" in
+      raise)
+        unmute_default_sink_chain
+        exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+
+        ;;
+      lower)
+        exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+        ;;
+      mute)
+        exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+        ;;
+      mic-mute)
+        exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+        ;;
+      *)
+        echo "usage: wp_volume {raise|lower|mute|mic-mute}" >&2
+        exit 64
+        ;;
+    esac
+  '';
 
   swayConfig = builtins.readFile ./config/sway;
 
@@ -128,6 +165,7 @@ in
 
     # Useful for VS Code storing credentials.
     services.gnome.gnome-keyring.enable = true;
+    services.usbmuxd.enable = true;
 
     location.provider = "geoclue2";
 
@@ -154,6 +192,7 @@ in
         slurp
         swayidle
         swaylock
+        wpVolume
         wdisplays
         wf-recorder
         wl-clipboard

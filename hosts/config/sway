@@ -41,10 +41,10 @@ exec nm-applet --indicator
 exec spice-vdagent
 
 # Hardware media keys.
-bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+
-bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-bindsym --locked XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-bindsym --locked XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindsym --locked XF86AudioRaiseVolume exec wp_volume raise
+bindsym --locked XF86AudioLowerVolume exec wp_volume lower
+bindsym --locked XF86AudioMute exec wp_volume mute
+bindsym --locked XF86AudioMicMute exec wp_volume mic-mute
 bindsym --locked XF86MonBrightnessUp exec brightnessctl -q -n set +5%
 bindsym --locked XF86MonBrightnessDown exec brightnessctl -q -n set 5%-
 
