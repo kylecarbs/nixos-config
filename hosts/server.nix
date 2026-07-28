@@ -96,7 +96,56 @@ in
   systemd.services = lib.mapAttrs'
     (name: service:
       lib.nameValuePair "tailscale-${name}" (mkTailscaleServeService name service))
-    tailscaleServeServices;
+    tailscaleServeServices // {
+    openchat-relay = {
+      description = "OpenChat content-encrypted sync relay";
+      after = [ "network-online.target" "tailscaled.service" ];
+      wants = [ "network-online.target" "tailscaled.service" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "simple";
+        DynamicUser = true;
+        ExecStart = "/nix/var/nix/profiles/openchat-relay/bin/openchat --data-dir=/var/lib/openchat-relay serve --bind=127.0.0.1:9070 --db=/var/lib/openchat-relay/relay.db --min-proto=1";
+        Restart = "on-failure";
+        RestartSec = "3s";
+        TimeoutStopSec = "15s";
+        StateDirectory = "openchat-relay";
+        StateDirectoryMode = "0700";
+        UMask = "0077";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        IPAddressAllow = "localhost";
+        IPAddressDeny = "any";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        MemoryMax = "1G";
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ProcSubset = "pid";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
+        SystemCallFilter = [ "@system-service" ];
+        TasksMax = 128;
+        LimitNOFILE = 512;
+      };
+    };
+  };
 
   networking.firewall = {
     enable = true;
