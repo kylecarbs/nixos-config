@@ -14,7 +14,7 @@ let
   });
 
   cursorMainline = pkgs.code-cursor.overrideAttrs (oldAttrs: rec {
-    version = "3.3.30";
+    version = "3.13.25";
     src = pkgs.appimageTools.extract {
       inherit (oldAttrs) pname;
       inherit version;
@@ -23,15 +23,15 @@ let
           pkgs.fetchurl
             {
               # https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=latest
-              url = "https://downloads.cursor.com/production/3dc559280adc5f931ade8e25c7b85393842acf34/linux/x64/Cursor-3.3.30-x86_64.AppImage";
-              hash = "sha256-dx/ddEBUK6lHn98nP/k907M8inOvjOUHUzyJFLFmCRs=";
+              url = "https://downloads.cursor.com/production/31e8d61c448c7472e371505838a0fe34083dad55/linux/x64/Cursor-3.13.25-x86_64.AppImage";
+              hash = "sha256-/UJHe6oWeDTCvAMgbNbBsmB2pgTZQqSKXvtr7Hfkv6k=";
             }
         else if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then
           pkgs.fetchurl
             {
               # https://www.cursor.com/api/download?platform=linux-arm64&releaseTrack=latest
-              url = "https://downloads.cursor.com/production/031e7e0ff1e2eda9c1a0f5df67d44053b059c5df/linux/arm64/Cursor-1.2.1-aarch64.AppImage";
-              hash = "sha256-Otg+NyW1DmrqIb0xqZCfJ4ys61/DBOQNgaAR8PMOCfg=";
+              url = "https://downloads.cursor.com/production/31e8d61c448c7472e371505838a0fe34083dad55/linux/arm64/Cursor-3.13.25-aarch64.AppImage";
+              hash = "sha256-xUiGu37cm79rmqhfy+YDYsydcgqI8uc/Mv7gLdee0cU=";
             }
         else (throw "Unsupported system: ${pkgs.stdenv.hostPlatform.system}");
     };
