@@ -126,7 +126,7 @@ in
       git
       git-lfs
       gnumake
-      go_1_25
+      go
       goreleaser
       (google-cloud-sdk.withExtraComponents
         ([ google-cloud-sdk.components.gke-gcloud-auth-plugin ]))

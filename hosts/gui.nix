@@ -6,10 +6,9 @@ let
   apple-emoji = pkgs.callPackage ../pkgs/apple-emoji.nix { };
   apple-fonts = pkgs.callPackage ../pkgs/apple-fonts.nix { };
   flameshotWayland = pkgs.flameshot.overrideAttrs (oldAttrs: {
-    # Flameshot's grim path needs explicit output-scale handling on Wayland so
-    # HiDPI screenshots crop the selected monitor instead of physical pixels.
+    # Keep the Sway launcher on the focused output with its native scale.
     patches = (oldAttrs.patches or [ ]) ++ [
-      ../pkgs/flameshot-grim-device-pixel-ratio.patch
+      ../pkgs/flameshot-focused-output.patch
     ];
   });
 
@@ -290,7 +289,7 @@ in
         enable = true;
         package = pkgs.rofi;
         theme = "Arc-Dark";
-        font = "Fira Code 14";
+        settings.font = "Fira Code 14";
       };
 
       dconf = {
@@ -325,14 +324,13 @@ in
         force = true;
         text = ''
           [General]
-          disabledGrimWarning=true
           drawThickness=18
           savePath=/home/kyle/Downloads
-          useGrimAdapter=true
         '';
       };
 
       home.pointerCursor = {
+        enable = true;
         x11.enable = true;
         gtk.enable = true;
         package = pkgs.vanilla-dmz;

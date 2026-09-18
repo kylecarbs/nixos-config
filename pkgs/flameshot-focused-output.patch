@@ -1,0 +1,48 @@
+From: Kyle Local Packaging <kyle@example.invalid>
+Subject: [PATCH] flameshot: capture the focused Sway output through grim
+
+Flameshot 14 handles monitor placement and device pixel ratios itself,
+but removed the grim backend. Preserve the focused-output launcher by
+capturing that output directly at its Qt scale, without portal monitor
+selection or cropping a single-output portal image as a full desktop.
+
+--- a/src/utils/screengrabber.cpp
++++ b/src/utils/screengrabber.cpp
+@@ -245,6 +245,37 @@
+     return screenshot;
+ 
+ #elif defined(Q_OS_UNIX) && !defined(Q_OS_MACOS)
++    const QString outputName = qEnvironmentVariable("FLAMESHOT_WAYLAND_OUTPUT");
++    if (m_info.waylandDetected() && !outputName.isEmpty()) {
++        const QList<QScreen*> screens = QGuiApplication::screens();
++        for (int i = 0; i < screens.size(); ++i) {
++            QScreen* screen = screens[i];
++            if (screen->name() != outputName) {
++                continue;
++            }
++
++            QProcess grim;
++            grim.start(QStringLiteral("grim"),
++                       { QStringLiteral("-o"), outputName,
++                         QStringLiteral("-s"), QString::number(screen->devicePixelRatio()),
++                         QStringLiteral("-t"), QStringLiteral("ppm"),
++                         QStringLiteral("-") });
++            ok = grim.waitForFinished() &&
++                 grim.exitStatus() == QProcess::NormalExit &&
++                 grim.exitCode() == 0 &&
++                 screenshot.loadFromData(grim.readAllStandardOutput(), "PPM");
++            if (ok) {
++                m_selectedMonitor = i;
++                screenshot.setDevicePixelRatio(screen->devicePixelRatio());
++                return screenshot;
++            }
++            AbstractLogger::error() << tr("Unable to capture focused output");
++            return QPixmap();
++        }
++        ok = false;
++        AbstractLogger::error() << tr("Focused output is no longer available");
++        return QPixmap();
++    }
+     if (!m_info.waylandDetected() && ConfigHandler().useX11LegacyScreenshot()) {
+         qWarning() << "Using deprecated legacy X11 screenshot method. "
+                       "Consider installing xdg-desktop-portal for your "

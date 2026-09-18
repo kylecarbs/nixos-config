@@ -1,0 +1,12 @@
+Disabled raw camera devices must complete their asynchronous event so discovery
+can continue to the processed V4L2 camera.
+
+--- a/src/scripts/monitors/v4l2/create-device.lua
++++ b/src/scripts/monitors/v4l2/create-device.lua
+@@ -39,5 +39,6 @@
+ 
+         if cutils.parseBool (properties ["device.disabled"]) then
+           log:notice ("V4L2 device " .. properties["device.name"] .. " disabled")
++          transition:advance ()
+           return
+         end
