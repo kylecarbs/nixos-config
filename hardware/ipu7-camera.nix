@@ -83,6 +83,4 @@
     ];
     "wireplumber.profiles".main."monitor.libcamera" = "disabled";
   };
-
-  environment.systemPackages = [ pkgs.zoom-us ];
 }
