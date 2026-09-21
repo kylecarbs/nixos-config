@@ -147,10 +147,18 @@ in
     security.rtkit.enable = true;
     services.pipewire = {
       enable = true;
+      # Keep USB cameras such as the Opal C1 available when a firmware control
+      # cannot be read. Drop this backport once the packaged version includes it.
+      package = pkgs.pipewire.overrideAttrs (old: {
+        patches = (old.patches or [ ]) ++ [ ../patches/pipewire/v4l2-unreadable-controls.patch ];
+      });
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
     };
+    # WirePlumber loads camera SPA plugins in its own process.
+    systemd.user.services.wireplumber.environment.SPA_PLUGIN_DIR =
+      "${config.services.pipewire.package}/lib/spa-0.2";
 
     hardware.graphics = {
       enable = true;

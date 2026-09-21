@@ -1,0 +1,60 @@
+From 919de4c52e83f23326a7c847df1cf54f68d039eb Mon Sep 17 00:00:00 2001
+From: Viorel Cernateanu <vrilutza@gmail.com>
+Date: Wed, 19 Aug 2026 05:39:20 +0300
+Subject: [PATCH] spa: v4l2: keep reading the other controls when one cannot be
+ read
+
+VIDIOC_G_CTRL failing on a single control aborts spa_v4l2_update_controls(),
+so SPA_PARAM_Props enumeration fails for the whole node and a consumer that
+requires that param cannot use the device at all. Only EACCES was exempt,
+for write only controls.
+
+Any other errno reaches the same fatal path, and the flags of a control do
+not say in advance whether reading it can fail: get_ctrl() calls the driver's
+g_volatile_ctrl handler for a VOLATILE control and returns whatever that
+returns, which is driver specific.
+
+Skip the control instead, and log it at debug level: one unreadable control
+is not a reason to hide the other properties of the device. Leave its value
+alone rather than reporting 0, so it keeps the last value that was read, or
+the default that spa_v4l2_enum_controls() stored; 0 is not necessarily inside
+the range the control advertises.
+---
+ spa/plugins/v4l2/v4l2-utils.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/spa/plugins/v4l2/v4l2-utils.c b/spa/plugins/v4l2/v4l2-utils.c
+index 16387bc11..c85d6fff1 100644
+--- a/spa/plugins/v4l2/v4l2-utils.c
++++ b/spa/plugins/v4l2/v4l2-utils.c
+@@ -1556,20 +1556,20 @@ spa_v4l2_update_controls(struct impl *this)
+ 		spa_zero(control);
+ 		control.id = c->ctrl_id;
+ 		if (xioctl(dev->fd, VIDIOC_G_CTRL, &control) < 0) {
+-			/* Write only controls like relative pan/tilt return EACCES */
+-			if (errno == EACCES) {
+-				c->value = 0;
+-				continue;
+-			}
+-			res = -errno;
+-			goto done;
++			/* One control that cannot be read must not hide every other
++			 * property of the node. Write only controls like relative
++			 * pan/tilt return EACCES, and a volatile control returns
++			 * whatever its g_volatile_ctrl handler returns. Keep the value
++			 * from the last successful read, or the default that
++			 * spa_v4l2_enum_controls() stored. */
++			spa_log_debug(this->log, "'%s' VIDIOC_G_CTRL %08x: %m",
++					this->props.device, c->ctrl_id);
++			continue;
+ 		}
+ 		c->value = control.value;
+ 	}
+-	res = 0;
+-done:
+ 	spa_v4l2_close(dev);
+-	return res;
++	return 0;
+ }
+ 
+ static int
