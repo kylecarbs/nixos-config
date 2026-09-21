@@ -274,7 +274,16 @@ in
 
     fonts.packages = with pkgs; [ apple-emoji apple-fonts fira-code ];
     # Replace the gross Linux emojis with pretty Apple ones.
-    fonts.fontconfig.defaultFonts.emoji = [ "Apple Color Emoji" ];
+    fonts.fontconfig.defaultFonts = {
+      sansSerif = [ "SF Pro Text" ];
+      emoji = [ "Apple Color Emoji" ];
+    };
+    fonts.fontconfig.localConf = ''
+      <alias binding="strong">
+        <family>system-ui</family>
+        <prefer><family>SF Pro Text</family></prefer>
+      </alias>
+    '';
 
     home-manager.users.kyle = { ... }: {
       home.packages = with pkgs; [
@@ -305,11 +314,16 @@ in
         settings."org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
           gtk-theme = "Adwaita-dark";
+          font-name = "SF Pro Text 11";
         };
       };
 
       gtk = {
         enable = true;
+        font = {
+          name = "SF Pro Text";
+          size = 11;
+        };
         theme = {
           package = pkgs.gnome-themes-extra;
           name = "Adwaita-dark";
