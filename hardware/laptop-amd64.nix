@@ -19,16 +19,6 @@
     options hid_apple swap_fn_leftctrl=1
   '';
 
-  # Disable Intel display power-saving paths that can cause stutter or stale
-  # frames in high-bandwidth, mixed-refresh external monitor setups.
-  boot.kernelParams = [
-    "xe.enable_psr=0"
-    "xe.enable_panel_replay=0"
-    "xe.enable_fbc=0"
-    "xe.enable_dc=0"
-    "xe.disable_power_well=0"
-    "xe.enable_sagv=0"
-  ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;

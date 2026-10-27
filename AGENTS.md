@@ -14,6 +14,11 @@ Project structure:
 - `hardware/*.nix` files contain host hardware details. Role composition and role-specific host overrides happen explicitly in `flake.nix`.
 - `hosts/config/AGENTS.md` is installed onto actual hosts as user-level agent guidance. Keep repository architecture notes in this root file instead.
 
+Laptop display:
+
+- Keep the Dell laptop's internal display at 120 Hz and use the Intel `xe` driver's default display power management. Avoid blanket kernel overrides that disable display power-saving features.
+- Display power-management kernel parameters require a reboot to take effect; rebuilding alone does not change the running driver.
+
 Camera validation:
 
 - Keep image processing and sensor tuning in the shared camera producer so every application receives the same processed image. The IPU7 laptop uses Intel's hardware ISP through the NixOS IPU7 module and V4L2 relay; prevent libcamera from competing for its raw sensor.
