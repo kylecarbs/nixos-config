@@ -30,6 +30,11 @@
               output DP-1 mode 5120x2160@165.06Hz scale 1.5 position 1920 0
             '';
           };
+          # AirPlay discovery and sender timing/audio replies on the laptop's LAN.
+          networking.firewall.interfaces.wlp0s20f3 = {
+            allowedUDPPorts = [ 5353 ];
+            allowedUDPPortRanges = [{ from = 60000; to = 60010; }];
+          };
           services.pipewire.extraConfig.pipewire."91-laptop-speaker-eq" =
             let
               speakerNode = "alsa_output.pci-0000_00_1f.3-platform-sof_sdw.HiFi__Speaker__sink";
