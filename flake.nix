@@ -3,11 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-kernel.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager";
     vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
 
-  outputs = { self, nixpkgs, home-manager, vscode-server }: {
+  outputs = { self, nixpkgs, nixpkgs-kernel, home-manager, vscode-server }: {
     formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
     # Dell XPS 14"
@@ -141,6 +142,9 @@
         ./hosts/server.nix
         ./hardware/server-amd64.nix
         {
+          # Update the server's LTS kernel independently of its application packages.
+          boot.kernelPackages = nixpkgs-kernel.legacyPackages.${system}.linuxPackages_6_18;
+
           services.vscode-server = {
             enable = true;
             installPath = "$HOME/.cursor-server";
