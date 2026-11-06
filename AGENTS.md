@@ -19,6 +19,10 @@ Laptop display:
 - Keep the Dell laptop's internal display at 120 Hz and use the Intel `xe` driver's default display power management. Avoid blanket kernel overrides that disable display power-saving features.
 - Display power-management kernel parameters require a reboot to take effect; rebuilding alone does not change the running driver.
 
+Apple keyboards:
+
+- Keep keyboard fixes specific to the affected model. The USB Magic Keyboard with Numeric Keypad (`05ac:026c`) uses an hwdb mapping from left Ctrl to right Ctrl to bypass the global `hid_apple.swap_fn_leftctrl=1` setting; preserve that setting for compact keyboards. Trigger udev for the affected keyboard or reconnect it after applying hwdb changes.
+
 Camera validation:
 
 - Keep image processing and sensor tuning in the shared camera producer so every application receives the same processed image. The IPU7 laptop uses Intel's hardware ISP through the NixOS IPU7 module and V4L2 relay; prevent libcamera from competing for its raw sensor.

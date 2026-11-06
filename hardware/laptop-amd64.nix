@@ -18,6 +18,12 @@
     # Make the Apple Magic Keyboard's bottom-left Fn key act as Ctrl.
     options hid_apple swap_fn_leftctrl=1
   '';
+  services.udev.extraHwdb = ''
+    # Magic Keyboard with Numeric Keypad (USB 05ac:026c): keep its left Ctrl
+    # working by using right Ctrl, which hid_apple's Fn swap does not affect.
+    evdev:input:b0003v05ACp026C*
+     KEYBOARD_KEY_700e0=rightctrl
+  '';
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
