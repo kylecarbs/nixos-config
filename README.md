@@ -4,6 +4,12 @@ This repository holds the NixOS configuration for my computers.
 
 Feel free to use it as a reference!
 
+The laptop and desktop enable CUPS and Avahi to discover network printers,
+including driverless IPP/AirPrint printers. Apply the configuration with
+`make laptop` or `make desktop`, then reopen Chrome and select the printer under
+**Print → Destination → See more**. If a printer needs to be added manually,
+use the CUPS interface at <http://localhost:631>.
+
 The `laptop-amd64` configuration allows AirPlay discovery (UDP 5353) and sender
 timing/audio replies (UDP 60000–60010) on its Wi-Fi interface, `wlp0s20f3`.
 These match the default ports used by the `airplay-linux` CLI. The rules take

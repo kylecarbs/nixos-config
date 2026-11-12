@@ -143,6 +143,14 @@ in
     time.timeZone = null;
     services.automatic-timezoned.enable = true;
 
+    # Discover network printers for Chrome and other desktop applications.
+    services.printing.enable = true;
+    services.avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+    };
+
     services.pulseaudio.enable = false;
     security.rtkit.enable = true;
     services.pipewire = {
