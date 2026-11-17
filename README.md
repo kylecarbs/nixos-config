@@ -10,6 +10,14 @@ including driverless IPP/AirPrint printers. Apply the configuration with
 **Print → Destination → See more**. If a printer needs to be added manually,
 use the CUPS interface at <http://localhost:631>.
 
+`hosts/server.nix` publishes private Tailscale Services with per-service systemd
+units. Polydex forwards TCP ports 8123 and 9000 to ClickHouse on localhost.
+With Tailscale 1.98.5, `set-config --service=svc:<name>` takes a per-service JSON
+file with top-level `version` and `endpoints`; the `--all` format instead wraps
+named services in `services`. Advertising a service alone does not load its
+endpoint mappings. The publisher units restart with `tailscaled` to reapply them.
+Verify the loaded mappings with `sudo tailscale serve get-config --service=svc:polydex`.
+
 The `laptop-amd64` configuration allows AirPlay discovery (UDP 5353) and sender
 timing/audio replies (UDP 60000–60010) on its Wi-Fi interface, `wlp0s20f3`.
 These match the default ports used by the `airplay-linux` CLI. The rules take

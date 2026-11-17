@@ -31,6 +31,7 @@ let
   mkTailscaleServeService = name: service: {
     description = "Publish ${name} through Tailscale Service";
     after = [ "network-online.target" "tailscaled.service" ] ++ (service.after or [ ]);
+    partOf = [ "tailscaled.service" ];
     wants = [ "network-online.target" "tailscaled.service" ] ++ (service.wants or [ ]);
     wantedBy = [ "multi-user.target" ];
     path = [ pkgs.tailscale ];
