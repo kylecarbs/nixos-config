@@ -16,11 +16,6 @@ let
       after = [ "docker.service" ];
       wants = [ "docker.service" ];
     };
-    codex = {
-      endpoints = {
-        "tcp:80" = "tcp://127.0.0.1:18081";
-      };
-    };
   };
 
   mkTailscaleServeConfig = service: {
@@ -75,13 +70,14 @@ in
     openssh.authorizedKeys.keys = sshKeys;
   };
 
-  users.users.root.openssh.authorizedKeys.keys = sshKeys;
-
+  # SSH is reachable only over Tailscale; the public interface drops it below.
   services.openssh = {
+    openFirewall = false;
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
-      PermitRootLogin = "prohibit-password";
+      PermitRootLogin = "no";
+      AllowUsers = [ "kyle" ];
     };
   };
 
@@ -97,75 +93,32 @@ in
   systemd.services = lib.mapAttrs'
     (name: service:
       lib.nameValuePair "tailscale-${name}" (mkTailscaleServeService name service))
-    tailscaleServeServices // {
-    openchat-relay = {
-      description = "OpenChat content-encrypted sync relay";
-      after = [ "network-online.target" "tailscaled.service" ];
-      wants = [ "network-online.target" "tailscaled.service" ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "simple";
-        DynamicUser = true;
-        ExecStart = "/nix/var/nix/profiles/openchat-relay/bin/openchat --data-dir=/var/lib/openchat-relay serve --bind=127.0.0.1:9070 --db=/var/lib/openchat-relay/relay.db --min-proto=1";
-        Restart = "on-failure";
-        RestartSec = "3s";
-        TimeoutStopSec = "15s";
-        StateDirectory = "openchat-relay";
-        StateDirectoryMode = "0700";
-        UMask = "0077";
-        AmbientCapabilities = "";
-        CapabilityBoundingSet = "";
-        DevicePolicy = "closed";
-        IPAddressAllow = "localhost";
-        IPAddressDeny = "any";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        MemoryMax = "1G";
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateTmp = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        ProcSubset = "pid";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = [ "@system-service" ];
-        TasksMax = 128;
-        LimitNOFILE = 512;
-      };
-    };
-  };
+    tailscaleServeServices;
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 ];
+    # tailscaled's own ts-input chain already accepts all tailnet traffic, so
+    # Tailscale ACLs decide what peers reach; this states that SSH relies on it.
+    interfaces.tailscale0.allowedTCPPorts = [ 22 ];
+    # Drop new TCP from the public interface even if a module later opens a
+    # global port. The host also forwards traffic for Docker and the Tailscale
+    # exit node, so drop every new forwarded connection from it, for all
+    # protocols, keeping containers and tailnet routes unreachable from it.
     extraCommands = ''
-      iptables -w -I nixos-fw 1 -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -m tcp ! --dport 22 -j DROP
-      ip6tables -w -I nixos-fw 1 -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -m tcp ! --dport 22 -j DROP
+      iptables -w -I nixos-fw 1 -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -j DROP
+      ip6tables -w -I nixos-fw 1 -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -j DROP
 
       iptables -w -N DOCKER-USER 2>/dev/null || true
       iptables -w -C FORWARD -j DOCKER-USER 2>/dev/null || iptables -w -I FORWARD 1 -j DOCKER-USER
-      iptables -w -C DOCKER-USER -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -j DROP 2>/dev/null || iptables -w -I DOCKER-USER 1 -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -j DROP
+      iptables -w -C DOCKER-USER -i ${publicInterface} -m conntrack --ctstate NEW -j DROP 2>/dev/null || iptables -w -I DOCKER-USER 1 -i ${publicInterface} -m conntrack --ctstate NEW -j DROP
 
       ip6tables -w -N DOCKER-USER 2>/dev/null || true
       ip6tables -w -C FORWARD -j DOCKER-USER 2>/dev/null || ip6tables -w -I FORWARD 1 -j DOCKER-USER
-      ip6tables -w -C DOCKER-USER -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -j DROP 2>/dev/null || ip6tables -w -I DOCKER-USER 1 -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -j DROP
+      ip6tables -w -C DOCKER-USER -i ${publicInterface} -m conntrack --ctstate NEW -j DROP 2>/dev/null || ip6tables -w -I DOCKER-USER 1 -i ${publicInterface} -m conntrack --ctstate NEW -j DROP
     '';
     extraStopCommands = ''
-      iptables -w -D nixos-fw -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -m tcp ! --dport 22 -j DROP 2>/dev/null || true
-      ip6tables -w -D nixos-fw -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -m tcp ! --dport 22 -j DROP 2>/dev/null || true
+      iptables -w -D nixos-fw -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -j DROP 2>/dev/null || true
+      ip6tables -w -D nixos-fw -i ${publicInterface} -p tcp -m conntrack --ctstate NEW -j DROP 2>/dev/null || true
     '';
   };
 

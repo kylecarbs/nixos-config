@@ -18,6 +18,14 @@ named services in `services`. Advertising a service alone does not load its
 endpoint mappings. The publisher units restart with `tailscaled` to reapply them.
 Verify the loaded mappings with `sudo tailscale serve get-config --service=svc:polydex`.
 
+The server accepts SSH only over Tailscale (`tailscale0`), as `kyle` with a key;
+root SSH login is disabled. Its public interface, `eno1`, accepts no new inbound
+connections, including forwarded traffic to Docker containers on any protocol,
+so a container port published on `0.0.0.0` is still unreachable from the
+internet. tailscaled accepts all traffic on `tailscale0` before the NixOS
+firewall runs, so Tailscale ACLs decide which peers reach which ports. If
+Tailscale is down, use the hosting provider's console or rescue system to get in.
+
 The `laptop-amd64` configuration allows AirPlay discovery (UDP 5353) and sender
 timing/audio replies (UDP 60000–60010) on its Wi-Fi interface, `wlp0s20f3`.
 These match the default ports used by the `airplay-linux` CLI. The rules take

@@ -14,6 +14,11 @@ Project structure:
 - `hardware/*.nix` files contain host hardware details. Role composition and role-specific host overrides happen explicitly in `flake.nix`.
 - `hosts/config/AGENTS.md` is installed onto actual hosts as user-level agent guidance. Keep repository architecture notes in this root file instead.
 
+Server network exposure:
+
+- The server's public interface (`eno1`) accepts no new inbound connections. An explicit `nixos-fw` rule drops new TCP on `eno1` even if a global port is opened, SSH is allowed only on `tailscale0`, and `DOCKER-USER` drops all new forwarded traffic from `eno1` for every protocol. tailscaled's `ts-input` chain accepts all `tailscale0` traffic first, so tailnet exposure is governed by Tailscale ACLs, not the NixOS firewall. Publish services through Tailscale or a Cloudflare tunnel rather than opening public ports, and ask before adding any public exception.
+- Removing a rule from `networking.firewall.extraCommands` does not delete the live rule from Docker's `DOCKER-USER` chain. Delete stale rules by hand or reboot.
+
 Kernel security updates:
 
 - The server and desktop use `nixpkgs-kernel` for their 6.18 LTS kernel. Update that input independently of application packages and keep it at 6.18.63 or newer for NoisyTCP (CVE-2026-99288).
