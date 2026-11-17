@@ -14,6 +14,12 @@ Project structure:
 - `hardware/*.nix` files contain host hardware details. Role composition and role-specific host overrides happen explicitly in `flake.nix`.
 - `hosts/config/AGENTS.md` is installed onto actual hosts as user-level agent guidance. Keep repository architecture notes in this root file instead.
 
+Kernel security updates:
+
+- The server and desktop use `nixpkgs-kernel` for their 6.18 LTS kernel. Update that input independently of application packages and keep it at 6.18.63 or newer for NoisyTCP (CVE-2026-99288).
+- The laptop carries the upstream NoisyTCP patch while its kernel is older than 7.3.4. Remove the backport when its main nixpkgs input supplies a fixed kernel.
+- Building or staging a kernel does not fix the running kernel; verify the booted version after reboot. Backports keep the version number, so also compare the booted kernel store path against the staged generation. A patched host kernel also protects its containers.
+
 Laptop display:
 
 - Keep the Dell laptop's internal display at 120 Hz and use the Intel `xe` driver's default display power management. Avoid blanket kernel overrides that disable display power-saving features.

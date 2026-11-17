@@ -126,12 +126,18 @@
         vscode-server.nixosModules.default
         ./hosts/gui.nix
         ./hardware/desktop-amd64.nix
-        {
+        ({ pkgs, ... }: {
+          # Keep the desktop's existing NVIDIA driver, built for the updated kernel.
+          boot.kernelPackages = pkgs.linuxPackagesFor (import nixpkgs-kernel {
+            inherit system;
+            inherit (pkgs) config;
+          }).linux_6_18;
+
           services.vscode-server = {
             enable = true;
             installPath = "$HOME/.cursor-server";
           };
-        }
+        })
       ];
     };
     nixosConfigurations.server-amd64 = nixpkgs.lib.nixosSystem rec {

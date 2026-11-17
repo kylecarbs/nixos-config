@@ -16,8 +16,9 @@ These match the default ports used by the `airplay-linux` CLI. The rules take
 effect after applying the configuration; temporary manual firewall rules are
 replaced when the firewall restarts or the machine reboots.
 
-The server uses the 6.18 LTS kernel from a separate `nixpkgs-kernel` input so
-kernel security updates do not require updating the other system packages.
+The server and desktop use the 6.18 LTS kernel from a separate
+`nixpkgs-kernel` input so kernel security updates do not require updating the
+other system packages.
 To update and stage a kernel for the next reboot:
 
 ```sh
@@ -25,6 +26,22 @@ nix flake update nixpkgs-kernel
 sudo nixos-rebuild boot --flake .#server-amd64
 ```
 
+Use `desktop-amd64` for the desktop. The laptop keeps its existing kernel
+package and carries the upstream NoisyTCP patch until that package reaches
+Linux 7.3.4 or newer; rebuild it with `laptop-amd64`.
+
 Reboot when ready, then check `uname -r` to verify the new kernel is running.
+The laptop backport keeps the same version number. After rebuilding and
+rebooting it, verify that the booted kernel matches the staged generation:
+
+```sh
+readlink -f /run/booted-system/kernel /nix/var/nix/profiles/system/kernel
+```
+
+Both paths should resolve to the same patched kernel in the Nix store.
 Staging a kernel does not patch the currently running kernel. For
-CVE-2026-98432, the 6.18 branch requires version 6.18.56 or newer.
+CVE-2026-98432, the 6.18 branch requires version 6.18.56 or newer. For
+[NoisyTCP (CVE-2026-99288)](https://github.com/V4bel/NoisyTCP), it requires
+6.18.63 or newer. The kernel fix covers host and container networking.
+Do not disable SYN cookies as a permanent workaround: that reduces SYN-flood
+protection and would need to be applied separately to every network namespace.

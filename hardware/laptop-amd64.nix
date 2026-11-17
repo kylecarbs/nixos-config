@@ -12,6 +12,15 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "xe" ]; # Early modesetting for Intel Arc GPU
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # NoisyTCP (CVE-2026-99288): keep the laptop's current kernel/driver stack
+  # until its package input supplies a fixed release (Linux 7.3.4 or newer).
+  boot.kernelPatches = lib.optional (lib.versionOlder pkgs.linux_latest.version "7.3.4") {
+    name = "CVE-2026-99288";
+    patch = pkgs.fetchpatch {
+      url = "https://github.com/torvalds/linux/commit/4e2b3ef19e0e04adca38442f07dd6bc93c712bf1.patch";
+      hash = "sha256-5TKMa8HRyBxYSLVi04r6bFBjsF81HLbW43PFewsDLVQ=";
+    };
+  };
   boot.kernelModules = [ "kvm-intel" "hid_apple" ];
   boot.extraModulePackages = [ ];
   boot.extraModprobeConfig = ''
